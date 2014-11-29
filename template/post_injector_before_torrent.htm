@@ -1,0 +1,69 @@
+<hook-action name="displayPostTorrentHtml" args='pargs'>
+    <style>
+        .post_extend {
+            border: 1px dashed #ccc;
+            background: #f3f9fb;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .post_extend_ct {
+            float: left;
+            width: 375px;
+            border-right: 1px solid #d5e6ed;
+        }
+        .post_extend_sd {
+            float: left;
+            border-left: 1px solid #d5e6ed;
+            margin-left: -1px;
+            padding-left: 10px;
+            width: 448px;
+        }
+        .post_item li {
+            float: left;
+            height: 28px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .post_item li:last-child {
+            padding-bottom: 0;
+        }
+        .post_item li span {
+            font-weight: bold;
+        }
+    </style>
+    <div class="cc post_extend" id="titleMaker">请先选择分类</div>
+    <div class="cc post_extend">
+        <div class="post_extend_ct">
+            <div class="post_item">
+                <ul>
+                    <li><span>种子文件： </span><input type="file" class="input length_5" name="torrent" value=""></li>
+                    <li><span>Wiki链接：</span><input type="text" class="input length_5" name="wikilink" value="{$wikilink}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="post_extend_sd">
+            <div class="post_item">
+                <ul>
+                    <li><span>发布说明：</span><p>1、必须上传种子文件；</p></li><p>
+                    <li><p>2、填写Wiki链接有益于下载者获取更多相关信息</p></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="cc post_extend" style="color:#FF0000">Private Tracker 地址（点击文本框复制到剪贴板，请不要泄露给其他人）：<input id="tracker" type="text" class="input" name="tracker" value="http://pt.xuulm.com/app-index-announce?app=torrent&passkey={$pargs->passkey}" data-clipboard-text="http://pt.xuulm.com/app-index-announce?app=torrent&passkey={$pargs->passkey}" style="width:640px;"></div>
+    
+    <script src="src/extensions/torrent/res/js/ZeroClipboard.min.js"></script>
+    <script>
+    if ('{$pargs->passkey}' == '') {
+      window.location.reload(true);
+    }
+
+    var client = new ZeroClipboard( document.getElementById("tracker") );
+
+    client.on( "load", function(client) {
+      client.on( "complete", function(client, args) {
+        alert("Tracker已复制到剪贴板！");
+      } );
+    } );
+    </script>
+</hook>
