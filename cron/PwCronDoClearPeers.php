@@ -12,17 +12,17 @@ Wind::import('SRV:cron.srv.base.AbstractCronBase');
 class PwCronDoClearPeers extends AbstractCronBase{
 	
 	public function run($cronId) {
-  	$config = require(realpath(dirname(__FILE__)).'/../../../../../conf/database.php');
-    try {
-        $dbHandle = new PDO ( $config['dsn'], $config['user'], $config['pwd'] );
-        $dbHandle->setAttribute ( PDO::ATTR_EMULATE_PREPARES, false );
-
-        $sql = 'DELETE from pw_app_torrent_peer WHERE NOW() - last_action > 350';
-        $sth = @$dbHandle->prepare ( $sql );
-        @$sth->execute ();
-    } catch ( PDOException $e ) {
-      return NULL;
-    }
+        $fids = range(12, 23); // An array of thread ids for PT torrent
+        foreach ($fids as $fid) {
+            $topics = Wekit::load('forum.PwThread')->getThreadByFid($fid, 0);
+            foreach ($topics as $topic) {
+                if ($topic['special'] != 'torrent') continue;
+                $torrent = Wekit::load('EXT:torrent.service.dao.PwTorrentDao')->getTorrentByTid($topic['tid']);
+                $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->getTorrentPeerByTorrent($torrent['id']);
+                foreach ($peers as $peer) 
+                    if (strtotime($peer['last_action']) < strtotime('-30 minute')) Wekit::load('EXT:torrent.service.PwTorrentPeer')->deleteTorrentPeer($peer['id']);
+            }
+        }
 	}
 }
 ?>

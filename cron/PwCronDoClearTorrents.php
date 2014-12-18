@@ -31,11 +31,11 @@ class PwCronDoClearTorrents extends AbstractCronBase
         Wekit::load('forum.PwThread')->updateThread($dm);
         
         $api = WindidApi::api('message');
-        $api->send($created_userid, '您的种子 ' . $subject . ' 因长期断种已被系统自动移入回收站，如有异议请尽快联系管理员，管理员将根据相关规定决定恢复或彻底删除。', 0)
+        $api->send($created_userid, '您的种子 ' . $subject . ' 因长期断种已被系统自动移入回收站，如有异议请尽快联系管理员，管理员将根据相关规定决定恢复或彻底删除。', 1);
     }
     
     public function run($cronId) {
-        $fids = range(12, 23);
+        $fids = range(12, 23); // An array of thread ids for PT torrent
         foreach ($fids as $fid) {
             $topics = Wekit::load('forum.PwThread')->getThreadByFid($fid, 0);
             foreach ($topics as $topic) {
