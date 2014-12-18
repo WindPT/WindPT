@@ -29,7 +29,7 @@ class PwTorrentPeer {
     }
     public function deleteTorrentPeer($id) {
         if (empty($id)) return false;
-        return $this->_getDao(self::FETCH_MAIN)->deleteTorrentPeer($aid);
+        return $this->_getDao(self::FETCH_MAIN)->deleteTorrentPeer($id);
     }
     protected function _getDaoMap() {
         return array(
