@@ -7,7 +7,7 @@ defined('WEKIT_VERSION') or exit(403);
  * @copyright http://7in0.me
  * @license http://7in0.me
  */
-class App_Torrent_Space_ProfileDo {
+class PwSpaceProfileDoTorrent {
 	
 	/**
 	 * @param array $space
