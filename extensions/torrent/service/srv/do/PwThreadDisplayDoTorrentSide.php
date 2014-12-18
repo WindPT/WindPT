@@ -2,13 +2,6 @@
 defined('WEKIT_VERSION') or exit(403);
 Wind::import('SRV:forum.srv.threadDisplay.do.PwThreadDisplayDoBase');
 
-/**
- * 帖子内容展示
- *
- * @author 7IN0SAN9 <me@7in0.me>
- * @copyright http://7in0.me
- * @license http://7in0.me
- */
 class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
 {
     
