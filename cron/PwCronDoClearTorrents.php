@@ -36,6 +36,7 @@ class PwCronDoClearTorrents extends AbstractCronBase
     
     public function run($cronId) {
         $fids = range(12, 23); // An array of thread ids for PT torrent
+        date_default_timezone_set('Asia/Shanghai');
         foreach ($fids as $fid) {
             $topics = Wekit::load('forum.PwThread')->getThreadByFid($fid, 0);
             foreach ($topics as $topic) {
