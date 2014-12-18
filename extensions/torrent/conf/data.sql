@@ -1,19 +1,3 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : 192.168.26.190
- Source Server Type    : MySQL
- Source Server Version : 50528
- Source Host           : localhost
- Source Database       : xuulm_newpt
-
- Target Server Type    : MySQL
- Target Server Version : 50528
- File Encoding         : utf-8
-
- Date: 10/12/2014 12:51:32 PM
-*/
-
 SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -54,7 +38,7 @@ CREATE TABLE `pw_app_torrent` (
   `endsticky` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `info_hash` (`info_hash`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `pw_app_torrent_agent_allowed_family`
@@ -77,7 +61,7 @@ CREATE TABLE `pw_app_torrent_agent_allowed_family` (
   `comment` varchar(200) NOT NULL DEFAULT '',
   `hits` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `pw_app_torrent_agent_allowed_family`
@@ -96,7 +80,7 @@ CREATE TABLE `pw_app_torrent_file` (
   `filename` varchar(255) NOT NULL DEFAULT '',
   `size` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=98 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `pw_app_torrent_history`
@@ -112,7 +96,7 @@ CREATE TABLE `pw_app_torrent_history` (
   `downloaded_last` bigint(20) DEFAULT '0',
   `status` enum('do','done','stop') NOT NULL DEFAULT 'do',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `pw_app_torrent_peer`
@@ -137,7 +121,7 @@ CREATE TABLE `pw_app_torrent_peer` (
   `finishedat` int(10) unsigned NOT NULL DEFAULT '0',
   `passkey` char(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `pw_app_torrent_user`
@@ -150,6 +134,6 @@ CREATE TABLE `pw_app_torrent_user` (
   `uploaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
