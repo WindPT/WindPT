@@ -53,41 +53,41 @@
 	<description>种子帖阅读页</description>
 	</app_torrent>
 	</c_read_run>
+	<s_space_profile>
+	<app_torrent>
+	<class>EXT:torrent.service.srv.do.PwSpaceProfileDoTorrent</class>
+	<loadway>load</loadway>
+	<method>appDo</method>
+	<description>个人资料页</description>
+	</app_torrent>
+	</s_space_profile>
+	<m_PwThreadDisplay>
+	<app_torrent>
+	<class>EXT:torrent.service.srv.do.PwThreadDisplayDoTorrentSide</class>
+	<description>帖子阅读页边栏</description>
+	</app_torrent>
+	</m_PwThreadDisplay>
+	<m_PwThreadList>
+	<app_torrent>
+	<class>EXT:torrent.service.srv.do.PwThreadListDoTorrent</class>
+	<description>帖子列表页</description>
+	</app_torrent>
+	</m_PwThreadList>
 	<s_PwThreadsDao_delete>
 	<app_torrent>
-	<class>EXT:torrent.service.srv.App_Torrent_PwThreadsDao_DeleteDo</class>
+	<class>EXT:torrent.service.srv.do.PwThreadsDeleteDoTorrent</class>
 	<loadway>load</loadway>
-	<method>app_TorrentDo</method>
+	<method>appDo</method>
 	<description>删除种子贴时删除对应记录和种子文件</description>
 	</app_torrent>
 	</s_PwThreadsDao_delete>
 	<s_PwThreadsDao_batchDelete>
 	<app_torrent>
-	<class>EXT:torrent.service.srv.App_Torrent_PwThreadsDao_BatchDeleteDo</class>
+	<class>EXT:torrent.service.srv.do.PwThreadsBatchDeleteDoTorrent</class>
 	<loadway>load</loadway>
-	<method>app_TorrentDo</method>
+	<method>appDo</method>
 	<description>批量删除种子贴时删除对应记录和种子文件</description>
 	</app_torrent>
 	</s_PwThreadsDao_batchDelete>
-	<s_space_profile>
-	<app_torrent>
-	<class>EXT:torrent.service.srv.App_Torrent_Space_ProfileDo</class>
-	<loadway>load</loadway>
-	<method>app_TorrentDo</method>
-	<description>个人资料页注入</description>
-	</app_torrent>
-	</s_space_profile>
-	<m_PwThreadDisplay>
-	<app_torrent>
-	<class>EXT:torrent.service.srv.App_TorrentPwThreadDisplayDo</class>
-	<description>帖子页注入</description>
-	</app_torrent>
-	</m_PwThreadDisplay>
-	<m_PwThreadList>
-	<app_torrent>
-	<class>EXT:torrent.service.srv.App_TorrentPwThreadListDo</class>
-	<description>帖子列表页注入</description>
-	</app_torrent>
-	</m_PwThreadList>
 	</inject-services>
 	</manifest>

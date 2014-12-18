@@ -8,7 +8,7 @@ class PwTorrentDao extends PwBaseDao {
         return $this->_get($id);
     }
     public function getTorrentByTid($tid) {
-        $sql = $this->_bindTable("SELECT * FROM %s WHERE tid LIKE ?");
+        $sql = $this->_bindTable("SELECT * FROM %s WHERE tid = ?");
         $smt = $this->getConnection()->createStatement($sql);
         return $smt->getOne(array($tid));
     }
