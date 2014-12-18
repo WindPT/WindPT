@@ -12,6 +12,11 @@ class PwTorrentDao extends PwBaseDao {
         $smt = $this->getConnection()->createStatement($sql);
         return $smt->getOne(array($tid));
     }
+    public function fetchTorrentByUid($uid) {
+        $sql = $this->_bindTable("SELECT * FROM %s WHERE owner = ?");
+        $smt = $this->getConnection()->createStatement($sql);
+        return $smt->queryAll(array($uid));
+    }
     public function getTorrentByInfoHash($info_hash) {
         $sql = $this->_bindTable("SELECT * FROM %s WHERE binary info_hash like ?");
         $smt = $this->getConnection()->createStatement($sql);
