@@ -45,7 +45,7 @@
                 <strong>添加时间：</strong>
                 <span>{$torrent['added']}</span>
                 <strong>做种：</strong>
-                <span style="width: 50px;<!--# if($torrent['seeder']==0) echo 'color:red;'; #-->"><!--# if($torrent['seeder']==0) echo '断种'; else echo $torrent['seeder']; #--></span>
+                <span style="width: 50px;<!--# if($torrent['seeder']=='断种') echo 'color:red;'; #-->">{$torrent['seeder']}</span>
                 <strong>下载：</strong>
                 <span style="width: 50px;">{$torrent['leecher']}</span>
             </li>

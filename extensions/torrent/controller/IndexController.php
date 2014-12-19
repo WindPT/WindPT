@@ -69,22 +69,22 @@ class IndexController extends PwBaseController
         if (!$user) {
             PwAnnounce::showError("Invalid passkey! Re-download the torrent file!");
         }
-
-        $config = require(realpath(dirname(__FILE__)).'/../../../../conf/database.php');
+        
+        $config = require (realpath(dirname(__FILE__)) . '/../../../../conf/database.php');
         try {
-            $dbHandle = new PDO ( $config['dsn'], $config['user'], $config['pwd'] );
+            $dbHandle = new PDO($config['dsn'], $config['user'], $config['pwd']);
             $dbHandle->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         }
         catch(PDOException $e) {
             PwAnnounce::showError("database: Cannot connect to database!");
         }
-
+        
         $sql = 'SELECT * from pw_user_ban WHERE uid = :uid';
         $ban_info = $this->dquery($dbHandle, $sql, array(':uid' => $user['uid']));
         if ($ban_info[0]) {
             PwAnnounce::showError("User was banned!");
         }
-
+        
         //获取种子
         $torrent = $this->_getTorrentDS()->getTorrentByInfoHash($infoHash);
         if (!$torrent) {
@@ -216,21 +216,21 @@ class IndexController extends PwBaseController
                 elseif ($rotio < 7.45) $credit_total = 13;
                 else $credit_total = 14;
             }
-
+            
             $WindApi = WindidApi::api('user');
             $crdtits = $WindApi->getUserCredit($user['uid']);
             $credit_add = $credit_total - $crdtits['credit3'];
-
+            
             if ($credit_add != 0) {
                 $pwUser = Wekit::load('user.PwUser');
                 Wind::import('SRV:credit.bo.PwCreditBo');
                 $creditBo = PwCreditBo::getInstance();
-                $changes = array('3'=>$credit_add);
+                $changes = array('3' => $credit_add);
                 $creditBo->addLog('PT Tracker', $changes, new PwUserBo($user['uid']));
-                $credits_to = array('3'=>$credit_total);
+                $credits_to = array('3' => $credit_total);
                 $creditBo->execute(array($user['uid'] => $credits_to), false);
             }
-
+            
             if ($status != '') {
                 $sql = 'UPDATE pw_app_torrent_history SET uploaded = :uploaded, uploaded_last = :uploaded_last, downloaded = :downloaded, downloaded_last = :downloaded_last, status = :status WHERE uid = :uid AND torrent = :torrent';
                 $this->dexec($dbHandle, $sql, array(':uid' => $user['uid'], ':torrent' => $torrent['id'], ':uploaded' => $uploaded_total, ':uploaded_last' => $uploaded, ':downloaded' => $downloaded_total, ':downloaded_last' => $downloaded, ':status' => $status));
@@ -280,18 +280,9 @@ class IndexController extends PwBaseController
         $torrent = $this->_getTorrentDS()->getTorrent($id);
         $torrentnameprefix = "[uupt][";
         $timestamp = Pw::getTime();
-        header("Content-Type: application/x-bittorrent");
-        if (str_replace("Gecko", "", $_SERVER['HTTP_USER_AGENT']) != $_SERVER['HTTP_USER_AGENT']) {
-            header("Content-Disposition: attachment; filename=\"$torrentnameprefix" . $torrent["save_as"] . "].torrent\" ; charset=utf-8");
-        } else if (str_replace("Firefox", "", $_SERVER['HTTP_USER_AGENT']) != $_SERVER['HTTP_USER_AGENT']) {
-            header("Content-Disposition: attachment; filename=\"$torrentnameprefix" . $torrent["save_as"] . "].torrent\" ; charset=utf-8");
-        } else if (str_replace("Opera", "", $_SERVER['HTTP_USER_AGENT']) != $_SERVER['HTTP_USER_AGENT']) {
-            header("Content-Disposition: attachment; filename=\"$torrentnameprefix" . $torrent["save_as"] . "].torrent\" ; charset=utf-8");
-        } else if (str_replace("IE", "", $_SERVER['HTTP_USER_AGENT']) != $_SERVER['HTTP_USER_AGENT']) {
-            header("Content-Disposition: attachment; filename=" . str_replace("+", "%20", rawurlencode("$torrentnameprefix" . $torrent["save_as"] . "].torrent")));
-        } else {
-            header("Content-Disposition: attachment; filename=" . str_replace("+", "%20", rawurlencode("$torrentnameprefix" . $torrent["save_as"] . "].torrent")));
-        }
+        
+        header('Content-type: application/octet-streamn');
+        header('Content-disposition: attachment; filename="' . $torrentnameprefix . rawurlencode($torrent['save_as']) . '].torrent"; charset=utf-8');
         header('Content-Transfer-Encoding: binary');
         header('Expires: 0');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
