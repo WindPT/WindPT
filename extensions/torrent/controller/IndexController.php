@@ -5,6 +5,7 @@ Wind::import('EXT:torrent.service.srv.helper.PwBencode');
 Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
 Wind::import('EXT:torrent.service.dm.PwTorrentDm');
 Wind::import('EXT:torrent.service.dm.PwTorrentPeerDm');
+Wind::import('EXT:torrent.service.dm.PwTorrentHistoryDm');
 
 class IndexController extends PwBaseController
 {
@@ -21,44 +22,25 @@ class IndexController extends PwBaseController
         $this->setTemplate('');
     }
     
-    private function dquery($dbHandle, $sql, $bind) {
-        $sth = @$dbHandle->prepare($sql) or PwAnnounce::showError("database: Cannot prepare statement for execution!");
-        @$sth->execute($bind) or PwAnnounce::showError("database: Cannot fetch result");
-        if ($sth->errorCode == 0) {
-            $result = @$sth->fetchAll(PDO::FETCH_ASSOC);
-            if (empty($result) || empty($result[0])) return NULL;
-            else return $result;
-        } else {
-            PwAnnounce::showError("database: Database returned an error : " . $sth->errorCode);
-        }
-    }
-    
-    private function dexec($dbHandle, $sql, $bind) {
-        $sth = @$dbHandle->prepare($sql) or PwAnnounce::showError("database: Cannot prepare statement for execution!");
-        @$sth->execute($bind) or PwAnnounce::showError("database: Cannot fetch result");
-        if ($sth->errorCode == 0) return $sth->rowCount();
-        else PwAnnounce::showError("database: Database returned an error : " . $sth->errorCode);
-    }
-    
     public function announceAction() {
         
         //变量获取
-        $passKey = $this->getInput("passkey");
-        $infoHash = $this->getInput("info_hash");
-        $peerId = $this->getInput("peer_id");
-        $event = $this->getInput("event");
-        $port = $this->getInput("port");
-        $downloaded = $this->getInput("downloaded");
-        $uploaded = $this->getInput("uploaded");
-        $left = $this->getInput("left");
-        $compact = $this->getInput("compact");
-        $noPeerId = $this->getInput("no_peer_id");
-        $agent = $_SERVER["HTTP_USER_AGENT"];
+        $passKey = $this->getInput('passkey');
+        $infoHash = $this->getInput('info_hash');
+        $peerId = $this->getInput('peer_id');
+        $event = $this->getInput('event');
+        $port = $this->getInput('port');
+        $downloaded = $this->getInput('downloaded');
+        $uploaded = $this->getInput('uploaded');
+        $left = $this->getInput('left');
+        $compact = $this->getInput('compact');
+        $noPeerId = $this->getInput('no_peer_id');
+        $agent = $_SERVER['HTTP_USER_AGENT'];
         $ip = Wind::getComponent('request')->getClientIp();
         
         //检测客户端是否允许下载
         if (!PwAnnounce::checkClient()) {
-            PwAnnounce::showError("This a a bittorrent application and can't be loaded into a browser!");
+            PwAnnounce::showError('This a a bittorrent application and can\'t be loaded into a browser!');
         }
         
         //检测客户端角色
@@ -67,32 +49,22 @@ class IndexController extends PwBaseController
         //检测PassKey，验证用户权限
         $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passKey);
         if (!$user) {
-            PwAnnounce::showError("Invalid passkey! Re-download the torrent file!");
+            PwAnnounce::showError('Invalid passkey! Re-download the torrent file!');
         }
         
-        $config = require (realpath(dirname(__FILE__)) . '/../../../../conf/database.php');
-        try {
-            $dbHandle = new PDO($config['dsn'], $config['user'], $config['pwd']);
-            $dbHandle->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        }
-        catch(PDOException $e) {
-            PwAnnounce::showError("database: Cannot connect to database!");
-        }
-        
-        $sql = 'SELECT * from pw_user_ban WHERE uid = :uid';
-        $ban_info = $this->dquery($dbHandle, $sql, array(':uid' => $user['uid']));
-        if ($ban_info[0]) {
-            PwAnnounce::showError("User was banned!");
+        $userBan = Wekit::load('SRV:user.dao.PwUserBanDao')->getBanInfo($user['uid']);
+        if ($userBan) {
+            PwAnnounce::showError('User was banned!');
         }
         
         //获取种子
         $torrent = $this->_getTorrentDS()->getTorrentByInfoHash($infoHash);
         if (!$torrent) {
-            PwAnnounce::showError("Torrent not registered with this tracker!");
+            PwAnnounce::showError('Torrent not registered with this tracker!');
         }
         unset($self);
         
-        //获取Peers
+        //获取Peers getTorrentPeerByTorrentAndUid
         $peers = PwAnnounce::getPeersByTorrentId($torrent['id'], $peerId);
         $self = PwAnnounce::getSelf($peers, $peerId);
         
@@ -103,63 +75,59 @@ class IndexController extends PwBaseController
         if (isset($self)) {
             $dm = new PwTorrentPeerDm($self['id']);
             switch ($event) {
-                case "":
-                case "started":
-                    $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), "Y-m-d H:i:s"))->setLastAction(Pw::time2str(Pw::getTime(), "Y-m-d H:i:s"))->setSeeder($seeder)->setAgent($agent);
+                case '':
+                case 'started':
+                    $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
                     break;
 
-                case "stopped":
+                case 'stopped':
                     $this->_getTorrentPeerDS()->deleteTorrentPeer($self['id']);
                     $status = 'stop';
                     break;
 
-                case "completed":
+                case 'completed':
                     $dm->setFinishedat(Pw::getTime());
-                    $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), "Y-m-d H:i:s"))->setLastAction(Pw::time2str(Pw::getTime(), "Y-m-d H:i:s"))->setSeeder($seeder)->setAgent($agent);
+                    $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
                     $status = 'done';
                     break;
 
                 default:
-                    PwAnnounce::showError("Invalid event from client!");
+                    PwAnnounce::showError('Invalid event from client!');
             }
         } else {
             $sockres = @pfsockopen($ip, $port, $errno, $errstr, 5);
-            if ($errno == "111") {
-                $connectable = "no";
+            if ($errno == '111') {
+                $connectable = 'no';
             } else {
-                $connectable = "yes";
+                $connectable = 'yes';
             }
             @fclose($sockres);
             
-            $sql = 'DELETE from pw_app_torrent_peer WHERE userid = :uid AND torrent = :torrent';
-            $this->dexec($dbHandle, $sql, array(':uid' => $user['uid'], ':torrent' => $torrent['id']));
-            
             $dm = new PwTorrentPeerDm();
-            $dm->setTottent($torrent['id'])->setUserid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), "Y-m-d H:i:s"))->setLastAction(Pw::time2str(Pw::getTime(), "Y-m-d H:i:s"))->setSeeder($seeder)->setAgent($agent)->setPasskey($passKey);
+            $dm->setTottent($torrent['id'])->setUserid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passKey);
             $this->_getTorrentPeerDS()->addTorrentPeer($dm);
         }
         
-        $sql = 'SELECT * from pw_app_torrent_history WHERE uid = :uid AND torrent = :torrent';
-        $dresult = $this->dquery($dbHandle, $sql, array(':uid' => $user['uid'], ':torrent' => $torrent['id']));
-        if (empty($dresult)) {
-            $sql = 'INSERT INTO pw_app_torrent_history(uid, torrent, uploaded, downloaded) values(:uid, :torrent, :uploaded, :downloaded)';
-            $this->dexec($dbHandle, $sql, array(':uid' => $user['uid'], ':torrent' => $torrent['id'], ':uploaded' => $uploaded, ':downloaded' => $downloaded));
+        $historie = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
+        if (!$historie) {
+            $dm = new PwTorrentHistoryDm();
+            $dm->setUid($user['uid'])->setTottent($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
+            $this->_getTorrentHistoryDao()->addTorrentHistory($dm->getData());
         } else {
-            $uploaded_add = max(0, $uploaded - $dresult[0]['uploaded_last']);
-            $downloaded_add = max(0, $downloaded - $dresult[0]['downloaded_last']);
+            $uploaded_add = max(0, $uploaded - $history['uploaded_last']);
+            $downloaded_add = max(0, $downloaded - $history['downloaded_last']);
             
-            $uploaded_total = $dresult[0]['uploaded'] + $uploaded_add;
-            $downloaded_total = $dresult[0]['downloaded'] + $downloaded_add;
+            $uploaded_total = $history['uploaded'] + $uploaded_add;
+            $downloaded_total = $history['downloaded'] + $downloaded_add;
             
             if ($downloaded_total != 0) $rotio = round($uploaded_total / $downloaded_total, 2);
             else $rotio = 0;
             
-            $sql = 'SELECT count(*) as total from pw_bbs_threads WHERE disabled = 0 AND ischeck = 1 AND special = "torrent" AND created_userid = :uid';
-            $tresult = $this->dquery($dbHandle, $sql, array(':uid' => $user['uid']));
+            $user_torrents = $this->_getTorrentDS()->fetchTorrentByUid($user['uid']);
             
-            if ($tresult[0]['total'] < 1) {
+            if (count($user_torrents) < 1) {
                 $credit_total = 0;
             } elseif ($downloaded_total / 1073741824 < 10) {
                 $credit_total = 1;
@@ -231,31 +199,30 @@ class IndexController extends PwBaseController
                 $creditBo->execute(array($user['uid'] => $credits_to), false);
             }
             
-            if ($status != '') {
-                $sql = 'UPDATE pw_app_torrent_history SET uploaded = :uploaded, uploaded_last = :uploaded_last, downloaded = :downloaded, downloaded_last = :downloaded_last, status = :status WHERE uid = :uid AND torrent = :torrent';
-                $this->dexec($dbHandle, $sql, array(':uid' => $user['uid'], ':torrent' => $torrent['id'], ':uploaded' => $uploaded_total, ':uploaded_last' => $uploaded, ':downloaded' => $downloaded_total, ':downloaded_last' => $downloaded, ':status' => $status));
-            } else {
-                $sql = 'UPDATE pw_app_torrent_history SET uploaded = :uploaded, uploaded_last = :uploaded_last, downloaded = :downloaded, downloaded_last = :downloaded_last WHERE uid = :uid AND torrent = :torrent';
-                $this->dexec($dbHandle, $sql, array(':uid' => $user['uid'], ':torrent' => $torrent['id'], ':uploaded' => $uploaded_total, ':uploaded_last' => $uploaded, ':downloaded' => $downloaded_total, ':downloaded_last' => $downloaded));
-            }
+            $dm = new PwTorrentHistoryDm($history['id']);
+            $dm->setUid($user['uid'])->setTottent($torrent['id'])->setUploaded($uploaded)->setUploadedLast($uploaded_last)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded);
+            if ($status != '') $dm->setStatus($status);
+            $this->_getTorrentHistoryDao()->updateTorrentHistory($history['id'], $dm->getData());
             
-            $sql = 'UPDATE pw_app_torrent_user SET uploaded_mo = :uploaded, downloaded_mo = :downloaded WHERE uid = :uid';
-            $this->dexec($dbHandle, $sql, array(':uid' => $user['uid'], ':uploaded' => $user['uploaded_mo'] + $uploaded_add, ':downloaded' => $user['downloaded_mo'] + $downloaded_add));
+            //$sql = 'UPDATE pw_app_torrent_user SET uploaded_mo = :uploaded, downloaded_mo = :downloaded WHERE uid = :uid';
+            //$this->dexec($dbHandle, $sql, array(':uid' => $user['uid'], ':uploaded' => $user['uploaded_mo'] + $uploaded_add, ':downloaded' => $user['downloaded_mo'] + $downloaded_add));
         }
         
-        $sql = 'SELECT COUNT(*) AS count FROM pw_app_torrent_peer WHERE torrent = :torrent AND seeder = :seeder';
-        $dresult = $this->dquery($dbHandle, $sql, array(':torrent' => $torrent['id'], ':seeder' => 'yes'));
-        $torrent['seeders'] = $dresult[0]['count'];
-        
-        $sql = 'SELECT COUNT(*) AS count FROM pw_app_torrent_peer WHERE torrent = :torrent AND seeder = :seeder';
-        $dresult = $this->dquery($dbHandle, $sql, array(':torrent' => $torrent['id'], ':seeder' => 'no'));
-        $torrent['leechers'] = $dresult[0]['count'];
+        foreach ($peers as $peer) {
+            if ($peer['seeder'] == 'yes') {
+                $seeder++;
+            } else {
+                $leecher++;
+            }
+        }
+        $torrent['seeders'] = $seeder;
+        $torrent['leechers'] = $leecher;
         
         //更新种子信息
         $dm = new PwTorrentDm($torrent['id']);
         $dm->setSeeders($torrent['seeders']);
         $dm->setLeechers($torrent['leechers']);
-        $dm->setLastAction(Pw::time2str(Pw::getTime(), "Y-m-d H:i:s"));
+        $dm->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'));
         $this->_getTorrentDS()->updateTorrent($dm);
         
         //返回Peers数据给客户端
@@ -264,21 +231,21 @@ class IndexController extends PwBaseController
         PwAnnounce::sendPeerList($peer_string);
     }
     public function downloadAction() {
-        $id = $this->getInput("id");
+        $id = $this->getInput('id');
         $result = $this->check();
         if ($result instanceof PwError) {
             $this->showError($result->getError());
         }
-        $file = "./torrent/$id.torrent";
+        $file = './torrent/$id.torrent';
         if (!file_exists($file)) {
-            $this->showError("种子文件不存在！");
+            $this->showError('种子文件不存在！');
         }
         header('Content-Description: File Transfer');
         $bencode = new PwBencode();
         $dictionary = $bencode->doDecodeFile($file);
-        $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl("app/index/announce?app=torrent&passkey=" . $this->user->passkey)));
+        $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('app/index/announce?app=torrent&passkey=' . $this->user->passkey)));
         $torrent = $this->_getTorrentDS()->getTorrent($id);
-        $torrentnameprefix = "[uupt][";
+        $torrentnameprefix = '[uupt][';
         $timestamp = Pw::getTime();
         
         header('Content-type: application/octet-streamn');
@@ -292,7 +259,11 @@ class IndexController extends PwBaseController
     }
     public function check() {
         if (!$this->loginUser->uid) {
-            return new PwError("必须登录才能下载种子！");
+            return new PwError('必须登录才能下载种子！');
+        }
+        $userBan = Wekit::load('SRV:user.dao.PwUserBanDao')->getBanInfo($this->loginUser->uid);
+        if ($userBan) {
+            return new PwError('用户已被封禁！');
         }
         if (!$this->user->passkey) {
             Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
@@ -320,7 +291,7 @@ class IndexController extends PwBaseController
         $this->user = $user;
     }
     public function makePassKey() {
-        return md5($this->loginUser->username . Pw::time2str(Pw::getTime(), "Y-m-d H:i:s") . $this->loginUser->info['password']);
+        return md5($this->loginUser->username . Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s') . $this->loginUser->info['password']);
     }
     private function _getTorrentDS() {
         return Wekit::load('EXT:torrent.service.PwTorrent');
@@ -330,5 +301,8 @@ class IndexController extends PwBaseController
     }
     private function _getTorrentUserDS() {
         return Wekit::load('EXT:torrent.service.PwTorrentUser');
+    }
+    private function _getTorrentHistoryDao() {
+        return Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao');
     }
 }
