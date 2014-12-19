@@ -88,8 +88,7 @@ class IndexController extends PwBaseController
                     break;
 
                 case 'completed':
-                    $dm->setFinishedat(Pw::getTime());
-                    $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
+                    $dm->setFinishedat(Pw::getTime())->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
                     $status = 'done';
                     break;
@@ -207,6 +206,7 @@ class IndexController extends PwBaseController
             
             //$sql = 'UPDATE pw_app_torrent_user SET uploaded_mo = :uploaded, downloaded_mo = :downloaded WHERE uid = :uid';
             //$this->dexec($dbHandle, $sql, array(':uid' => $user['uid'], ':uploaded' => $user['uploaded_mo'] + $uploaded_add, ':downloaded' => $user['downloaded_mo'] + $downloaded_add));
+            
         }
         
         foreach ($peers as $peer) {
@@ -221,9 +221,7 @@ class IndexController extends PwBaseController
         
         //更新种子信息
         $dm = new PwTorrentDm($torrent['id']);
-        $dm->setSeeders($torrent['seeders']);
-        $dm->setLeechers($torrent['leechers']);
-        $dm->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'));
+        $dm->setSeeders($torrent['seeders'])->setLeechers($torrent['leechers'])->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'));
         $this->_getTorrentDS()->updateTorrent($dm);
         
         //返回Peers数据给客户端
@@ -237,7 +235,7 @@ class IndexController extends PwBaseController
         if ($result instanceof PwError) {
             $this->showError($result->getError());
         }
-        $file = './torrent/$id.torrent';
+        $file = './torrent/' . $id . '.torrent';
         if (!file_exists($file)) {
             $this->showError('种子文件不存在！');
         }
@@ -269,8 +267,7 @@ class IndexController extends PwBaseController
         if (!$this->user->passkey) {
             Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
             $dm = new PwTorrentUserDm();
-            $dm->setUid($this->loginUser->uid);
-            $dm->setPassKey($this->makePassKey());
+            $dm->setUid($this->loginUser->uid)->setPassKey($this->makePassKey());
             $this->_getTorrentUserDS()->addTorrentUser($dm);
             $this->getUser();
         }
@@ -278,8 +275,7 @@ class IndexController extends PwBaseController
             $torrentUser = $this->_getTorrentUserDS()->getTorrentUserByUid($this->loginUser->uid);
             Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
             $dm = new PwTorrentUserDm($torrentUser['id']);
-            $dm->setUid($this->loginUser->uid);
-            $dm->setPassKey($this->makePassKey());
+            $dm->setUid($this->loginUser->uid)->setPassKey($this->makePassKey());
             $this->_getTorrentUserDS()->updateTorrentUser($dm);
             $this->getUser();
         }
