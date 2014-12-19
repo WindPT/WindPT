@@ -6,7 +6,7 @@ class PwTorrentPeerDm extends PwBaseDm {
     public function __construct($id = 0) {
         $this->id = $id;
     }
-    public function setTottent($torrent) {
+    public function setTorrent($torrent) {
         $this->_data['torrent'] = $torrent;
         return $this;
     }

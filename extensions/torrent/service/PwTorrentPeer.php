@@ -31,6 +31,10 @@ class PwTorrentPeer {
         if (empty($id)) return false;
         return $this->_getDao(self::FETCH_MAIN)->deleteTorrentPeer($id);
     }
+    public function deleteTorrentPeerByTorrentAndUid($tid, $uid) {
+        if (empty($tid) || empty($uid)) return false;
+        return $this->_getDao(self::FETCH_MAIN)->deleteTorrentPeerByTorrentAndUid($tid, $uid);
+    }
     protected function _getDaoMap() {
         return array(
             self::FETCH_MAIN        => 'EXT:torrent.service.dao.PwTorrentPeerDao',

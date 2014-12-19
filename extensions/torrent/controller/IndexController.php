@@ -19,10 +19,6 @@ class IndexController extends PwBaseController
         echo 'WindPT private BitTorrent tracker';
     }
     
-    public function ptProfileAction() {
-        $this->setTemplate('');
-    }
-    
     public function announceAction() {
         
         //变量获取
@@ -105,15 +101,17 @@ class IndexController extends PwBaseController
             }
             @fclose($sockres);
             
+            $this->_getTorrentPeerDS()->deleteTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
+
             $dm = new PwTorrentPeerDm();
-            $dm->setTottent($torrent['id'])->setUserid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passKey);
+            $dm->setTorrent($torrent['id'])->setUserid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passKey);
             $this->_getTorrentPeerDS()->addTorrentPeer($dm);
         }
         
         $historie = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
         if (!$historie) {
             $dm = new PwTorrentHistoryDm();
-            $dm->setUid($user['uid'])->setTottent($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
+            $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
             $this->_getTorrentHistoryDao()->addTorrentHistory($dm->getData());
         } else {
             $uploaded_add = max(0, $uploaded - $history['uploaded_last']);
@@ -200,7 +198,7 @@ class IndexController extends PwBaseController
             }
             
             $dm = new PwTorrentHistoryDm($history['id']);
-            $dm->setUid($user['uid'])->setTottent($torrent['id'])->setUploaded($uploaded)->setUploadedLast($uploaded_last)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded);
+            $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded)->setUploadedLast($uploaded_last)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded);
             if ($status != '') $dm->setStatus($status);
             $this->_getTorrentHistoryDao()->updateTorrentHistory($history['id'], $dm->getData());
             

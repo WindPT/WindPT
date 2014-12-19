@@ -23,6 +23,11 @@ class PwTorrentPeerDao extends PwBaseDao
         $smt = $this->getConnection()->createStatement($sql);
         return $smt->queryAll(array($tid), 'id');
     }
+    public function getTorrentPeerByTorrentAndUid($tid, $uid) {
+        $sql = $this->_bindSql('SELECT * FROM %s WHERE torrent = ? AND userid = ?', $this->getTable());
+        $smt = $this->getConnection()->createStatement($sql);
+        return $smt->queryAll(array($tid, $uid), 'id');
+    }
     public function addTorrentPeer($fields) {
         return $this->_add($fields);
     }
@@ -31,5 +36,15 @@ class PwTorrentPeerDao extends PwBaseDao
     }
     public function deleteTorrentPeer($id) {
         return $this->_delete($id);
+    }
+    public function deleteTorrentPeerByTorrentAndUid($tid, $uid) {
+        $peers = $this->getTorrentPeerByTorrentAndUid($tid, $uid);
+        if(is_array($peers)) {
+            foreach($peers as $peer)
+                $this->_delete($peer['id']);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

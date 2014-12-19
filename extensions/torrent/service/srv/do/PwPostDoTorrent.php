@@ -145,7 +145,7 @@ class PwPostDoTorrent extends PwPostDoBase
         $filedm = new PwTorrentFileDm();
         if (is_array($this->filelist)) {
             foreach ($this->filelist as $file) {
-                $filedm->setTottent($result);
+                $filedm->setTorrent($result);
                 $filedm->setFileName($file[0]);
                 $filedm->setSize($file[1]);
                 $this->_getTorrentFileDS()->addTorrentFile($filedm);
