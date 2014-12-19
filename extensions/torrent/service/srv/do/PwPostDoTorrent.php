@@ -30,7 +30,7 @@ class PwPostDoTorrent extends PwPostDoBase
     public function createHtmlBeforeContent() {
         $torrentUser = $this->_getTorrentUserDS()->getTorrentUserByUid($this->user->uid);
         $this->passkey = $torrentUser['passkey'];
-
+        
         $uid = $this->user->uid;
         if (!$this->passkey) {
             Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
@@ -111,7 +111,7 @@ class PwPostDoTorrent extends PwPostDoBase
             }
             $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.url') . '/announce.php'));
             $dictionary['value']['info']['value']['private'] = $bencode->doDecode('i1e');
-
+            
             //$dictionary['value']['info']['value']['source'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.name')));
             unset($dictionary['value']['announce-list']);
             unset($dictionary['value']['nodes']);
@@ -129,7 +129,7 @@ class PwPostDoTorrent extends PwPostDoBase
             $this->filelist = $fileList;
             $this->totalength = $totalLength;
             $this->type = $type;
-
+            
             return true;
         } else {
             return new PwError('必须上传一个种子文件！');
@@ -152,29 +152,29 @@ class PwPostDoTorrent extends PwPostDoBase
             }
         }
         $bencode = new PwBencode();
-        $fp = fopen('./torrent/$result.torrent', 'w');
+        $fp = fopen('./torrent/' . $result . '.torrent', 'w');
         if ($fp) {
             @fwrite($fp, $bencode->doEncode($this->dictionary));
             fclose($fp);
         }
         return true;
     }
-
+    
     public function getUser($uid) {
         $user = new PwUserBo($uid, true);
         $torrentUser = $this->_getTorrentUserDS()->getTorrentUserByUid($uid);
         $user->passkey = $torrentUser['passkey'];
         $this->user = $user;
     }
-
+    
     public function makePassKey() {
         return md5($this->loginUser->username . Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s') . $this->loginUser->info['password']);
     }
-
+    
     private function _getTorrentUserDS() {
         return Wekit::load('EXT:torrent.service.PwTorrentUser');
     }
-
+    
     private function _checkHash($hash) {
         return true;
     }
