@@ -18,17 +18,12 @@ class PwTorrentDao extends PwBaseDao {
         return $smt->queryAll(array($uid));
     }
     public function getTorrentByInfoHash($info_hash) {
-        $sql = $this->_bindTable("SELECT * FROM %s WHERE binary info_hash like ?");
+        $sql = $this->_bindTable("SELECT * FROM %s WHERE binary info_hash = ?");
         $smt = $this->getConnection()->createStatement($sql);
         return $smt->getOne(array($info_hash));
     }
     public function addTorrent($fields) {
         return $this->_add($fields);
-    }
-    public function checkTorrentExist($hash) {
-        $sql = $this->_bindTable("SELECT * FROM %s WHERE info_hash LIKE ?");
-        $smt = $this->getConnection()->createStatement($sql);
-        return $smt->getOne(array($hash));
     }
     public function updateTorrent($id, $fields, $increaseFields = array()) {
         return $this->_update($id, $fields);

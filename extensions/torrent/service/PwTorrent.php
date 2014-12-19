@@ -25,9 +25,6 @@ class PwTorrent
         }
         return $this->_getDao(self::FETCH_MAIN)->addTorrent($dm->getData());
     }
-    public function checkTorrentExist($hash) {
-        return $this->_getDao(self::FETCH_MAIN)->checkTorrentExist($hash);
-    }
     public function updateTorrent(PwTorrentDm $dm, $fetchmode = self::FETCH_MAIN) {
         if (($result = $dm->beforeUpdate()) !== true) {
             return $result;
