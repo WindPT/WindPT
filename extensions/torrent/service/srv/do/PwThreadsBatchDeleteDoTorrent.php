@@ -12,11 +12,11 @@ class PwThreadsBatchDeleteDoTorrent
         $torrentDao = Wekit::load('EXT:torrent.service.dao.PwTorrentDao');
         $fileDao = Wekit::load('EXT:torrent.service.dao.PwTorrentFileDao');
         foreach ($ids as $id) {
-            $torrent = $torrentDao->fetchTorrentByTid($id);
+            $torrent = $torrentDao->getTorrentByTid($id);
             $files = $fileDao->getTorrentFileByTorrent($torrent['id']);
             foreach ($files as $file) $fileDao->deleteTorrentFile($file['id']);
-            $torrentDa->deleteTorrent($torrent['id']);
-            @unlink('../../../../../torrent/' . $torrent['id'] . '.torrent');
+            $torrentDao->deleteTorrent($torrent['id']);
+            @unlink('../../../../../../torrent/' . $torrent['id'] . '.torrent');
         }
     }
 }
