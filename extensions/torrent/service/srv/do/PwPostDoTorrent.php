@@ -152,7 +152,7 @@ class PwPostDoTorrent extends PwPostDoBase
             }
         }
         $bencode = new PwBencode();
-        $fp = fopen('./torrent/' . $result . '.torrent', 'w');
+        $fp = fopen(WEKIT_PATH . '../torrent/' . $result . '.torrent', 'w');
         if ($fp) {
             @fwrite($fp, $bencode->doEncode($this->dictionary));
             fclose($fp);

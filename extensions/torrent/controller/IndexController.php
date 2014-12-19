@@ -233,7 +233,7 @@ class IndexController extends PwBaseController
         if ($result instanceof PwError) {
             $this->showError($result->getError());
         }
-        $file = './torrent/' . $id . '.torrent';
+        $file = WEKIT_PATH . '../torrent/' . $id . '.torrent';
         if (!file_exists($file)) {
             $this->showError('种子文件不存在！');
         }

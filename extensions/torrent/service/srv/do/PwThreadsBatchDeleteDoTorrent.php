@@ -16,7 +16,7 @@ class PwThreadsBatchDeleteDoTorrent
             $files = $fileDao->getTorrentFileByTorrent($torrent['id']);
             foreach ($files as $file) $fileDao->deleteTorrentFile($file['id']);
             $torrentDao->deleteTorrent($torrent['id']);
-            @unlink('../../../../../../torrent/' . $torrent['id'] . '.torrent');
+            @unlink(WEKIT_PATH . '../torrent/' . $torrent['id'] . '.torrent');
         }
     }
 }
