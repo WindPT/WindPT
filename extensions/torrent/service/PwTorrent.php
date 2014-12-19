@@ -1,6 +1,7 @@
 <?php
 defined('WEKIT_VERSION') || exit('Forbidden');
-class PwTorrent {
+class PwTorrent
+{
     const FETCH_MAIN = 1;
     public function getTorrent($id, $fetchmode = self::FETCH_MAIN) {
         if (empty($id)) return array();
@@ -9,6 +10,10 @@ class PwTorrent {
     public function getTorrentByTid($tid, $fetchmod = self::FETCH_MAIN) {
         if (empty($tid)) return array();
         return $this->_getDao($fetchmod)->getTorrentByTid($tid);
+    }
+    public function fetchTorrentByUid($uid, $fetchmod = self::FETCH_MAIN) {
+        if (empty($tid)) return array();
+        return $this->_getDao($fetchmod)->fetchTorrentByUid($tid);
     }
     public function getTorrentByInfoHash($info_hash, $fetchmod = self::FETCH_MAIN) {
         if (empty($info_hash)) return array();
@@ -34,9 +39,7 @@ class PwTorrent {
         return $this->_getDao(self::FETCH_MAIN)->deleteTorrent($aid);
     }
     protected function _getDaoMap() {
-        return array(
-            self::FETCH_MAIN        => 'EXT:torrent.service.dao.PwTorrentDao',
-        );
+        return array(self::FETCH_MAIN => 'EXT:torrent.service.dao.PwTorrentDao',);
     }
     protected function _getDao($fetchmode = self::FETCH_MAIN) {
         return Wekit::loadDaoFromMap($fetchmode, $this->_getDaoMap(), 'PwTorrent');

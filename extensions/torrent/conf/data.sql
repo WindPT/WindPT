@@ -91,9 +91,9 @@ CREATE TABLE `pw_app_torrent_history` (
   `uid` int(10) NOT NULL,
   `torrent` mediumint(8) NOT NULL,
   `uploaded` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `uploaded_last` bigint(20) DEFAULT '0',
+  `uploaded_last` bigint(20) NOT NULL DEFAULT '0',
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `downloaded_last` bigint(20) DEFAULT '0',
+  `downloaded_last` bigint(20) NOT NULL DEFAULT '0',
   `status` enum('do','done','stop') NOT NULL DEFAULT 'do',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
