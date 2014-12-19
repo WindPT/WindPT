@@ -15,7 +15,8 @@ class IndexController extends PwBaseController
         $this->getUser();
     }
     public function run() {
-        $peers = $this->_getTorrentPeerDS()->getTorrentPeerByTorrent(8);
+        $this->setTemplate('');
+        echo 'WindPT private BitTorrent tracker';
     }
     
     public function ptProfileAction() {
