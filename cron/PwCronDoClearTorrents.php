@@ -33,7 +33,7 @@ class PwCronDoClearTorrents extends AbstractCronBase
         foreach ($fids as $fid) {
             $topics = Wekit::load('forum.PwThread')->getThreadByFid($fid, 0);
             foreach ($topics as $topic) {
-                if ($topic['special'] != 'torrent') continue;
+                if ($topic['special'] != 'torrent' || $topic['disabled'] > 0) continue;
                 $torrent = Wekit::load('EXT:torrent.service.dao.PwTorrentDao')->getTorrentByTid($topic['tid']);
                 if (strtotime($torrent['last_action']) < strtotime('-' . $torrentimeout . ' day')) $this->delete_thread($topic);
             }
