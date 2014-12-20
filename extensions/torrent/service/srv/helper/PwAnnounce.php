@@ -8,7 +8,18 @@ class PwAnnounce {
         exit(0);
     }
     public static function bc($exp) {
-        $result = exec('echo ' . escapeshellarg($exp) . ' | bc');
+        if (Wekit::C('site', 'app.torrent.calfunc') == 'curl') {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, str_replace('%s', urlencode($exp), Wekit::C('site', 'app.torrent.calcmd')));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            $result = curl_exec($ch);
+            curl_close($ch);
+        } else {
+            if (Wekit::C('site', 'app.torrent.calcmd') == 'dc') $cmd = 'dc';
+            else $cmd = 'bc -l';
+            $result = exec('echo ' . escapeshellarg($exp) . ' | '.$cmd);
+        }
         if (is_numeric($result)){
             return $result;
         }else{

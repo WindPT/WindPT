@@ -53,6 +53,35 @@
         <tr><td colspan="3">可用的变量： %downloaded%, %downloaded_total%, %uploaded%, %uploaded_total%, %rotio%, %rotio_total%, %time%, %credit%, %torrents%</td></tr>
     </table>
 </div>
+<div class="h_a">运算器设置</div>
+<div class="table_full">
+    <table width="100%">
+        <col class="th" />
+        <col width="400" />
+        <col />
+        <tr>
+            <th><label><input type="radio" name="calfunc" value="exec" {@pw::ifcheck($config['app.torrent.calfunc'] != 'curl')}><span>exec()</span></label></th>
+            <td>
+            <!--# if ($config['app.torrent.calfunc'] != 'curl') { #-->
+            <ul class="switch_list cc">
+                <li><label><input type="radio" name="calcmd" value="bc" {@pw::ifcheck($config['app.torrent.calcmd'] != 'dc')}><span>bc -l</span></label></li>
+                <li><label><input type="radio" name="calcmd" value="dc" {@Pw::ifcheck($config['app.torrent.calcmd'] == 'dc')}><span>dc</span></label></li>
+            </ul>
+            <!--# } #-->
+            </td>
+            <td><div class="fun_tips">使用 Linux 系统指令进行计算，有一定风险。</div></td>
+        </tr>
+        <tr>
+            <th><label><input type="radio" name="calfunc" value="curl" {@pw::ifcheck($config['app.torrent.calfunc'] == 'curl')}><span>curl()</span></label></th>
+            <td>
+            <!--# if ($config['app.torrent.calfunc'] == 'curl') { #-->
+            <input type="text" name="calcmd" class="input length_5" value="{$config['app.torrent.calcmd']}">
+            <!--# } #-->
+            </td>
+            <td><div class="fun_tips">使用 curl 借助远程服务进行运算，需要专门后端支持。用 %s 取代 URL 中的算式部分</div></td>
+        </tr>
+    </table>
+</div>
 <!--# } #-->
 <div class="btn_wrap">
     <div class="btn_wrap_pd">
