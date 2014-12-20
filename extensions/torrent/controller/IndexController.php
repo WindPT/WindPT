@@ -126,8 +126,8 @@ class IndexController extends PwBaseController
             $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded);
             if ($status != '') $dm->setStatus($status);
             $this->_getTorrentHistoryDao()->updateTorrentHistory($history['id'], $dm->getData());
-            $uploaded = $uploaded_total;
-            $downloaded = $downloaded_total;
+            $uploaded = $uploaded_add;
+            $downloaded = $downloaded_add;
             unset($uploaded_add);
             unset($downloaded_add);
             unset($uploaded_total);
