@@ -112,6 +112,8 @@ class IndexController extends PwBaseController
             $dm = new PwTorrentHistoryDm();
             $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
             $this->_getTorrentHistoryDao()->addTorrentHistory($dm->getData());
+            if ($downloaded != 0) $rotio = round($uploaded / $downloaded, 2);
+            else $rotio = 1;
         } else {
             $uploaded_add = max(0, $uploaded - $history['uploaded_last']);
             $downloaded_add = max(0, $downloaded - $history['downloaded_last']);
@@ -120,7 +122,7 @@ class IndexController extends PwBaseController
             $downloaded_total = $history['downloaded'] + $downloaded_add;
             
             if ($downloaded_total != 0) $rotio = round($uploaded_total / $downloaded_total, 2);
-            else $rotio = 0;
+            else $rotio = 1;
             
             $dm = new PwTorrentHistoryDm($history['id']);
             $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded);
@@ -149,13 +151,13 @@ class IndexController extends PwBaseController
             }
             unset($histories);
             if ($downloaded_total != 0) $rotio_total = round($uploaded_total / $downloaded_total, 2);
-            else $rotio_total = 0;
+            else $rotio_total = 1;
             $timeUsed = time() - strtotime($self['started']);
             $symbol = array('%downloaded%', '%downloaded_total%', '%uploaded%', '%uploaded_total%', '%rotio%', '%rotio_total%', '%time%', '%credit%', '%torrents%');
-            $numbers = array($downloaded, $downloaded_total, $uploaded, $uploaded_total, $rotio, $rotio_total, $timeUsed, 0, $user_torrents);
+            $numbers = array(intval($downloaded), intval($downloaded_total), intval($uploaded), intval($uploaded_total), intval($rotio), intval($rotio_total), intval($timeUsed), 0, intval($user_torrents));
             foreach ($_credits as $key => $value) {
                 if (!$credit['enabled']) continue;
-                $numbers[7] = $crdtits['credit' . $key];
+                $numbers[7] = intval($crdtits['credit' . $key]);
                 $exp = str_replace($symbol, $numbers, $credit['func']);
                 $credit_c = PwAnnounce::cal($exp);
                 $changes[$key] = $credit_c;
