@@ -51,7 +51,6 @@ class PwPostDoTorrent extends PwPostDoBase
     }
     public function check($postDm) {
         $bencode = new PwBencode();
-        $deniedfts = Wekit::C('site', 'app.torrent.deniedfts');
         if (!is_array($deniedfts)) $deniedfts = array();
         if (isset($_FILES['torrent'])) {
             $file = pathinfo($_FILES['torrent']['name']);
@@ -103,16 +102,21 @@ class PwPostDoTorrent extends PwPostDoBase
                 }
                 $type = 'multi';
             }
-            foreach ($fileList as $file) {
-                $ft = substr(strrchr($file[0], '.'), 1);
-                if (in_array($ft, $deniedfts)) {
-                    return new PwError('种子内存在禁止发布的文件类型！');
+            if (in_array('deniedfts', Wekit::C('site', 'app.torrent.check'))) {
+                $deniedfts = Wekit::C('site', 'app.torrent.deniedfts');
+                foreach ($fileList as $file) {
+                    $ft = substr(strrchr($file[0], '.'), 1);
+                    if (in_array($ft, $deniedfts)) {
+                        return new PwError('种子内存在禁止发布的文件类型！');
+                    }
                 }
             }
             $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.url') . '/announce.php'));
             $dictionary['value']['info']['value']['private'] = $bencode->doDecode('i1e');
             
-            //$dictionary['value']['info']['value']['source'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.name')));
+            if (in_array('source', Wekit::C('site', 'app.torrent.check'))) {
+                $dictionary['value']['info']['value']['source'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.name')));
+            }
             unset($dictionary['value']['announce-list']);
             unset($dictionary['value']['nodes']);
             $dictionary = $bencode->doDecode($bencode->doEncode($dictionary));

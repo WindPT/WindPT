@@ -1,15 +1,5 @@
 <?php
-
-/**
- * the last known user to change this file in the repository  <$LastChangedBy: gao.wanggao $>
- * @author $Author: gao.wanggao $ Foxsee@aliyun.com
- * @copyright ?2003-2103 phpwind.com
- * @license http://www.phpwind.com
- * @version $Id: PwCronDoClearOnline.php 18771 2012-09-27 07:47:26Z gao.wanggao $
- * @package
- */
 Wind::import('SRV:cron.srv.base.AbstractCronBase');
-
 class PwCronDoClearTorrents extends AbstractCronBase
 {
     
@@ -35,14 +25,17 @@ class PwCronDoClearTorrents extends AbstractCronBase
     }
     
     public function run($cronId) {
-        $fids = range(12, 23); // An array of thread ids for PT torrent
+        $torrentimeout = Wekit::C('site', 'app.torrent.cron.torrentimeout');
+        if ($torrentimeout < 1) return '';
+        $fids = Wekit::C('site', 'app.torrent.pt_threads');
+        if (empty($fids)) return '';
         date_default_timezone_set('Asia/Shanghai');
         foreach ($fids as $fid) {
             $topics = Wekit::load('forum.PwThread')->getThreadByFid($fid, 0);
             foreach ($topics as $topic) {
                 if ($topic['special'] != 'torrent') continue;
                 $torrent = Wekit::load('EXT:torrent.service.dao.PwTorrentDao')->getTorrentByTid($topic['tid']);
-                if (strtotime($torrent['last_action']) < strtotime('-10 day')) $this->delete_thread($topic);
+                if (strtotime($torrent['last_action']) < strtotime('-' . $torrentimeout . ' day')) $this->delete_thread($topic);
             }
         }
     }

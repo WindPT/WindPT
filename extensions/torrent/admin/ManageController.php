@@ -12,7 +12,12 @@ class ManageController extends AdminBaseController
     public function run() {
         $service = $this->_loadConfigService();
         $config = $service->getValues('site');
+        $cronDs = Wekit::load('SRV:cron.PwCron');
+        $cronList['ClearPeers'] = $cronDs->getCronByFile('PwCronDoClearPeers');
+        $cronList['ClearTorrents'] = $cronDs->getCronByFile('PwCronDoClearTorrents');
+        $config['app.torrent.pt_threads'] = implode(',', $config['app.torrent.pt_threads']);
         $this->setOutput($config, 'config');
+        $this->setOutput($cronList, 'cronList');
     }
     
     public function creditAction() {
@@ -23,10 +28,29 @@ class ManageController extends AdminBaseController
         $this->setOutput($creditType, 'creditType');
     }
     
+    public function themeAction() {
+        $service = $this->_loadConfigService();
+        $config = $service->getValues('site');
+        if ($config['theme.site.default'] == 'pt') {
+            $this->setOutput($config, 'config');
+        } else {
+            $this->setTemplate('');
+            echo '必须使用 PT 专用主题才能进行设置。';
+        }
+    }
+    
     public function dorunAction() {
-        list($deniedfts, $showuserinfo) = $this->getInput(array('deniedfts', 'showuserinfo'), 'post');
+        list($pt_threads, $showuserinfo, $check, $deniedfts, $torrentnameprefix, $peertimeout, $torrentimeout) = $this->getInput(array('pt_threads', 'showuserinfo', 'check', 'deniedfts', 'torrentnameprefix', 'peertimeout', 'torrentimeout'), 'post');
+        $pt_threads = explode(',', $pt_threads);
+        foreach ($pt_threads as $key => $value) {
+            $pt_threads[$key] = intval($value);
+        }
+        if (empty($torrentnameprefix)) $torrentnameprefix = Wekit::C('site', 'info.name');
+        if (intval($peertimeout) < 15) $peertimeout = 15;
         $config = new PwConfigSet('site');
-        $config->set('app.torrent.deniedfts', $deniedfts)->set('app.torrent.showuserinfo', $showuserinfo)->flush();
+        $config->set('app.torrent.pt_threads', $pt_threads)->set('app.torrent.showuserinfo', $showuserinfo)->set('app.torrent.check', $check)->set('app.torrent.torrentnameprefix', $torrentnameprefix)->set('app.torrent.cron.peertimeout', intval($peertimeout))->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
+        if (!empty($deniedfts)) $config->set('app.torrent.deniedfts', $deniedfts);
+        $config->flush();
         $this->showMessage('ADMIN:success');
     }
     
@@ -39,10 +63,18 @@ class ManageController extends AdminBaseController
             if (!$credit['enabled'] || empty($credit['func'])) continue;
             $_credits[$key] = $credit;
         }
-        if ($calfunc=='exec' && !in_array($calcmd, $_calcmd)) $calcmd = 'bc';
-        if ($calfunc=='curl' && in_array($calcmd, $_calcmd)) $calcmd = '';
+        if ($calfunc == 'exec' && !in_array($calcmd, $_calcmd)) $calcmd = 'bc';
+        if ($calfunc == 'curl' && in_array($calcmd, $_calcmd)) $calcmd = '';
         $config = new PwConfigSet('site');
         $config->set('app.torrent.creditifopen', intval($creditifopen))->set('app.torrent.credits', $_credits)->set('app.torrent.calfunc', $calfunc)->set('app.torrent.calcmd', $calcmd)->flush();
+        $this->showMessage('ADMIN:success');
+    }
+    
+    public function dothemeAction() {
+        list($qmenuifopen, $showpeers) = $this->getInput(array('qmenuifopen', 'showpeers'), 'post');
+        $config = new PwConfigSet('site');
+        $config->set('app.torrent.theme.qmenuifopen', intval($qmenuifopen))->set('app.torrent.theme.showpeers', $showpeers);
+        $config->flush();
         $this->showMessage('ADMIN:success');
     }
     

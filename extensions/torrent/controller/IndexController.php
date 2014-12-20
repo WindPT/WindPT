@@ -62,8 +62,10 @@ class IndexController extends PwBaseController
         
         //获取Peers
         $peers = PwAnnounce::getPeersByTorrentId($torrent['id'], $peerId);
+        
         //$self = PwAnnounce::getSelf($peers, $peerId);
         $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
+        
         //更新种子统计信息
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
         
@@ -198,7 +200,9 @@ class IndexController extends PwBaseController
         $dictionary = $bencode->doDecodeFile($file);
         $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('app/index/announce?app=torrent&passkey=' . $this->user->passkey)));
         $torrent = $this->_getTorrentDS()->getTorrent($id);
-        $torrentnameprefix = '[uupt][';
+        $torrentnameprefix = Wekit::C('site', 'app.torrent.torrentnameprefix');
+        if ($torrentnameprefix == '') $torrentnameprefix = Wekit::C('site', 'info.name');
+        $torrentnameprefix = '[' . $torrentnameprefix . '][';
         $timestamp = Pw::getTime();
         
         header('Content-type: application/octet-streamn');

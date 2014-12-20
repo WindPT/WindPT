@@ -1,9 +1,12 @@
 <!--#
 /**
+ * @@12.20
+ *  @移除全局变量 $qmenu_id，使用 Wekit::C 获取相关参数
+ *  @editor 7in0
  * @@10.19
  *  @增加了快捷菜单按钮
  *  @增加了快捷菜单面板
- *  @author young 
+ *  @author young
 */
 #-->
 <!--#if ($site_info_notice = Wekit::C('site','info.notice')) {#-->
@@ -53,9 +56,10 @@
         </div>
         <template source="TPL:common.header_login" load="true" />
 
+        <!--# if (Wekit::C('site','app.torrent.theme.qmenuifopen') == 1 && !empty(Wekit::C('site','app.torrent.pt_threads'))) { #-->
         <!--快捷菜单按钮-->
         <a class="qmenu">快捷菜单</a>
-        
+
         <!--#
             $forumdb = Wekit::load('forum.srv.PwForumService')->getCommonForumList();
             if ($pwforum instanceof PwForumBo) {
@@ -72,17 +76,19 @@
             <h2>版块列表</h2>
             <ul>
             <!--# foreach ($forumdb[0] as $k => $cate) { #-->
-                <!--# if ($forumdb[$cate['fid']] && $k==$qmenu_id) { #-->
-                        <!--# foreach ($forumdb[$cate['fid']] as $forums) { #-->
+                <!--# if ($forumdb[$cate['fid']]) { #-->
+                    <!--# foreach ($forumdb[$cate['fid']] as $forums) { #-->
+                        <!--# if (in_array($forums['fid'], Wekit::C('site','app.torrent.pt_threads'))) { #-->
                 <li>
                 <a href="{@url:bbs/thread/run?fid=$forums['fid']}">{@strip_tags($forums['name'])}</a>
                 </li>
                         <!--# } #-->
+                    <!--# } #-->
                 <!--# } #-->
             <!--# } #-->
             </ul>
         </div>
-
+        <!--# } #-->
     </div>
 </header>
 <!--#

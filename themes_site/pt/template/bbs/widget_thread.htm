@@ -1,6 +1,9 @@
 <!--#
 //二级板块帖子列表
 /**
+ * @@12.20
+ *  @使用 Wekit::C 获取相关参数控制种子数、下载数的显示
+ *  @editor 7in0
  * @@10.19
  *  @修改了帖子列表布局
  *  @加宽普通主题行
@@ -42,7 +45,7 @@
     </p>
     </td>
     <td class="num">
-    <!--# if ($value['special']=='torrent') { #-->
+    <!--# if ($value['special']=='torrent' && in_array('widget', Wekit::C('site','app.torrent.theme.showpeers'))) { #-->
         <span>下载<em>{$value['leecher']}</em></span>
         <span <!--# if($value['seeder']==0) echo 'style="background: red; color:white;"' #-->>做种<em>{$value['seeder']}</em></span>
     <!--# } #-->

@@ -10,11 +10,29 @@
     <ul class="cc">
         <li class="current"><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/run')}">基本设置</a></li>
         <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/credit')}">积分设置</a></li>
+        <!--# if($config['theme.site.default']=='pt') { #-->
+        <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/theme')}">主题设置</a></li>
+        <!--# } #-->
     </ul>
 </div>
 
 <form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/app/torrent/manage/dorun')}">
-<div class="h_a">微PT设置</div>
+<div class="h_a">全局参数设置</div>
+<div class="table_full">
+    <table width="100%">
+        <col class="th" />
+        <col width="400" />
+        <col />
+        <tr>
+            <th>资源板块 ID</th>
+            <td>
+                <input name="pt_threads" type="text" class="input length_5" value="{$config['app.torrent.pt_threads']}">
+            </td>
+            <td><div class="fun_tips">用半角逗号分隔</div></td>
+        </tr>
+    </table>
+</div>
+<div class="h_a">展示设置</div>
 <div class="table_full">
     <table width="100%">
         <col class="th" />
@@ -28,8 +46,27 @@
                 <li><label><input name="showuserinfo[]" type="checkbox" value="profile" {@pw::ifcheck(in_array('profile' ,$config['app.torrent.showuserinfo']))}><span>个人资料页</span></label></li>
             </ul>
             </td>
-            <td><div class="fun_tips">选择在那些页面展示用户个PT状态信息</div></td>
+            <td><div class="fun_tips">选择在那些页面展示用户的PT状态信息</div></td>
         </tr>
+    </table>
+</div>
+<div class="h_a">发布设置</div>
+<div class="table_full">
+    <table width="100%">
+        <col class="th" />
+        <col width="400" />
+        <col />
+        <tr>
+            <th>发布前动作</th>
+            <td>
+            <ul class="one_list cc">
+                <li><label><input name="check[]" type="checkbox" value="deniedfts" {@pw::ifcheck(in_array('deniedfts' ,$config['app.torrent.check']))}><span>检查禁止的文件类型</span></label></li>
+                <li><label><input name="check[]" type="checkbox" value="source" {@pw::ifcheck(in_array('source' ,$config['app.torrent.check']))}><span>添加网站信息（用户需要重新下载种子）</span></label></li>
+            </ul>
+            </td>
+            <td><div class="fun_tips">选择发布帖子前对种子文件进行哪些附加处理</div></td>
+        </tr>
+        <!--# if (in_array('deniedfts', $config['app.torrent.check'])) { #-->
         <tr>
             <th>禁止的文件类型</th>
             <td>
@@ -50,8 +87,52 @@
             </td>
             <td><div class="fun_tips">禁止发布的文件类型（扩展名），用户发布种子时系统会自动检查。</div></td>
         </tr>
+        <!--# } #-->
     </table>
 </div>
+<div class="h_a">下载设置</div>
+<div class="table_full">
+    <table width="100%">
+        <col class="th" />
+        <col width="400" />
+        <col />
+        <tr>
+            <th>种子文件前缀</th>
+            <td>
+                <input name="torrentnameprefix" type="text" class="input length_5" value="{$config['app.torrent.torrentnameprefix']}">
+            </td>
+            <td><div class="fun_tips"></div></td>
+        </tr>
+    </table>
+</div>
+<!--# if ($cronList['ClearPeers']['isopen']>0 || $cronList['ClearTorrents']['isopen']>0) { #-->
+<div class="h_a">计划任务设置</div>
+<div class="table_full">
+    <table width="100%">
+        <col class="th" />
+        <col width="400" />
+        <col />
+        <!--# if ($cronList['ClearPeers']['isopen']>0) { #-->
+        <tr>
+            <th>Peer超时</th>
+            <td>
+                <input name="peertimeout" type="text" class="input length_5" value="{$config['app.torrent.cron.peertimeout']}">
+            </td>
+            <td><div class="fun_tips">单位 分钟，必须大于15。</div></td>
+        </tr>
+        <!--# } #-->
+        <!--# if ($cronList['ClearTorrents']['isopen']>0) { #-->
+        <tr>
+            <th>断种清理天数</th>
+            <td>
+                <input name="torrentimeout" type="text" class="input length_5" value="{$config['app.torrent.cron.torrentimeout']}">
+            </td>
+            <td><div class="fun_tips">设为 0 关闭。</div></td>
+        </tr>
+        <!--# } #-->
+    </table>
+</div>
+<!--# } #-->
 <div class="btn_wrap">
     <div class="btn_wrap_pd">
         <button class="btn btn_submit mr10 J_ajax_submit_btn" type="submit">提交</button>
