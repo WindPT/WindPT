@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:admin.common.head' />
+</head>
+<body>
+<div class="wrap">
+
+<div class="nav">
+    <ul class="cc">
+        <li class="current"><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/run')}">基本设置</a></li>
+        <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/credit')}">积分设置</a></li>
+    </ul>
+</div>
+
+<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/app/torrent/manage/dorun')}">
+<div class="h_a">微PT设置</div>
+<div class="table_full">
+    <table width="100%">
+        <col class="th" />
+        <col width="400" />
+        <col />
+        <tr>
+            <th>展示PT用户信息</th>
+            <td>
+            <ul class="one_list cc">
+                <li><label><input name="showuserinfo[]" type="checkbox" value="threadside" {@pw::ifcheck(in_array('threadside' ,$config['app.torrent.showuserinfo']))}><span>帖子页边栏</span></label></li>
+                <li><label><input name="showuserinfo[]" type="checkbox" value="profile" {@pw::ifcheck(in_array('profile' ,$config['app.torrent.showuserinfo']))}><span>个人资料页</span></label></li>
+            </ul>
+            </td>
+            <td><div class="fun_tips">选择在那些页面展示用户个PT状态信息</div></td>
+        </tr>
+        <tr>
+            <th>禁止的文件类型</th>
+            <td>
+            <div class="cross">
+            <ul id="J_ul_list_deniedfts" class="J_ul_list_public">
+                <li>
+                    <span class="span_3">后缀名(小写)</span>
+                </li>
+                <!--# foreach ($config['app.torrent.deniedfts'] as $deniedft) { #-->
+                <li>
+                <span class="span_3"><input name="deniedfts[]" type="text" class="input length_2" value="{$deniedft}"></span>
+                <span class="span_4"><a href="#" class="J_ul_list_remove">[删除]</a></span>
+                </li>
+                <!--# } #-->
+            </ul>
+            </div>
+            <a href="" class="link_add J_ul_list_add" data-related="deniedfts">添加附件类型</a>
+            </td>
+            <td><div class="fun_tips">禁止发布的文件类型（扩展名），用户发布种子时系统会自动检查。</div></td>
+        </tr>
+    </table>
+</div>
+<div class="btn_wrap">
+    <div class="btn_wrap_pd">
+        <button class="btn btn_submit mr10 J_ajax_submit_btn" type="submit">提交</button>
+    </div>
+</div>
+</form>
+
+</div>
+<template source='TPL:admin.common.footer' />
+<script>
+var _li_html = '<li>\
+                    <span class="span_3"><input type="text" value="" class="input length_2" name="deniedfts[]"></span>\
+                    <span class="span_4">\
+                        <a class="J_ul_list_remove" href="#">[删除]</a>\
+                    </span>\
+                </li>';
+</script>
+</body>
+</html>

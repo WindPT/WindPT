@@ -9,6 +9,9 @@ class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
     }
     
     public function createHtmlAfterUserInfo($user, $read) {
+        if (!in_array('threadside', Wekit::C('site', 'app.torrent.showuserinfo'))) {
+            return '';
+        }
         $torrents = Wekit::load('EXT:torrent.service.dao.PwTorrentDao')->fetchTorrentByUid($user['uid']);
         $histories = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->fetchTorrentHistoryByUid($user['uid']);
         

@@ -40,13 +40,6 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
             PwHook::template('displayReadTorrentHtml', 'EXT:torrent.template.read_injector_before_torrent', true, $this->torrent);
         }
     }
-    public function createHtmlAfterContent($read) {
-        if ($read['pid'] == 0) {
-            
-            //PwHook::template('displaySetHtmlAfterContent', 'TPL:bbs.read_set', true, $this);
-            
-        }
-    }
     private function formatHash($hash) {
         return preg_replace_callback('/./s', create_function('$matches', 'return sprintf("%02x", ord($matches[0]));'), str_pad($hash, 20));
     }

@@ -21,6 +21,10 @@ class PwTorrentPeer {
     public function getTorrentPeerByTorrent($tid, $fetchmode = self::FETCH_MAIN) {
         return $this->_getDao($fetchmode)->getTorrentPeerByTorrent($tid);
     }
+    public function getTorrentPeerByTorrentAndUid($tid, $uid) {
+        if (empty($tid) || empty($uid)) return false;
+        return $this->_getDao(self::FETCH_MAIN)->getTorrentPeerByTorrentAndUid($tid, $uid);
+    }
     public function updateTorrentPeer(PwTorrentPeerDm $dm, $fetchmode = self::FETCH_MAIN) {
         if (($result = $dm->beforeUpdate()) !== true) {
             return $result;

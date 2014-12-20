@@ -6,7 +6,6 @@ Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
 Wind::import('EXT:torrent.service.dm.PwTorrentDm');
 Wind::import('EXT:torrent.service.dm.PwTorrentPeerDm');
 Wind::import('EXT:torrent.service.dm.PwTorrentHistoryDm');
-
 class IndexController extends PwBaseController
 {
     private $user;
@@ -61,10 +60,10 @@ class IndexController extends PwBaseController
         }
         unset($self);
         
-        //获取Peers getTorrentPeerByTorrentAndUid
+        //获取Peers
         $peers = PwAnnounce::getPeersByTorrentId($torrent['id'], $peerId);
-        $self = PwAnnounce::getSelf($peers, $peerId);
-        
+        //$self = PwAnnounce::getSelf($peers, $peerId);
+        $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
         //更新种子统计信息
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
         
@@ -77,18 +76,15 @@ class IndexController extends PwBaseController
                     $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
                     break;
-
                 case 'stopped':
                     $this->_getTorrentPeerDS()->deleteTorrentPeer($self['id']);
                     $status = 'stop';
                     break;
-
                 case 'completed':
                     $dm->setFinishedat(Pw::getTime())->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
                     $status = 'done';
                     break;
-
                 default:
                     PwAnnounce::showError('Invalid event from client!');
             }
@@ -101,11 +97,10 @@ class IndexController extends PwBaseController
             }
             @fclose($sockres);
             
-            $this->_getTorrentPeerDS()->deleteTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
-
             $dm = new PwTorrentPeerDm();
             $dm->setTorrent($torrent['id'])->setUserid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passKey);
             $this->_getTorrentPeerDS()->addTorrentPeer($dm);
+            $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
         }
         
         $historie = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
@@ -123,88 +118,49 @@ class IndexController extends PwBaseController
             if ($downloaded_total != 0) $rotio = round($uploaded_total / $downloaded_total, 2);
             else $rotio = 0;
             
-            $user_torrents = $this->_getTorrentDS()->fetchTorrentByUid($user['uid']);
-            
-            if (count($user_torrents) < 1) {
-                $credit_total = 0;
-            } elseif ($downloaded_total / 1073741824 < 10) {
-                $credit_total = 1;
-            } elseif ($downloaded_total / 1073741824 < 30) {
-                if ($rotio > 1.05) $credit_total = 2;
-                elseif ($rotio < 0.95) $credit_total = 1;
-                else $credit_total = 2;
-            } elseif ($downloaded_total / 1073741824 < 60) {
-                if ($rotio > 1.55) $credit_total = 3;
-                elseif ($rotio < 1.45) $credit_total = 2;
-                else $credit_total = 3;
-            } elseif ($downloaded_total / 1073741824 < 100) {
-                if ($rotio > 2.05) $credit_total = 4;
-                elseif ($rotio < 1.95) $credit_total = 3;
-                else $credit_total = 4;
-            } elseif ($downloaded_total / 1073741824 < 400) {
-                if ($rotio > 2.55) $credit_total = 5;
-                elseif ($rotio < 2.45) $credit_total = 4;
-                else $credit_total = 5;
-            } elseif ($downloaded_total / 1073741824 < 1024) {
-                if ($rotio > 3.55) $credit_total = 6;
-                elseif ($rotio < 3.45) $credit_total = 5;
-                else $credit_total = 6;
-            } elseif ($downloaded_total / 1073741824 < 3075) {
-                if ($rotio > 4.05) $credit_total = 7;
-                elseif ($rotio < 3.95) $credit_total = 6;
-                else $credit_total = 7;
-            } elseif ($downloaded_total / 1073741824 < 5120) {
-                if ($rotio > 4.55) $credit_total = 8;
-                elseif ($rotio < 4.45) $credit_total = 7;
-                else $credit_total = 8;
-            } elseif ($downloaded_total / 1073741824 < 9216) {
-                if ($rotio > 5.05) $credit_total = 9;
-                elseif ($rotio < 4.95) $credit_total = 8;
-                else $credit_total = 9;
-            } elseif ($downloaded_total / 1073741824 < 11264) {
-                if ($rotio > 5.55) $credit_total = 10;
-                elseif ($rotio < 5.45) $credit_total = 9;
-                else $credit_total = 10;
-            } elseif ($downloaded_total / 1073741824 < 13312) {
-                if ($rotio > 6.05) $credit_total = 11;
-                elseif ($rotio < 5.95) $credit_total = 10;
-                else $credit_total = 11;
-            } elseif ($downloaded_total / 1073741824 < 14336) {
-                if ($rotio > 6.55) $credit_total = 12;
-                elseif ($rotio < 6.45) $credit_total = 11;
-                else $credit_total = 12;
-            } elseif ($downloaded_total / 1073741824 < 17408) {
-                if ($rotio > 7.05) $credit_total = 13;
-                elseif ($rotio < 6.95) $credit_total = 12;
-                else $credit_total = 13;
-            } elseif ($downloaded_total / 1073741824 < 20480) {
-                if ($rotio > 7.55) $credit_total = 14;
-                elseif ($rotio < 7.45) $credit_total = 13;
-                else $credit_total = 14;
-            }
-            
-            $WindApi = WindidApi::api('user');
-            $crdtits = $WindApi->getUserCredit($user['uid']);
-            $credit_add = $credit_total - $crdtits['credit3'];
-            
-            if ($credit_add != 0) {
-                $pwUser = Wekit::load('user.PwUser');
-                Wind::import('SRV:credit.bo.PwCreditBo');
-                $creditBo = PwCreditBo::getInstance();
-                $changes = array('3' => $credit_add);
-                $creditBo->addLog('PT Tracker', $changes, new PwUserBo($user['uid']));
-                $credits_to = array('3' => $credit_total);
-                $creditBo->execute(array($user['uid'] => $credits_to), false);
-            }
-            
             $dm = new PwTorrentHistoryDm($history['id']);
-            $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded)->setUploadedLast($uploaded_last)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded);
+            $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded);
             if ($status != '') $dm->setStatus($status);
             $this->_getTorrentHistoryDao()->updateTorrentHistory($history['id'], $dm->getData());
-            
-            //$sql = 'UPDATE pw_app_torrent_user SET uploaded_mo = :uploaded, downloaded_mo = :downloaded WHERE uid = :uid';
-            //$this->dexec($dbHandle, $sql, array(':uid' => $user['uid'], ':uploaded' => $user['uploaded_mo'] + $uploaded_add, ':downloaded' => $user['downloaded_mo'] + $downloaded_add));
-            
+            $uploaded = $uploaded_total;
+            $downloaded = $downloaded_total;
+            unset($uploaded_add);
+            unset($downloaded_add);
+            unset($uploaded_total);
+            unset($downloaded_total);
+        }
+        
+        if (Wekit::C('site', 'app.torrent.creditifopen') == 1) {
+            $changed = 0;
+            $WindApi = WindidApi::api('user');
+            $pwUser = Wekit::load('user.PwUser');
+            $crdtits = $WindApi->getUserCredit($user['uid']);
+            $_credits = Wekit::C('site', 'app.torrent.credits');
+            $user_torrents = count($this->_getTorrentDS()->fetchTorrentByUid($user['uid']));
+            $histories = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->fetchTorrentHistoryByUid($user['uid']);
+            foreach ($histories as $history) {
+                $downloaded_total+= $history['downloaded'];
+                $uploaded_total+= $history['uploaded'];
+            }
+            unset($histories);
+            if ($downloaded_total != 0) $rotio_total = round($uploaded_total / $downloaded_total, 2);
+            else $rotio_total = 0;
+            $timeUsed = time() - strtotime($self['started']);
+            $symbol = array('%downloaded%', '%downloaded_total%', '%uploaded%', '%uploaded_total%', '%rotio%', '%rotio_total%', '%time%', '%credit%', '%torrents%');
+            $numbers = array($downloaded, $downloaded_total, $uploaded, $uploaded_total, $rotio, $rotio_total, $timeUsed, 0, $user_torrents);
+            foreach ($_credits as $key => $value) {
+                if (!$credit['enabled']) continue;
+                $numbers[7] = $crdtits['credit' . $key];
+                $exp = str_replace($symbol, $numbers, $credit['func']);
+                $credit_c = PwAnnounce::bc($exp);
+                $changes[$key] = $credit_c;
+                $changed++;
+            }
+            if ($changed) {
+                $creditBo = Wekit::load('SRV:credit.bo.PwCreditBo')->getInstance();
+                $creditBo->sets($user['uid'], $changes);
+                $creditBo->addLog('pt_tracker', $changes, new PwUserBo($user['uid']));
+            }
         }
         
         foreach ($peers as $peer) {
