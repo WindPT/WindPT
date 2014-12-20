@@ -29,7 +29,7 @@ class PwAnnounce {
             $result = exec('echo ' . escapeshellarg($exp) . ' | '.$cmd);
         }
         if (is_numeric($result)){
-            return $result;
+            return interval($result);
         }else{
             return 0;
         }

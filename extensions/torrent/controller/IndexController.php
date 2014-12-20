@@ -64,13 +64,13 @@ class IndexController extends PwBaseController
         $peers = PwAnnounce::getPeersByTorrentId($torrent['id'], $peerId);
         
         //$self = PwAnnounce::getSelf($peers, $peerId);
-        $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
+        $self = array_pop($this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']));
         
         //更新种子统计信息
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
         
         //更新客户端提交数据
-        if (isset($self)) {
+        if (!empty($self)) {
             $dm = new PwTorrentPeerDm($self['id']);
             switch ($event) {
                 case '':

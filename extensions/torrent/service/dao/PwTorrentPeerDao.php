@@ -37,14 +37,4 @@ class PwTorrentPeerDao extends PwBaseDao
     public function deleteTorrentPeer($id) {
         return $this->_delete($id);
     }
-    public function deleteTorrentPeerByTorrentAndUid($tid, $uid) {
-        $peers = $this->getTorrentPeerByTorrentAndUid($tid, $uid);
-        if(is_array($peers)) {
-            foreach($peers as $peer)
-                $this->_delete($peer['id']);
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
