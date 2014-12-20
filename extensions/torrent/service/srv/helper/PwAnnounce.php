@@ -16,8 +16,16 @@ class PwAnnounce {
             $result = curl_exec($ch);
             curl_close($ch);
         } else {
-            if (Wekit::C('site', 'app.torrent.calcmd') == 'dc') $cmd = 'dc';
-            else $cmd = 'bc -l';
+            switch (Wekit::C('site', 'app.torrent.calcmd') == 'expr') {
+                case 'expr':
+                $cmd = 'xargs expr';
+                break;
+                case 'dc':
+                $cmd = 'dc';
+                break;
+                default:
+                $cmd = 'bc -l';
+            }
             $result = exec('echo ' . escapeshellarg($exp) . ' | '.$cmd);
         }
         if (is_numeric($result)){

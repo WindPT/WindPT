@@ -46,7 +46,7 @@
                 <label><input type="checkbox" name="credits[{$key}][enabled]" value="1" {@Pw::ifcheck($config['app.torrent.credits'][$key]['enabled'] == 1)}><span>启用</span></label>
             </td>
             <td>
-                <input type="text" name="credits[{$key}][func]" class="input length_5" value="{$config['app.torrent.credits'][$key]['func']}">
+                <input type="text" name="credits[{$key}][func]" class="input" value="{$config['app.torrent.credits'][$key]['func']}" style="width: 100%;">
             </td>
         </tr>
         <!--# } #-->
@@ -64,7 +64,8 @@
             <td>
             <!--# if ($config['app.torrent.calfunc'] != 'curl') { #-->
             <ul class="switch_list cc">
-                <li><label><input type="radio" name="calcmd" value="bc" {@pw::ifcheck($config['app.torrent.calcmd'] != 'dc')}><span>bc -l</span></label></li>
+                <li><label><input type="radio" name="calcmd" value="expr" {@Pw::ifcheck($config['app.torrent.calcmd'] == 'expr')}><span>expr</span></label></li>
+                <li><label><input type="radio" name="calcmd" value="bc" {@pw::ifcheck($config['app.torrent.calcmd'] == 'bc')}><span>bc -l</span></label></li>
                 <li><label><input type="radio" name="calcmd" value="dc" {@Pw::ifcheck($config['app.torrent.calcmd'] == 'dc')}><span>dc</span></label></li>
             </ul>
             <!--# } #-->
@@ -75,7 +76,7 @@
             <th><label><input type="radio" name="calfunc" value="curl" {@pw::ifcheck($config['app.torrent.calfunc'] == 'curl')}><span>curl()</span></label></th>
             <td>
             <!--# if ($config['app.torrent.calfunc'] == 'curl') { #-->
-            <input type="text" name="calcmd" class="input length_5" value="{$config['app.torrent.calcmd']}">
+            <input type="text" name="calcmd" class="input" value="{$config['app.torrent.calcmd']}" style="width: 100%;">
             <!--# } #-->
             </td>
             <td><div class="fun_tips">使用 curl 借助远程服务进行运算，需要专门后端支持。用 %s 取代 URL 中的算式部分</div></td>
