@@ -29,11 +29,7 @@ class PwAnnounce
             }
             $result = exec('echo ' . escapeshellarg($exp) . ' | ' . $cmd);
         }
-        if (is_numeric($result)) {
-            return interval($result);
-        } else {
-            return 0;
-        }
+        return interval($result);
     }
     public static function checkClient() {
         $agent = $_SERVER['HTTP_USER_AGENT'];
