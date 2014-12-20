@@ -119,7 +119,7 @@ CREATE TABLE `pw_app_torrent_peer` (
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `agent` varchar(60) NOT NULL DEFAULT '',
   `finishedat` int(10) unsigned NOT NULL DEFAULT '0',
-  `passkey` char(32) NOT NULL DEFAULT '',
+  `passkey` char(40) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -130,7 +130,7 @@ DROP TABLE IF EXISTS `pw_app_torrent_user`;
 CREATE TABLE `pw_app_torrent_user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
-  `passkey` varchar(32) NOT NULL DEFAULT '',
+  `passkey` varchar(40) NOT NULL DEFAULT '',
   `uploaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)

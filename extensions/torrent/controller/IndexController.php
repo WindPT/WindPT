@@ -246,7 +246,7 @@ class IndexController extends PwBaseController
         $this->user = $user;
     }
     public function makePassKey() {
-        return md5($this->loginUser->username . Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s') . $this->loginUser->info['password']);
+        return sha1($this->loginUser->username . Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s') . $this->loginUser->info['password']);
     }
     private function _getTorrentDS() {
         return Wekit::load('EXT:torrent.service.PwTorrent');

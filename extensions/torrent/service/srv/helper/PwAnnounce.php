@@ -71,18 +71,6 @@ class PwAnnounce {
     public static function sendPeerList($peer_string) {
         header('Content-Type: text/plain; charset=utf-8');
         header('Pragma: no-cache');
-        /*
-        if (stristr($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip') && extension_loaded('zlib') && ini_get('zlib.output_compression') == 0) {
-            if (ini_get('output_handler')!='ob_gzhandler') {
-                // only for non compact
-                ob_start('ob_gzhandler');
-            } else {
-                ob_start();
-            }
-        } else {
-            ob_start();
-        }
-        */
         echo $peer_string;
         exit();
     }
