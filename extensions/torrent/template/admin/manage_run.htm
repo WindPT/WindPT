@@ -105,14 +105,14 @@
         </tr>
     </table>
 </div>
-<!--# if ($cronList['ClearPeers']['isopen']>0 || $cronList['ClearTorrents']['isopen']>0) { #-->
+<!--# if ($cronList['ClearPeers']['isopen'] > 0 || $cronList['ClearTorrents']['isopen'] > 0) { #-->
 <div class="h_a">计划任务设置</div>
 <div class="table_full">
     <table width="100%">
         <col class="th" />
         <col width="400" />
         <col />
-        <!--# if ($cronList['ClearPeers']['isopen']>0) { #-->
+        <!--# if ($cronList['ClearPeers']['isopen'] > 0) { #-->
         <tr>
             <th>Peer超时</th>
             <td>
@@ -121,7 +121,7 @@
             <td><div class="fun_tips">单位 分钟，必须大于15。</div></td>
         </tr>
         <!--# } #-->
-        <!--# if ($cronList['ClearTorrents']['isopen']>0) { #-->
+        <!--# if ($cronList['ClearTorrents']['isopen'] > 0) { #-->
         <tr>
             <th>断种清理天数</th>
             <td>

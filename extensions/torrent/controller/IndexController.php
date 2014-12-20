@@ -17,10 +17,7 @@ class IndexController extends PwBaseController
         $this->setTemplate('');
         echo 'WindPT private BitTorrent tracker';
     }
-    
     public function announceAction() {
-        
-        //变量获取
         $passKey = $this->getInput('passkey');
         $infoHash = $this->getInput('info_hash');
         $peerId = $this->getInput('peer_id');
@@ -32,44 +29,48 @@ class IndexController extends PwBaseController
         $compact = $this->getInput('compact');
         $noPeerId = $this->getInput('no_peer_id');
         $agent = $_SERVER['HTTP_USER_AGENT'];
-        $ip = Wind::getComponent('request')->getClientIp();
-        
-        //检测客户端是否允许下载
+        $ip = PwAnnounce::getClientIp();
+
         if (!PwAnnounce::checkClient()) {
             PwAnnounce::showError('This a a bittorrent application and can\'t be loaded into a browser!');
         }
+
+        $seeder = PwAnnounce::checkClientRole($left); // Check if a seeder
         
-        //检测客户端角色
-        $seeder = PwAnnounce::checkClientRole($left);
-        
-        //检测PassKey，验证用户权限
+        // Verify passkey
         $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passKey);
         if (!$user) {
             PwAnnounce::showError('Invalid passkey! Re-download the torrent file!');
         }
         
+        // Check if user was banned
         $userBan = Wekit::load('SRV:user.dao.PwUserBanDao')->getBanInfo($user['uid']);
         if ($userBan) {
             PwAnnounce::showError('User was banned!');
         }
         
-        //获取种子
+        // Get torrent information by infoHash
         $torrent = $this->_getTorrentDS()->getTorrentByInfoHash($infoHash);
         if (!$torrent) {
             PwAnnounce::showError('Torrent not registered with this tracker!');
         }
         unset($self);
         
-        //获取Peers
+        // Get peers list
         $peers = PwAnnounce::getPeersByTorrentId($torrent['id'], $peerId);
         
+        // Get client information by user from peers list
         //$self = PwAnnounce::getSelf($peers, $peerId);
         $self = array_pop($this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']));
         
-        //更新种子统计信息
+        // Check if already started
+        if ($ip != $self['ip']) {
+            PwAnnounce::showError('You have already started downloading this torrent!');
+        }
+
+        // Update peer
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
         
-        //更新客户端提交数据
         if (!empty($self)) {
             $dm = new PwTorrentPeerDm($self['id']);
             switch ($event) {
@@ -105,8 +106,9 @@ class IndexController extends PwBaseController
             $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
         }
         
-        $historie = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
-        if (!$historie) {
+        // Update user's history with this torrent
+        $history = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
+        if (!$history) {
             $dm = new PwTorrentHistoryDm();
             $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
             $this->_getTorrentHistoryDao()->addTorrentHistory($dm->getData());
@@ -132,6 +134,7 @@ class IndexController extends PwBaseController
             unset($downloaded_total);
         }
         
+        // Update user's credits
         if (Wekit::C('site', 'app.torrent.creditifopen') == 1) {
             $changed = 0;
             $WindApi = WindidApi::api('user');
@@ -154,7 +157,7 @@ class IndexController extends PwBaseController
                 if (!$credit['enabled']) continue;
                 $numbers[7] = $crdtits['credit' . $key];
                 $exp = str_replace($symbol, $numbers, $credit['func']);
-                $credit_c = PwAnnounce::bc($exp);
+                $credit_c = PwAnnounce::cal($exp);
                 $changes[$key] = $credit_c;
                 $changed++;
             }
@@ -165,6 +168,7 @@ class IndexController extends PwBaseController
             }
         }
         
+        // Update torrent information
         foreach ($peers as $peer) {
             if ($peer['seeder'] == 'yes') {
                 $seeder++;
@@ -175,17 +179,17 @@ class IndexController extends PwBaseController
         $torrent['seeders'] = $seeder;
         $torrent['leechers'] = $leecher;
         
-        //更新种子信息
         $dm = new PwTorrentDm($torrent['id']);
         $dm->setSeeders($torrent['seeders'])->setLeechers($torrent['leechers'])->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'));
         $this->_getTorrentDS()->updateTorrent($dm);
         
-        //返回Peers数据给客户端
+        // Output peers list to client
         $peer_string = PwAnnounce::buildWaitTime($torrent);
         $peer_string = PwAnnounce::buildPeerList($peers, $compact, $no_peer_id, $peer_string);
         PwAnnounce::sendPeerList($peer_string);
     }
     public function downloadAction() {
+        // Get the torrent file
         $id = $this->getInput('id');
         $result = $this->check();
         if ($result instanceof PwError) {
@@ -195,18 +199,22 @@ class IndexController extends PwBaseController
         if (!file_exists($file)) {
             $this->showError('种子文件不存在！');
         }
-        header('Content-Description: File Transfer');
+
+        // Change announce to user's private announce
         $bencode = new PwBencode();
         $dictionary = $bencode->doDecodeFile($file);
         $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('app/index/announce?app=torrent&passkey=' . $this->user->passkey)));
+
+        // Generate file name
         $torrent = $this->_getTorrentDS()->getTorrent($id);
         $torrentnameprefix = Wekit::C('site', 'app.torrent.torrentnameprefix');
         if ($torrentnameprefix == '') $torrentnameprefix = Wekit::C('site', 'info.name');
         $torrentnameprefix = '[' . $torrentnameprefix . '][';
-        $timestamp = Pw::getTime();
         
+        // Send torrent file to broswer
+        header('Content-Description: File Transfer');
         header('Content-type: application/octet-streamn');
-        header('Content-disposition: attachment; filename="' . $torrentnameprefix . rawurlencode($torrent['save_as']) . '].torrent"; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $torrentnameprefix . rawurlencode($torrent['save_as']) . '].torrent"; charset=utf-8');
         header('Content-Transfer-Encoding: binary');
         header('Expires: 0');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -222,6 +230,7 @@ class IndexController extends PwBaseController
         if ($userBan) {
             return new PwError('用户已被封禁！');
         }
+        // Re-generate passkey for user if passkey invalid
         if (!$this->user->passkey) {
             Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
             $dm = new PwTorrentUserDm();
@@ -229,7 +238,7 @@ class IndexController extends PwBaseController
             $this->_getTorrentUserDS()->addTorrentUser($dm);
             $this->getUser();
         }
-        if (strlen($this->user->passkey) != 32) {
+        if (strlen($this->user->passkey) != 40) {
             $torrentUser = $this->_getTorrentUserDS()->getTorrentUserByUid($this->loginUser->uid);
             Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
             $dm = new PwTorrentUserDm($torrentUser['id']);

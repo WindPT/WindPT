@@ -35,10 +35,16 @@ class PwPostDoTorrent extends PwPostDoBase
         if (!$this->passkey) {
             Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
             $dm = new PwTorrentUserDm();
-            $dm->setUid($uid);
-            $dm->setPassKey($this->makePassKey());
+            $dm->setUid($uid)->setPassKey($this->makePassKey());
             $this->_getTorrentUserDS()->addTorrentUser($dm);
             $this->getUser($uid);
+        }
+        if (strlen($this->passkey) != 40) {
+            Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
+            $dm = new PwTorrentUserDm($uid);
+            $dm->setUid($uid)->setPassKey($this->makePassKey());
+            $this->_getTorrentUserDS()->updateTorrentUser($dm);
+            $this->getUser();
         }
         PwHook::template('displayPostTorrentHtml', 'EXT:torrent.template.post_injector_before_torrent', true, $this);
     }
