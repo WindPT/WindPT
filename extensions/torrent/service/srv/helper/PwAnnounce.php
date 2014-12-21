@@ -122,7 +122,8 @@ class PwAnnounce
             return $server['HTTP_CLIENT_IP'];
         } elseif ($server['HTTP_X_FORWARDED_FOR'] != null) {
             $ip = strtok($server['HTTP_X_FORWARDED_FOR'], ',');
-            return $ip[0];
+            if (is_array($ip)) return $ip[0];
+            else return $ip;
         } elseif ($server['HTTP_PROXY_USER'] != null) {
             return $server['HTTP_PROXY_USER'];
         } elseif ($server['REMOTE_ADDR'] != null) {

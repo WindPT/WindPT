@@ -63,16 +63,16 @@ class IndexController extends PwBaseController
         // Get client information by user from peers list
         //$self = PwAnnounce::getSelf($peers, $peerId);
         $self = array_pop($this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']));
-        
-        // Check if already started
-        if ($ip != $self['ip']) {
-            PwAnnounce::showError('You have already started downloading this torrent!');
-        }
 
         // Update peer
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
         
         if (!empty($self)) {
+            // Check if already started
+            if ($ip != $self['ip']) {
+                PwAnnounce::showError('You have already started downloading this torrent!');
+            }
+            
             $dm = new PwTorrentPeerDm($self['id']);
             switch ($event) {
                 case '':
