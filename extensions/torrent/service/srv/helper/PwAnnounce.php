@@ -139,7 +139,7 @@ class PwAnnounce
             $count = count($peer_list);
             foreach ($peer_list as $peer) {
                 if ($compact) {
-                    $peer_string.= str_pad(pack('Nn', ip2bin($peer['ip']), $peer['port']), 6);
+                    $peer_string.= str_pad(pack('Nn', self::ip2bin($peer['ip']), $peer['port']), 6);
                 } elseif ($no_peer_id == 1) {
                     $peer_string.= 'd' . $bencode->doEncodeString('ip') . $bencode->doEncodeString($peer['ip']) . $bencode->doEncodeString('port') . 'i' . $peer['port'] . 'e' . 'e';
                 } else {
