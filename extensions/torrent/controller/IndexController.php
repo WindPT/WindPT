@@ -12,7 +12,6 @@ class IndexController extends PwBaseController
     private $passkey;
     public function beforeAction($handlerAdapter) {
         parent::beforeAction($handlerAdapter);
-        $this->passkey = PwPasskey::getPassKey($this->loginUser->uid);
     }
     public function run() {
         $this->setTemplate('');
@@ -210,7 +209,8 @@ class IndexController extends PwBaseController
         // Change announce to user's private announce
         $bencode = new PwBencode();
         $dictionary = $bencode->doDecodeFile($file);
-        $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('app/index/announce?app=torrent&passkey=' . $this->passkey)));
+        $passkey = PwPasskey::getPassKey($this->loginUser->uid);
+        $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('app/index/announce?app=torrent&passkey=' . $passkey)));
 
         // Generate file name
         $torrent = $this->_getTorrentDS()->getTorrent($id);
