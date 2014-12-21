@@ -31,7 +31,7 @@ class IndexController extends PwBaseController
         $noPeerId = $this->getInput('no_peer_id');
         $agent = $_SERVER['HTTP_USER_AGENT'];
         $ip = PwAnnounce::getClientIp();
-        $compact = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)?0:1;
+        $compact = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)?0:$this->getInput('compact');
 
         header('Content-Type: text/plain; charset=utf-8');
         header('Pragma: no-cache');
