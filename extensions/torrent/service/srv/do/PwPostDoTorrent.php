@@ -1,6 +1,7 @@
 <?php
 defined('WEKIT_VERSION') || exit('Forbidden');
 Wind::import('SRV:forum.srv.post.do.PwPostDoBase');
+Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
 Wind::import('EXT:torrent.service.srv.helper.PwBencode');
 Wind::import('EXT:torrent.service.dm.PwTorrentDm');
 Wind::import('EXT:torrent.service.dm.PwTorrentFileDm');
@@ -26,26 +27,9 @@ class PwPostDoTorrent extends PwPostDoBase
         $this->fid = intval($pwpost->forum->fid);
         $this->wikilink = $wikilink;
         $this->action = $this->tid ? 'modify' : 'add';
+        $this->passkey = PwPasskey::getPassKey($this->user->uid);
     }
     public function createHtmlBeforeContent() {
-        $torrentUser = $this->_getTorrentUserDS()->getTorrentUserByUid($this->user->uid);
-        $this->passkey = $torrentUser['passkey'];
-        
-        $uid = $this->user->uid;
-        if (!$this->passkey) {
-            Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
-            $dm = new PwTorrentUserDm();
-            $dm->setUid($uid)->setPassKey($this->makePassKey());
-            $this->_getTorrentUserDS()->addTorrentUser($dm);
-            $this->getUser($uid);
-        }
-        if (strlen($this->passkey) != 40) {
-            Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
-            $dm = new PwTorrentUserDm($uid);
-            $dm->setUid($uid)->setPassKey($this->makePassKey());
-            $this->_getTorrentUserDS()->updateTorrentUser($dm);
-            $this->getUser();
-        }
         PwHook::template('displayPostTorrentHtml', 'EXT:torrent.template.post_injector_before_torrent', true, $this);
     }
     public function dataProcessing($postDm) {
@@ -168,23 +152,10 @@ class PwPostDoTorrent extends PwPostDoBase
             fclose($fp);
         }
         return true;
-    }
-    
-    public function getUser($uid) {
-        $user = new PwUserBo($uid, true);
-        $torrentUser = $this->_getTorrentUserDS()->getTorrentUserByUid($uid);
-        $user->passkey = $torrentUser['passkey'];
-        $this->user = $user;
-    }
-    
-    public function makePassKey() {
-        return sha1($this->loginUser->username . Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s') . $this->loginUser->info['password']);
-    }
-    
+    } 
     private function _getTorrentUserDS() {
         return Wekit::load('EXT:torrent.service.PwTorrentUser');
     }
-    
     private function _checkHash($hash) {
         return true;
     }

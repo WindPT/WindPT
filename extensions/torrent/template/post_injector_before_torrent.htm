@@ -54,10 +54,6 @@
     
     <script src="src/extensions/torrent/res/js/ZeroClipboard.min.js"></script>
     <script>
-    if ('{$pargs->passkey}' == '') {
-      window.location.reload(true);
-    }
-
     var client = new ZeroClipboard( document.getElementById("tracker") );
 
     client.on( "load", function(client) {

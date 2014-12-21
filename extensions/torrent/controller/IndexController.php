@@ -1,6 +1,7 @@
 <?php
 defined('WEKIT_VERSION') or exit(403);
 Wind::import('SRV:user.bo.PwUserBo');
+Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
 Wind::import('EXT:torrent.service.srv.helper.PwBencode');
 Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
 Wind::import('EXT:torrent.service.dm.PwTorrentDm');
@@ -8,10 +9,10 @@ Wind::import('EXT:torrent.service.dm.PwTorrentPeerDm');
 Wind::import('EXT:torrent.service.dm.PwTorrentHistoryDm');
 class IndexController extends PwBaseController
 {
-    private $user;
+    private $passkey;
     public function beforeAction($handlerAdapter) {
         parent::beforeAction($handlerAdapter);
-        $this->getUser();
+        $this->passkey = PwPasskey::getPassKey($this->loginUser->uid);
     }
     public function run() {
         $this->setTemplate('');
@@ -205,7 +206,7 @@ class IndexController extends PwBaseController
         // Change announce to user's private announce
         $bencode = new PwBencode();
         $dictionary = $bencode->doDecodeFile($file);
-        $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('app/index/announce?app=torrent&passkey=' . $this->user->passkey)));
+        $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('app/index/announce?app=torrent&passkey=' . $this->passkey)));
 
         // Generate file name
         $torrent = $this->_getTorrentDS()->getTorrent($id);
@@ -232,29 +233,7 @@ class IndexController extends PwBaseController
         if ($userBan) {
             return new PwError('用户已被封禁！');
         }
-        // Re-generate passkey for user if passkey invalid
-        if (!$this->user->passkey) {
-            Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
-            $dm = new PwTorrentUserDm();
-            $dm->setUid($this->loginUser->uid)->setPassKey($this->makePassKey());
-            $this->_getTorrentUserDS()->addTorrentUser($dm);
-            $this->getUser();
-        }
-        if (strlen($this->user->passkey) != 40) {
-            $torrentUser = $this->_getTorrentUserDS()->getTorrentUserByUid($this->loginUser->uid);
-            Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
-            $dm = new PwTorrentUserDm($torrentUser['id']);
-            $dm->setUid($this->loginUser->uid)->setPassKey($this->makePassKey());
-            $this->_getTorrentUserDS()->updateTorrentUser($dm);
-            $this->getUser();
-        }
         return true;
-    }
-    public function getUser() {
-        $user = new PwUserBo($this->loginUser->uid, true);
-        $torrentUser = $this->_getTorrentUserDS()->getTorrentUserByUid($this->loginUser->uid);
-        $user->passkey = $torrentUser['passkey'];
-        $this->user = $user;
     }
     public function makePassKey() {
         return sha1($this->loginUser->username . Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s') . $this->loginUser->info['password']);
