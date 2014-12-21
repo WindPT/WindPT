@@ -111,11 +111,11 @@ class IndexController extends PwBaseController
         }
         
         // Update user's history with this torrent
-        $history = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
+        $history = $this->_getTorrentHistoryDs()->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
         if (!$history) {
             $dm = new PwTorrentHistoryDm();
             $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
-            $this->_getTorrentHistoryDao()->addTorrentHistory($dm->getData());
+            $this->_getTorrentHistoryDs()->addTorrentHistory($dm);
             if ($downloaded != 0) $rotio = round($uploaded / $downloaded, 2);
             else $rotio = 1;
         } else {
@@ -131,7 +131,7 @@ class IndexController extends PwBaseController
             $dm = new PwTorrentHistoryDm($history['id']);
             $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded);
             if ($status != '') $dm->setStatus($status);
-            $this->_getTorrentHistoryDao()->updateTorrentHistory($history['id'], $dm->getData());
+            $this->_getTorrentHistoryDs()->updateTorrentHistory($dm);
             $uploaded = $uploaded_add;
             $downloaded = $downloaded_add;
             unset($uploaded_add);
@@ -148,7 +148,7 @@ class IndexController extends PwBaseController
             $crdtits = $WindApi->getUserCredit($user['uid']);
             $_credits = Wekit::C('site', 'app.torrent.credits');
             $user_torrents = count($this->_getTorrentDS()->fetchTorrentByUid($user['uid']));
-            $histories = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->fetchTorrentHistoryByUid($user['uid']);
+            $histories = $this->_getTorrentHistoryDs()->fetchTorrentHistoryByUid($user['uid']);
             foreach ($histories as $history) {
                 $downloaded_total+= $history['downloaded'];
                 $uploaded_total+= $history['uploaded'];
@@ -251,7 +251,7 @@ class IndexController extends PwBaseController
     private function _getTorrentUserDS() {
         return Wekit::load('EXT:torrent.service.PwTorrentUser');
     }
-    private function _getTorrentHistoryDao() {
-        return Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao');
+    private function _getTorrentHistoryDs() {
+        return Wekit::load('EXT:torrent.service.PwTorrentHistory');
     }
 }
