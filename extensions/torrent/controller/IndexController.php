@@ -31,6 +31,10 @@ class IndexController extends PwBaseController
         $noPeerId = $this->getInput('no_peer_id');
         $agent = $_SERVER['HTTP_USER_AGENT'];
         $ip = PwAnnounce::getClientIp();
+        $compact = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)?0:1;
+
+        header('Content-Type: text/plain; charset=utf-8');
+        header('Pragma: no-cache');
 
         if (!PwAnnounce::checkClient()) {
             PwAnnounce::showError('This a a bittorrent application and can\'t be loaded into a browser!');
@@ -72,7 +76,7 @@ class IndexController extends PwBaseController
             if ($ip != $self['ip']) {
                 PwAnnounce::showError('You have already started downloading this torrent!');
             }
-            
+
             $dm = new PwTorrentPeerDm($self['id']);
             switch ($event) {
                 case '':

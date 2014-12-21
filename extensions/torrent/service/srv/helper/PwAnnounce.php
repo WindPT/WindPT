@@ -87,60 +87,30 @@ class PwAnnounce
         $bencode = new PwBencode();
         return 'd' . $bencode->doEncodeString('interval') . 'i840e' . $bencode->doEncodeString('min interval') . 'i30e' . $bencode->doEncodeString('complete') . 'i' . $torrent['seeders'] . 'e' . $bencode->doEncodeString('incomplete') . 'i' . $torrent['leechers'] . 'e';
     }
-    public static function ip2bin($ip) {
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) return base_convert(ip2long($ip), 10, 2);
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) return false;
-        if (($ip_n = inet_pton($ip)) === false) return false;
-        $bits = 15;
-        // 16 x 8 bit = 128bit (ipv6)
-        while ($bits >= 0) {
-            $bin = sprintf("%08b", (ord($ip_n[$bits])));
-            $ipbin = $bin . $ipbin;
-            $bits--;
-        }
-        return $ipbin;
-    }
-    public static function bin2ip($bin) {
-        if (strlen($bin) <= 32) // 32bits (ipv4)
-            return long2ip(base_convert($bin, 2, 10));
-        if (strlen($bin) != 128) return false;
-        $pad = 128 - strlen($bin);
-        for ($i = 1; $i <= $pad; $i++) {
-            $bin = "0" . $bin;
-        }
-        $bits = 0;
-        while ($bits <= 7) {
-            $bin_part = substr($bin, ($bits * 16), 16);
-            $ipv6.= dechex(bindec($bin_part)) . ":";
-            $bits++;
-        }
-        return inet_ntop(inet_pton(substr($ipv6, 0, -1)));
-    }
     public static function getClientIp() {
         $server = Wind::getComponent('request')->getServer();
         if ($server['HTTP_CLIENT_IP'] != null) {
-            return $server['HTTP_CLIENT_IP'];
+            $ip = $server['HTTP_CLIENT_IP'];
         } elseif ($server['HTTP_X_FORWARDED_FOR'] != null) {
             $ip = strtok($server['HTTP_X_FORWARDED_FOR'], ',');
-            if (is_array($ip)) return $ip[0];
-            else return $ip;
         } elseif ($server['HTTP_PROXY_USER'] != null) {
-            return $server['HTTP_PROXY_USER'];
+            $ip = $server['HTTP_PROXY_USER'];
         } elseif ($server['REMOTE_ADDR'] != null) {
-            return $server['REMOTE_ADDR'];
+            $ip = $server['REMOTE_ADDR'];
         } else {
             return null;
         }
+        return $ip;
     }
     public static function buildPeerList($peer_list, $compact, $no_peer_id, $string) {
         $bencode = new PwBencode();
-        $string.= $bencode->doEncodeString('peers');
+        $string .= $bencode->doEncodeString('peers');
         $peer_string = '';
         if (is_array($peer_list)) {
             $count = count($peer_list);
             foreach ($peer_list as $peer) {
                 if ($compact) {
-                    $peer_string.= str_pad(pack('Nn', self::ip2bin($peer['ip']), $peer['port']), 6);
+                    $peer_string.= str_pad(pack('Nn', ip2long($peer['ip']), $peer['port']), 6);
                 } elseif ($no_peer_id == 1) {
                     $peer_string.= 'd' . $bencode->doEncodeString('ip') . $bencode->doEncodeString($peer['ip']) . $bencode->doEncodeString('port') . 'i' . $peer['port'] . 'e' . 'e';
                 } else {
