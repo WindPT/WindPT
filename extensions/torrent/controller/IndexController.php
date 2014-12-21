@@ -30,16 +30,17 @@ class IndexController extends PwBaseController
         $noPeerId = $this->getInput('no_peer_id');
         $agent = $_SERVER['HTTP_USER_AGENT'];
         $ip = PwAnnounce::getClientIp();
-        $compact = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)?0:$this->getInput('compact');
-
+        $compact = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ? 0 : $this->getInput('compact');
+        
         header('Content-Type: text/plain; charset=utf-8');
         header('Pragma: no-cache');
-
+        
         if (!PwAnnounce::checkClient()) {
             PwAnnounce::showError('This a a bittorrent application and can\'t be loaded into a browser!');
         }
-
-        $seeder = PwAnnounce::checkClientRole($left); // Check if a seeder
+        
+        $seeder = PwAnnounce::checkClientRole($left);
+        // Check if a seeder
         
         // Verify passkey
         $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passKey);
@@ -66,22 +67,24 @@ class IndexController extends PwBaseController
         // Get client information by user from peers list
         //$self = PwAnnounce::getSelf($peers, $peerId);
         $self = array_pop($this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']));
-
+        
         // Update peer
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
         
         if (!empty($self)) {
+            
             // Check if already started
             if ($ip != $self['ip']) {
                 PwAnnounce::showError('You have already started downloading this torrent!');
             }
-
+            
             $dm = new PwTorrentPeerDm($self['id']);
             switch ($event) {
                 case '':
                 case 'started':
                     $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
+                    $status = ($left > 0) ? 'do' : 'done';
                     break;
                 case 'stopped':
                     $this->_getTorrentPeerDS()->deleteTorrentPeer($self['id']);
@@ -108,6 +111,7 @@ class IndexController extends PwBaseController
             $dm->setTorrent($torrent['id'])->setUserid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passKey);
             $this->_getTorrentPeerDS()->addTorrentPeer($dm);
             $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
+            $status = ($left > 0) ? 'do' : 'done';
         }
         
         // Update user's history with this torrent
@@ -129,8 +133,7 @@ class IndexController extends PwBaseController
             else $rotio = 1;
             
             $dm = new PwTorrentHistoryDm($history['id']);
-            $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded);
-            if ($status != '') $dm->setStatus($status);
+            $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded)->setStatus($status);
             $this->_getTorrentHistoryDs()->updateTorrentHistory($dm);
             $uploaded = $uploaded_add;
             $downloaded = $downloaded_add;
@@ -195,6 +198,7 @@ class IndexController extends PwBaseController
         PwAnnounce::sendPeerList($peer_string);
     }
     public function downloadAction() {
+        
         // Get the torrent file
         $id = $this->getInput('id');
         $result = $this->check();
@@ -205,13 +209,13 @@ class IndexController extends PwBaseController
         if (!file_exists($file)) {
             $this->showError('种子文件不存在！');
         }
-
+        
         // Change announce to user's private announce
         $bencode = new PwBencode();
         $dictionary = $bencode->doDecodeFile($file);
         $passkey = PwPasskey::getPassKey($this->loginUser->uid);
         $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('app/index/announce?app=torrent&passkey=' . $passkey)));
-
+        
         // Generate file name
         $torrent = $this->_getTorrentDS()->getTorrent($id);
         $torrentnameprefix = Wekit::C('site', 'app.torrent.torrentnameprefix');
