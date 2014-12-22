@@ -161,15 +161,16 @@ class IndexController extends PwBaseController
             $symbol = array('%downloaded%', '%downloaded_total%', '%uploaded%', '%uploaded_total%', '%rotio%', '%rotio_total%', '%time%', '%credit%', '%torrents%');
             $numbers = array(intval($downloaded), intval($downloaded_total), intval($uploaded), intval($uploaded_total), intval($rotio), intval($rotio_total), intval($timeUsed), 0, intval($user_torrents));
             foreach ($_credits as $key => $value) {
-                if (!$credit['enabled']) continue;
+                if ($value['enabled'] != '1') continue;
                 $numbers[7] = intval($crdtits['credit' . $key]);
-                $exp = str_replace($symbol, $numbers, $credit['func']);
+                $exp = str_replace($symbol, $numbers, $value['func']);
                 $credit_c = PwAnnounce::cal($exp);
                 $changes[$key] = $credit_c;
                 $changed++;
             }
             if ($changed) {
-                $creditBo = Wekit::load('SRV:credit.bo.PwCreditBo')->getInstance();
+                Wind::import('SRV:credit.bo.PwCreditBo');
+                $creditBo = PwCreditBo::getInstance();
                 $creditBo->sets($user['uid'], $changes);
                 $creditBo->addLog('pt_tracker', $changes, new PwUserBo($user['uid']));
             }

@@ -29,7 +29,7 @@ class PwAnnounce
             }
             $result = exec('echo ' . escapeshellarg($exp) . ' | ' . $cmd);
         }
-        return interval($result);
+        return intval($result);
     }
     public static function checkClient() {
         $agent = $_SERVER['HTTP_USER_AGENT'];
