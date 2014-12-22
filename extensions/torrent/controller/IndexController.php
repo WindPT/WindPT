@@ -32,14 +32,12 @@ class IndexController extends PwBaseController
         $ip = PwAnnounce::getClientIp();
         $compact = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ? 0 : $this->getInput('compact');
         
-        header('Content-Type: text/plain; charset=utf-8');
-        header('Pragma: no-cache');
-        
         if (!PwAnnounce::checkClient()) {
             PwAnnounce::showError('This a a bittorrent application and can\'t be loaded into a browser!');
         }
         
         $seeder = PwAnnounce::checkClientRole($left);
+        
         // Check if a seeder
         
         // Verify passkey
@@ -66,7 +64,7 @@ class IndexController extends PwBaseController
         
         // Get client information by user from peers list
         //$self = PwAnnounce::getSelf($peers, $peerId);
-        $self = array_pop($this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']));
+        $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
         
         // Update peer
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
@@ -153,8 +151,8 @@ class IndexController extends PwBaseController
             $user_torrents = count($this->_getTorrentDS()->fetchTorrentByUid($user['uid']));
             $histories = $this->_getTorrentHistoryDs()->fetchTorrentHistoryByUid($user['uid']);
             foreach ($histories as $history) {
-                $downloaded_total+= $history['downloaded'];
-                $uploaded_total+= $history['uploaded'];
+                $downloaded_total += $history['downloaded'];
+                $uploaded_total += $history['uploaded'];
             }
             unset($histories);
             if ($downloaded_total != 0) $rotio_total = round($uploaded_total / $downloaded_total, 2);
