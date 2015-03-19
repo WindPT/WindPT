@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+    <application>
+        <name>PT</name>
+        <alias>pt</alias>
+        <version>1.0</version>
+        <pw-version>9.0</pw-version>
+        <charset>UTF-8</charset>
+        <type>style</type>
+        <style-type>site</style-type>
+        <description>为PT站优化的phpwind模板</description>
+        <logo>images/pt.png</logo>
+        <website></website>
+        <author-name>UULM Team</author-name>
+        <author-email>admin@uulm.net</author-email>
+        <author-icon></author-icon>
+    </application>
+</manifest>

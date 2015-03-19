@@ -1,0 +1,71 @@
+<hook-action name="displayReadTorrentHtml" args='torrent'>
+    <style>
+        .torrent {
+            margin-bottom: 10px;
+        }
+        .torrent li {
+            border-bottom: 1px solid #CCC;
+            height: 30px;
+            line-height: 30px;
+        }
+        .torrent li strong {
+            display: block;
+            float: left;
+            height: 30px;
+            line-height: 30px;
+            text-align: right;
+            width: 100px;
+        }
+        .torrent li span {
+            display: block;
+            float: left;
+            height: 30px;
+            line-height: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 200px;
+        }
+        .torrent ul.file li span {
+            margin-right: 10px;
+            width: 500px;
+        }
+        .torrent ul.file li span:last-child {
+            width: 100px;
+        }
+    </style>
+    <div class="torrent cc">
+        <ul>
+            <li>
+                <strong>文件名：{$passkey}</strong>
+                <span><a href="{@url:app/index/download?app=torrent&id=$torrent['id']}">{$torrent['filename']}</a></span>
+                <p style="color:#FF0000">若下载的文件扩展名是.torrent.html，请手动修改为.torrent</p>
+            </li>
+            <li>
+                <strong>添加时间：</strong>
+                <span>{$torrent['added']}</span>
+                <strong>做种：</strong>
+                <span style="width: 50px;<!--# if($torrent['seeder']=='断种') echo 'color:red;'; #-->">{$torrent['seeder']}</span>
+                <strong>下载：</strong>
+                <span style="width: 50px;">{$torrent['leecher']}</span>
+            </li>
+            
+            <!--# if($torrent['wikilink']!='') { #-->
+            <li><strong>Wiki链接：</strong><a href="{$torrent['wikilink']}" target="_blank">{$torrent['wikilink']}</a></li>
+            <!--# } #-->
+            <li><strong>Hash码：</strong>{$torrent['info_hash']}</li>
+            <li><strong>文件数量：</strong><span>共有{$torrent['numfiles']}个文件</span><strong>文件大小：</strong><span>{$torrent['size']}</span></li>
+        </ul>
+        <ul class="file">
+            <!--# if(isset($torrent['list'])) { #-->
+            <li onclick="$('#fileList').slideToggle();">文件列表：（点击展开/收拢）</li>
+            <div id="fileList" style="display:none;">
+            <li><span>文件名</span><span>文件大小</span></li>
+            <!--# foreach($torrent['list'] as $file) { #-->
+            <li><span title="{$file['filename']}">{$file['filename']}</span><span>{$file['size']}</span></li>
+            <!--# } #-->
+            </div>
+            <!--# } #-->
+        </ul>
+    </div>
+</hook>

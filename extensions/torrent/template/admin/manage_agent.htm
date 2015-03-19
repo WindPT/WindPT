@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+<template source='TPL:admin.common.head' />
+</head>
+<body>
+<div class="wrap">
+
+<div class="nav">
+    <ul class="cc">
+        <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/run')}">基本设置</a></li>
+        <li class="current"><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/agent')}">客户端设置</a></li>
+        <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/credit')}">积分设置</a></li>
+        <!--# if($config['theme.site.default']=='pt') { #-->
+        <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/theme')}">主题设置</a></li>
+        <!--# } #-->
+    </ul>
+</div>
+
+<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/app/torrent/manage/doagent')}">
+<div class="table_full">
+    <div class="table_list">
+        <table width="100%" id="J_group_table">
+            <col width="50">
+            <col width="140">
+            <col width="86">
+            <col width="210" />
+            <col width="210" />
+            <col width="86" />
+            <thead>
+                <tr>
+                    <td>编号</td>
+                    <td>客户端名称</td>
+                    <td>HTTPS</td>
+                    <td>Agent特征</td>
+                    <td>PeerID特征</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <tbody id="J_groupList">
+            <!--# foreach ($allowedClients as $allowedClient) { $key = $allowedClient['id'] #-->
+                <tr>
+                <td>{$key}</td>
+                <td><input type="text" class="input length_3" name="allowedClients[{$key}][family]" value="{$allowedClient['family']}"></td>
+                <td>
+                    <label><input type="radio" name="allowedClients[{$key}][allowhttps]" value="yes" {@pw::ifcheck($allowedClient['allowhttps']=='yes')}><span>允许</span></label>
+                    <label><input type="radio" name="allowedClients[{$key}][allowhttps]" value="no" {@Pw::ifcheck($allowedClient['allowhttps']=='no')}><span>禁止</span></label>
+                </td>
+                <td><input type="text" class="input length_3" name="allowedClients[{$key}][agent_pattern]" value="{$allowedClient['agent_pattern']}"></td>
+                <td><input type="text" class="input length_3" name="allowedClients[{$key}][peer_id_pattern]" value="{$allowedClient['peer_id_pattern']}"></td>
+                <td><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/doagent')}" class="mr10 J_ajax_del" data-pdata="{'act': 'delete','id': '{$key}'}">[删除]</a></td>
+                </tr>
+            <!--# } #-->
+            </tbody>
+            <tbody id="J_groups_add_temp">
+                <tr>
+                    <td></td>
+                    <td><input id="J_new_group_name" type="text" class="input length_3" name="newAllowedClients[]['family']"></td>
+                    <td><a id="J_inset_new_group" href="" class="link_add">添加</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="btn_wrap">
+    <div class="btn_wrap_pd">
+        <button class="btn btn_submit mr10 J_ajax_submit_btn" type="submit">提交</button>
+    </div>
+</div>
+</form>
+
+</div>
+<template source='TPL:admin.common.footer' />
+<script>
+$(function() {
+    var ct = 0;
+    var group_list = $('#J_groupList');
+    
+    //添加新组
+    $('#J_inset_new_group').click(function(e){
+        e.preventDefault();
+        var new_group_name = $('#J_new_group_name');
+
+        if (!(new_group_name.val().replace(/\s/g, ''))) {
+            new_group_name.focus();
+            return false;
+        }
+        new_group_html = '<tr class="ct">\
+                <td></td>\
+                <td><input type="text" class="input length_3" name="newAllowedClients[new_'+ ct +'][family]" value="'+ new_group_name.val() +'"></td>\
+                <td><label><input type="radio" name="newAllowedClients[new_'+ ct +'][allowhttps]" value="yes"><span>允许</span></label><label><input type="radio" name="newAllowedClients[new_'+ ct +'][allowhttps]" value="no" checked><span>禁止</span></label></td>\
+                <td><input type="text" class="input length_3" name="newAllowedClients[new_'+ ct +'][agent_pattern]"></td>\
+                <td><input type="text" class="input length_3" name="newAllowedClients[new_'+ ct +'][peer_id_pattern]"></td>\
+                <td><a class="mr10 J_new_group_del" href="">[删除]</a>\</td>\
+                </tr>';
+        group_list.append(new_group_html);
+        new_group_name.val('');
+        ct++;
+    });
+    
+    //删除未提交的组
+    Wind.use('dialog',function() {
+        group_list.on('click', 'a.J_new_group_del', function(e) {
+            e.preventDefault();
+            var $this = $(this);
+            Wind.dialog.confirm('确定要删除吗？',function() {
+                $this.parents('tr.ct').fadeOut('fast', function(){
+                    $(this).remove();
+                });
+            })
+        });
+    });
+});
+</script>
+</body>
+</html>
