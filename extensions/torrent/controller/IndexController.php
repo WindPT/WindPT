@@ -1,6 +1,5 @@
 <?php
 defined('WEKIT_VERSION') or exit(403);
-date_default_timezone_set("Asia/Shanghai");
 Wind::import('SRV:user.bo.PwUserBo');
 Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
 Wind::import('EXT:torrent.service.srv.helper.PwBencode');

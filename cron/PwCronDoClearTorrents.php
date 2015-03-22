@@ -29,7 +29,6 @@ class PwCronDoClearTorrents extends AbstractCronBase
         if ($torrentimeout < 1) return '';
         $fids = Wekit::C('site', 'app.torrent.pt_threads');
         if (empty($fids)) return '';
-        date_default_timezone_set('Asia/Shanghai');
         foreach ($fids as $fid) {
             $topics = Wekit::load('forum.PwThread')->getThreadByFid($fid, 0);
             foreach ($topics as $topic) {

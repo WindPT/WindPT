@@ -50,7 +50,7 @@
             </div>
         </div>
     </div>
-    <div class="cc post_extend" style="color:#FF0000">Private Tracker 地址（点击文本框复制到剪贴板，请不要泄露给其他人）：<input id="tracker" type="text" class="input" name="tracker" value="{@WindUrlHelper::createUrl('/app/torrent/index/announce')}?app=torrent&passkey={$pargs->passkey}" data-clipboard-text="{@WindUrlHelper::createUrl('/app/torrent/index/announce')}?app=torrent&passkey={$pargs->passkey}" style="width:640px;"></div>
+    <div class="cc post_extend" style="color:#FF0000">Private Tracker 地址（点击文本框复制到剪贴板，请不要泄露给其他人）：<input id="tracker" type="text" class="input" name="tracker" value="{@WindUrlHelper::createUrl('/app/torrent/index/announce')}?passkey={$pargs->passkey}" data-clipboard-text="{@WindUrlHelper::createUrl('/app/torrent/index/announce')}?app=torrent&passkey={$pargs->passkey}" style="width:640px;"></div>
     
     <script src="src/extensions/torrent/res/js/ZeroClipboard.min.js"></script>
     <script>
