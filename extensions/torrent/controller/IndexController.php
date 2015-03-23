@@ -26,7 +26,6 @@ class IndexController extends PwBaseController
         $downloaded = $this->getInput('downloaded');
         $uploaded = $this->getInput('uploaded');
         $left = $this->getInput('left');
-        $compact = $this->getInput('compact');
         $noPeerId = $this->getInput('no_peer_id');
         $agent = $_SERVER['HTTP_USER_AGENT'];
         $ip = PwAnnounce::getClientIp();
@@ -61,7 +60,6 @@ class IndexController extends PwBaseController
         if (!$torrent) {
             PwAnnounce::showError('Torrent not registered with this tracker!');
         }
-        unset($self);
         
         // Get this peer
         $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
