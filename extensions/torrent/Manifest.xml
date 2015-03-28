@@ -3,7 +3,7 @@
 	<application>
 	<name>微PT</name>
 	<alias>torrent</alias>
-	<version>0.9.7</version>
+	<version>0.9.10</version>
 	<pw-version>9.0</pw-version>
 	<description>基于PW9.0的PT应用，安装后在版块发帖类型中添加（种子帖）即可。配合对应主题使用效果更佳。</description>
 	<logo>images/logo.jpg</logo>

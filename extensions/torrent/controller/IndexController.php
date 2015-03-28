@@ -3,6 +3,7 @@ defined('WEKIT_VERSION') or exit(403);
 Wind::import('SRV:user.bo.PwUserBo');
 Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
 Wind::import('EXT:torrent.service.srv.helper.PwBencode');
+Wind::import('EXT:torrent.service.srv.helper.PwUpdateInfo');
 Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
 Wind::import('EXT:torrent.service.dm.PwTorrentDm');
 Wind::import('EXT:torrent.service.dm.PwTorrentPeerDm');
@@ -16,6 +17,125 @@ class IndexController extends PwBaseController
     public function run() {
         $this->setTemplate('');
         echo 'WindPT private BitTorrent tracker';
+    }
+    public function updateInfoAction() {
+        $t_type = $this->getInput('t_type', 'post');
+        $w_type = $this->getInput('w_type', 'post');
+        $wikilink = $this->getInput('wikilink', 'post');
+        $paras = $this->getInput('paras', 'post');
+
+        switch ($t_type) {
+            case '1':
+                // 书籍
+                $url = 'https://api.douban.com/v2/book/'.$wikilink;
+                $result = json_decode(PwUpdateInfo::curl($url));
+                $title = '['.$result->pubdate.']'; // 年份
+                $title .= '['.$result->title.']'; // 标题
+                if ($result->subtitle) $title .= '['.$result->subtitle.']'; // 子标题
+
+                // 作者
+                if ($result->author) {
+                    $title .= '[';
+                    foreach ($result->author as $author) {
+                        $title .= $author . ' ';
+                    }
+                    $title = substr($title,0,strlen($title)-1);
+                    $title .= ']';
+                }
+                $content = '[img]'.$result->image.'[/img]\n'.$result->summary;
+                break;
+
+            case '2':
+            case '21':
+                // 影视
+                if ($w_type == 12) {
+                    // 豆瓣
+                    $url = 'https://api.douban.com/v2/movie/subject/'.$wikilink;
+                    $result = json_decode(PwUpdateInfo::curl($url));
+                    $title = '['.$result->countries[0].']'; // 国别
+                    $title .= '['.$result->year.']'; // 年份
+                    $title .= '['.$result->title.']'; // 影片中文名
+
+                    // 又名
+                    $title .= '[';
+                    foreach ($result->aka as $aka) {
+                        if ($aka!=$result->title) $title .= $aka . ' ';
+                    }
+                    $title = substr($title,0,strlen($title)-1);
+                    $title .= ']';
+
+                    if($paras['se']) $title .= '['.$paras['se'].']'; // 季度、集数
+
+                    // 类型
+                    $title .= '[';
+                    foreach ($result->genres as $genre) {
+                        $title .= $genre . ' ';
+                    }
+                    $title = substr($title,0,strlen($title)-1);
+                    $title .= ']';
+
+                    $title .= '['.$paras['rip'].']'; // 压制
+                    $title .= '['.$paras['resolution'].']'; // 分辨率
+                    $title .= '['.$paras['sub'].']'; // 字幕
+                    $title .= '['.$paras['format'].']'; // 格式
+                    if($paras['status']) $title .= '['.$paras['status'].']'; // 状态
+
+                    $content = '[img]'.$result->images->medium.'[/img]\n'.$result->summary;
+                } elseif ($w_type == 2) {
+                    // IMDB
+                    $url = 'http://omdbapi.com/?i='.$wikilink;
+                    $result = json_decode(PwUpdateInfo::curl($url));
+                    $title = '['.$result->Country.']'; // 国别
+                    $title .= '['.$result->Year.']'; // 年份
+                    $title .= '['.$result->Title.']'; // 影片名
+
+                    if($paras['se']) $title .= '['.$paras['se'].']'; // 季度、集数
+
+                    // 类型
+                    $title .= '['.str_replace(', ', ' ', $result->Genre).']';
+
+                    $title .= '['.$paras['rip'].']'; // 压制
+                    $title .= '['.$paras['resolution'].']'; // 分辨率
+                    $title .= '['.$paras['sub'].']'; // 字幕
+                    $title .= '['.$paras['format'].']'; // 格式
+                    if($paras['status']) $title .= '['.$paras['status'].']'; // 状态
+
+                    $content = '[img]'.$result->Poster.'[/img]\n'.$result->Plot;
+                }
+                
+                break;
+            
+            case '3':
+                // 音乐
+                $url = 'https://api.douban.com/v2/music/'.$wikilink;
+                $result = json_decode(PwUpdateInfo::curl($url));
+                $title = '['.$result->attrs->pubdate.']'; // 年份
+                $title .= '['.$result->attrs->title.']'; // 标题
+                $title .= '['.$result->attrs->singer.']'; // 艺人
+                $title .= '['.$paras['format'].']'; // 格式
+                $title .= '['.$paras['bps'].']'; // 码率
+
+                $content = '[img]'.$result->image.'[/img]\n'.$result->summary;
+                break;
+
+            case '4':
+                // 软件
+                $title = '['.$paras['platform'].']'; // 平台
+                $title .= '['.$paras['name'].']'; // 中文名
+                if ($paras['oname']) $title .= '['.$paras['oname'].']'; // 原名
+                $title .= '['.$paras['lang'].']'; // 语言
+                $title .= '['.$paras['format'].']'; // 格式
+                break;
+
+            case '5':
+                // 其他
+                $title .= '['.$paras['name'].']'; // 中文名
+                if ($paras['oname']) $title .= '['.$paras['oname'].']'; // 原名
+                break;
+        }
+
+        echo json_encode(array('title'=>$title, 'content'=>$content));
+        $this->setTemplate('');
     }
     public function announceAction() {
         $passKey = $this->getInput('passkey');
