@@ -334,7 +334,7 @@ class IndexController extends PwBaseController
         $bencode = new PwBencode();
         $dictionary = $bencode->doDecodeFile($file);
         $passkey = PwPasskey::getPassKey($this->loginUser->uid);
-        $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('app/index/announce?app=torrent&passkey=' . $passkey)));
+        $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('/app/index/announce?app=torrent&passkey=' . $passkey)));
 
         // Generate file name
         $torrent = $this->_getTorrentDS()->getTorrent($id);
