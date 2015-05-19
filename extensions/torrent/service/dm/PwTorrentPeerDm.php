@@ -62,7 +62,7 @@ class PwTorrentPeerDm extends PwBaseDm {
         $this->_data['agent'] = $agent;
         return $this;
     }
-    public function setFinishedat($finishedat) {
+    public function setFinishedAt($finishedat) {
         $this->_data['finishedat'] = $finishedat;
         return $this;
     }

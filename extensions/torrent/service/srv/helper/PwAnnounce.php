@@ -42,19 +42,19 @@ class PwAnnounce
         }
         return $peer_list;
     }
-    public static function getSelf($peer_list, $peer_id) {
-        if (is_array($peer_list)) {
-            foreach ($peer_list as $peer) {
-                if ($peer_id == $peer['peer_id']) {
-                    return $peer;
-                }
-            }
-        }
-        return NULL;
-    }
     public static function sendPeerList($peer_string) {
         header('Content-Type: text/plain; charset=utf-8');
         header('Pragma: no-cache');
+        if (stristr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip") && extension_loaded('zlib') && ini_get("zlib.output_compression") == 0) {
+          if (ini_get('output_handler')!='ob_gzhandler') {
+          	// only for non compact
+          	ob_start("ob_gzhandler");
+          } else {
+          	ob_start();
+          }
+        } else {
+          ob_start();
+        }
         echo $peer_string;
         exit();
     }
@@ -73,20 +73,6 @@ class PwAnnounce
     public static function buildWaitTime($torrent) {
         $bencode = new PwBencode();
         return 'd' . $bencode->doEncodeString('interval') . 'i840e' . $bencode->doEncodeString('min interval') . 'i30e' . $bencode->doEncodeString('complete') . 'i' . $torrent['seeders'] . 'e' . $bencode->doEncodeString('incomplete') . 'i' . $torrent['leechers'] . 'e';
-    }
-    public static function getClientIp() {
-        if ($_SERVER['HTTP_CLIENT_IP'] != null) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif ($_SERVER['HTTP_X_FORWARDED_FOR'] != null) {
-            $ip = strtok($_SERVER['HTTP_X_FORWARDED_FOR'], ',');
-        } elseif ($_SERVER['HTTP_PROXY_USER'] != null) {
-            $ip = $_SERVER['HTTP_PROXY_USER'];
-        } elseif ($_SERVER['REMOTE_ADDR'] != null) {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        } else {
-            return null;
-        }
-        return $ip;
     }
     public static function buildPeerList($peer_list, $compact, $no_peer_id, $string) {
         $bencode = new PwBencode();
