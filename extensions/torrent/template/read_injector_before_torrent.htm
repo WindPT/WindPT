@@ -39,7 +39,6 @@
             <li>
                 <strong>文件名：{$passkey}</strong>
                 <span><a href="{@url:app/index/download?app=torrent&id=$torrent['id']}">{$torrent['filename']}</a></span>
-                <p style="color:#FF0000">若下载的文件扩展名是.torrent.html，请手动修改为.torrent</p>
             </li>
             <li>
                 <strong>添加时间：</strong>
@@ -49,7 +48,7 @@
                 <strong>下载：</strong>
                 <span style="width: 50px;">{$torrent['leecher']}</span>
             </li>
-            
+
             <!--# if($torrent['wikilink']!='') { #-->
             <li><strong>Wiki链接：</strong><a href="{$torrent['wikilink']}" target="_blank">{$torrent['wikilink']}</a></li>
             <!--# } #-->

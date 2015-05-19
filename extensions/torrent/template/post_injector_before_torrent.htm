@@ -129,7 +129,7 @@
         </span>
         <span class="t_attr_t">
         <input type="text" class="input" name="t_n_c" placeholder="中文名">
-        &nbsp;&nbsp;<input type="text" class="input" name="t_n_o" placeholder="原名（若有）">
+        &nbsp;&nbsp;<input type="text" class="input" name="t_n_o" placeholder="外文原名（若有）">
         </span>
         <button type="button" class="btn btn_submit mr10" id="UpdateInfo">更新标题和简介</button>
     </div>
@@ -254,7 +254,7 @@
         }, function( data ) {
             $('input[name="atc_title"]').val( data.title );
             $('iframe.wind_editor_iframe').contents().find('body.editor_content').text( data.content );
-        });
+        }, 'json');
     });
     </script>
 </hook>
