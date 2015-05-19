@@ -7,19 +7,19 @@ This project is still in early stage, DO NOT use it on production environment, p
 
 If you find any bugs or mistakes, please let me know by submitting a issue or making a pull request to `dev` branch.
 
-You should create a directory named `torrent` under the root of PHPWind manually.
+You should create a directory named `torrent` under the root of PHPWind manually if php ** does not have permission to `write` under the root ** .
 
 ```
 /
-|- cron
-|  |- PwCronDoClearPeers.php      // Cron script for cleaning up peers not active for a long time
-|  |- PwCronDoClearTorrents.php   // Cron script for cleaning up torrents not active for a long time
+|- cron                            // cron job [put in PHPWind/src/service/cron/srv/do]
+|  |- PwCronDoClearPeers.php
+|  |- PwCronDoClearTorrents.php
 |  =
 |- extensions
-|  |- torrent <dir>                // extension
+|  |- torrent <dir>                // extension [put in PHPWind/src/extensions/]
 |  =
 |- themes_site
-|  |- pt <dir>                     // theme
+|  |- pt <dir>                     // theme [put in PHPWind/themes/site/]
 =  =
 ```
 
