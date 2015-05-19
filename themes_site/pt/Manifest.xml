@@ -11,8 +11,8 @@
         <description>为PT站优化的phpwind模板</description>
         <logo>images/pt.png</logo>
         <website></website>
-        <author-name>UULM Team</author-name>
-        <author-email>admin@uulm.net</author-email>
-        <author-icon></author-icon>
+        <author-name>XUULM Team</author-name>
+        <author-email>xuulm@xuulm.com</author-email>
+        <author-icon>images/uulm.jpg</author-icon>
     </application>
 </manifest>
