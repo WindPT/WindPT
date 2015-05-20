@@ -22,7 +22,18 @@ class IndexController extends PwBaseController
         $t_type = $this->getInput('t_type', 'post');
         $w_type = $this->getInput('w_type', 'post');
         $wikilink = $this->getInput('wikilink', 'post');
-        $paras = $this->getInput('paras', 'post');
+        //$paras = $this->getInput('paras', 'post');
+        $paras_se = $this->getInput('se', 'post');
+        $paras_rip = $this->getInput('rip', 'post');
+        $paras_resolution = $this->getInput('resolution', 'post');
+        $paras_sub = $this->getInput('sub', 'post');
+        $paras_format = $this->getInput('format', 'post');
+        $paras_status = $this->getInput('status', 'post');
+        $paras_bps = $this->getInput('bps', 'post');
+        $paras_platform = $this->getInput('platform', 'post');
+        $paras_name = $this->getInput('name', 'post');
+        $paras_oname = $this->getInput('oname', 'post');
+        $paras_lang = $this->getInput('lang', 'post');
 
         switch ($t_type) {
             case '1':
@@ -42,7 +53,8 @@ class IndexController extends PwBaseController
                     $title = substr($title,0,strlen($title)-1);
                     $title .= ']';
                 }
-                $content = '[img]'.$result->image.'[/img]\n'.$result->summary;
+                $wikilink = $result->alt;
+                $content = '[img]'.$result->image.'[/img]<br />'.$result->summary;
                 break;
 
             case '2':
@@ -64,7 +76,7 @@ class IndexController extends PwBaseController
                     $title = substr($title,0,strlen($title)-1);
                     $title .= ']';
 
-                    if($paras['se']) $title .= '['.$paras['se'].']'; // 季度、集数
+                    if($paras_se) $title .= '['.$paras_se.']'; // 季度、集数
 
                     // 类型
                     $title .= '[';
@@ -74,13 +86,14 @@ class IndexController extends PwBaseController
                     $title = substr($title,0,strlen($title)-1);
                     $title .= ']';
 
-                    $title .= '['.$paras['rip'].']'; // 压制
-                    $title .= '['.$paras['resolution'].']'; // 分辨率
-                    $title .= '['.$paras['sub'].']'; // 字幕
-                    $title .= '['.$paras['format'].']'; // 格式
-                    if($paras['status']) $title .= '['.$paras['status'].']'; // 状态
+                    $title .= '['.$paras_rip.']'; // 压制
+                    $title .= '['.$paras_resolution.']'; // 分辨率
+                    $title .= '['.$paras_sub.']'; // 字幕
+                    $title .= '['.$paras_format.']'; // 格式
+                    if($paras_status) $title .= '['.$paras_status.']'; // 状态
 
-                    $content = '[img]'.$result->images->medium.'[/img]\n'.$result->summary;
+                    $wikilink = $result->alt;
+                    $content = '[img]'.$result->images->medium.'[/img]<br />'.$result->summary;
                 } elseif ($w_type == 2) {
                     // IMDB
                     $url = 'http://omdbapi.com/?i='.$wikilink;
@@ -89,18 +102,19 @@ class IndexController extends PwBaseController
                     $title .= '['.$result->Year.']'; // 年份
                     $title .= '['.$result->Title.']'; // 影片名
 
-                    if($paras['se']) $title .= '['.$paras['se'].']'; // 季度、集数
+                    if($paras_se) $title .= '['.$paras_se.']'; // 季度、集数
 
                     // 类型
                     $title .= '['.str_replace(', ', ' ', $result->Genre).']';
 
-                    $title .= '['.$paras['rip'].']'; // 压制
-                    $title .= '['.$paras['resolution'].']'; // 分辨率
-                    $title .= '['.$paras['sub'].']'; // 字幕
-                    $title .= '['.$paras['format'].']'; // 格式
-                    if($paras['status']) $title .= '['.$paras['status'].']'; // 状态
+                    $title .= '['.$paras_rip.']'; // 压制
+                    $title .= '['.$paras_resolution.']'; // 分辨率
+                    $title .= '['.$paras_sub.']'; // 字幕
+                    $title .= '['.$paras_format.']'; // 格式
+                    if($paras_status) $title .= '['.$paras_status.']'; // 状态
 
-                    $content = '[img]'.$result->Poster.'[/img]\n'.$result->Plot;
+                    $wikilink = 'http://www.imdb.com/title/'. $wikilink;
+                    $content = '[img]'.$result->Poster.'[/img]<br />'.$result->Plot;
                 }
 
                 break;
@@ -112,29 +126,29 @@ class IndexController extends PwBaseController
                 $title = '['.$result->attrs->pubdate.']'; // 年份
                 $title .= '['.$result->attrs->title.']'; // 标题
                 $title .= '['.$result->attrs->singer.']'; // 艺人
-                $title .= '['.$paras['format'].']'; // 格式
-                $title .= '['.$paras['bps'].']'; // 码率
-
-                $content = '[img]'.$result->image.'[/img]\n'.$result->summary;
+                $title .= '['.$paras_format.']'; // 格式
+                $title .= '['.$paras_bps.']'; // 码率
+                $wikilink = $result->alt;
+                $content = '[img]'.$result->image.'[/img]<br />'.$result->summary;
                 break;
 
             case '4':
                 // 软件
-                $title = '['.$paras['platform'].']'; // 平台
-                $title .= '['.$paras['name'].']'; // 中文名
-                if ($paras['oname']) $title .= '['.$paras['oname'].']'; // 原名
-                $title .= '['.$paras['lang'].']'; // 语言
-                $title .= '['.$paras['format'].']'; // 格式
+                $title = '['.$paras_platform.']'; // 平台
+                $title .= '['.$paras_name.']'; // 中文名
+                if ($paras_oname) $title .= '['.$paras_oname.']'; // 原名
+                $title .= '['.$paras_lang.']'; // 语言
+                $title .= '['.$paras_format.']'; // 格式
                 break;
 
             case '5':
                 // 其他
-                $title .= '['.$paras['name'].']'; // 中文名
-                if ($paras['oname']) $title .= '['.$paras['oname'].']'; // 原名
+                $title .= '['.$paras_name.']'; // 中文名
+                if ($paras_oname) $title .= '['.$paras_oname.']'; // 原名
                 break;
         }
 
-        echo json_encode(array('title'=>$title, 'content'=>$content));
+        echo json_encode(array('title'=>$title, 'wikilink'=>$wikilink, 'content'=>$content));
         $this->setTemplate('');
     }
     public function announceAction() {
