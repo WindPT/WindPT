@@ -48,9 +48,9 @@ class IndexController extends PwBaseController
                 if ($result->author) {
                     $title .= '[';
                     foreach ($result->author as $author) {
-                        $title .= $author . ' ';
+                        $title .= $author . ' / ';
                     }
-                    $title = substr($title,0,strlen($title)-1);
+                    $title = substr($title,0,strlen($title)-3);
                     $title .= ']';
                 }
                 $wikilink = $result->alt;
@@ -71,9 +71,9 @@ class IndexController extends PwBaseController
                     // 又名
                     $title .= '[';
                     foreach ($result->aka as $aka) {
-                        if ($aka!=$result->title) $title .= $aka . ' ';
+                        if ($aka!=$result->title) $title .= $aka . ' / ';
                     }
-                    $title = substr($title,0,strlen($title)-1);
+                    $title = substr($title,0,strlen($title)-3);
                     $title .= ']';
 
                     if($paras_se) $title .= '['.$paras_se.']'; // 季度、集数
@@ -81,9 +81,9 @@ class IndexController extends PwBaseController
                     // 类型
                     $title .= '[';
                     foreach ($result->genres as $genre) {
-                        $title .= $genre . ' ';
+                        $title .= $genre . ' / ';
                     }
-                    $title = substr($title,0,strlen($title)-1);
+                    $title = substr($title,0,strlen($title)-3);
                     $title .= ']';
 
                     $title .= '['.$paras_rip.']'; // 压制
