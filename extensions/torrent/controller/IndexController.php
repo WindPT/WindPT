@@ -40,7 +40,7 @@ class IndexController extends PwBaseController
                 case '1':
                     // 书籍
                     $url = 'https://api.douban.com/v2/book/'.$wikilink;
-                    if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey=' Wekit::C('site', 'app.torrent.titlegen.douban');
+                    if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey='.Wekit::C('site', 'app.torrent.titlegen.douban');
                     $result = json_decode(PwUpdateInfo::curl($url));
                     $title = '['.$result->pubdate.']'; // 年份
                     $title .= '['.$result->title.']'; // 标题
@@ -65,7 +65,7 @@ class IndexController extends PwBaseController
                     if ($w_type == 12) {
                         // 豆瓣
                         $url = 'https://api.douban.com/v2/movie/subject/'.$wikilink;
-                        if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey=' Wekit::C('site', 'app.torrent.titlegen.douban');
+                        if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey='.Wekit::C('site', 'app.torrent.titlegen.douban');
                         $result = json_decode(PwUpdateInfo::curl($url));
                         $title = '['.$result->countries[0].']'; // 国别
                         $title .= '['.$result->year.']'; // 年份
@@ -125,7 +125,7 @@ class IndexController extends PwBaseController
                 case '3':
                     // 音乐
                     $url = 'https://api.douban.com/v2/music/'.$wikilink;
-                    if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey=' Wekit::C('site', 'app.torrent.titlegen.douban');
+                    if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey='.Wekit::C('site', 'app.torrent.titlegen.douban');
                     $result = json_decode(PwUpdateInfo::curl($url));
                     $title = '['.$result->attrs->pubdate.']'; // 年份
                     $title .= '['.$result->attrs->title.']'; // 标题
