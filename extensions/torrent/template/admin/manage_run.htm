@@ -58,6 +58,24 @@
         <col width="400" />
         <col />
         <tr>
+            <th>标题生成器</th>
+            <td>
+            <ul class="switch_list cc">
+                <li><label><input type="radio" name="titlegenifopen" value="2" {@pw::ifcheck($config['app.torrent.titlegen.ifopen'] == 2)}><span>强制</span></label></li>
+                <li><label><input type="radio" name="titlegenifopen" value="1" {@pw::ifcheck($config['app.torrent.titlegen.ifopen'] == 1)}><span>开启</span></label></li>
+                <li><label><input type="radio" name="titlegenifopen" value="0" {@Pw::ifcheck($config['app.torrent.titlegen.ifopen'] == 0)}><span>关闭</span></label></li>
+            </ul>
+            </td>
+            <td><div class="fun_tips">是否开启标题生成器，选择“强制”则用户不能手动设置种子贴标题</div></td>
+        </tr>
+        <tr>
+            <th>豆瓣 apikey</th>
+            <td>
+                <input name="titlegendouban" type="text" class="input length_5" value="{$config['app.torrent.titlegen.douban']}">
+            </td>
+            <td><div class="fun_tips">是否开启标题生成器，选择“强制”则用户不能手动设置种子贴标题</div></td>
+        </tr>
+        <tr>
             <th>发布前动作</th>
             <td>
             <ul class="one_list cc">
