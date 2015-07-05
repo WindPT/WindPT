@@ -38,118 +38,118 @@ class IndexController extends PwBaseController
 
             switch ($t_type) {
                 case '1':
-                    // 书籍
-                    $url = 'https://api.douban.com/v2/book/'.$wikilink;
-                    if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey='.Wekit::C('site', 'app.torrent.titlegen.douban');
-                    $result = json_decode(PwUpdateInfo::curl($url));
-                    $title = '['.$result->pubdate.']'; // 年份
-                    $title .= '['.$result->title.']'; // 标题
-                    if ($result->subtitle) $title .= '['.$result->subtitle.']'; // 子标题
+                // 书籍
+                $url = 'https://api.douban.com/v2/book/'.$wikilink;
+                if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey='.Wekit::C('site', 'app.torrent.titlegen.douban');
+                $result = json_decode(PwUpdateInfo::curl($url));
+                $title = '['.$result->pubdate.']'; // 年份
+                $title .= '['.$result->title.']'; // 标题
+                if ($result->subtitle) $title .= '['.$result->subtitle.']'; // 子标题
 
-                    // 作者
-                    if ($result->author) {
-                        $title .= '[';
-                        foreach ($result->author as $author) {
-                            $title .= $author . ' / ';
-                        }
-                        $title = substr($title,0,strlen($title)-3);
-                        $title .= ']';
+                // 作者
+                if ($result->author) {
+                    $title .= '[';
+                    foreach ($result->author as $author) {
+                        $title .= $author . ' / ';
                     }
-                    $wikilink = $result->alt;
-                    $content = '[img]'.$result->image.'[/img]<br />'.$result->summary;
-                    break;
+                    $title = substr($title,0,strlen($title)-3);
+                    $title .= ']';
+                }
+                $wikilink = $result->alt;
+                $content = '[img]'.$result->image.'[/img]<br />'.$result->summary;
+                break;
 
                 case '2':
                 case '21':
-                    // 影视
-                    if ($w_type == 12) {
-                        // 豆瓣
-                        $url = 'https://api.douban.com/v2/movie/subject/'.$wikilink;
-                        if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey='.Wekit::C('site', 'app.torrent.titlegen.douban');
-                        $result = json_decode(PwUpdateInfo::curl($url));
-                        $title = '['.$result->countries[0].']'; // 国别
-                        $title .= '['.$result->year.']'; // 年份
-                        $title .= '['.$result->title.']'; // 影片中文名
-
-                        // 又名
-                        $title .= '[';
-                        foreach ($result->aka as $aka) {
-                            if ($aka!=$result->title) $title .= $aka . ' / ';
-                        }
-                        $title = substr($title,0,strlen($title)-3);
-                        $title .= ']';
-
-                        if($paras_se) $title .= '['.$paras_se.']'; // 季度、集数
-
-                        // 类型
-                        $title .= '[';
-                        foreach ($result->genres as $genre) {
-                            $title .= $genre . ' / ';
-                        }
-                        $title = substr($title,0,strlen($title)-3);
-                        $title .= ']';
-
-                        $title .= '['.$paras_rip.']'; // 压制
-                        $title .= '['.$paras_resolution.']'; // 分辨率
-                        $title .= '['.$paras_sub.']'; // 字幕
-                        $title .= '['.$paras_format.']'; // 格式
-                        if($paras_status) $title .= '['.$paras_status.']'; // 状态
-
-                        $wikilink = $result->alt;
-                        $content = '[img]'.$result->images->medium.'[/img]<br />'.$result->summary;
-                    } elseif ($w_type == 2) {
-                        // IMDB
-                        $url = 'http://omdbapi.com/?i='.$wikilink;
-                        $result = json_decode(PwUpdateInfo::curl($url));
-                        $title = '['.$result->Country.']'; // 国别
-                        $title .= '['.$result->Year.']'; // 年份
-                        $title .= '['.$result->Title.']'; // 影片名
-
-                        if($paras_se) $title .= '['.$paras_se.']'; // 季度、集数
-
-                        // 类型
-                        $title .= '['.str_replace(', ', ' ', $result->Genre).']';
-
-                        $title .= '['.$paras_rip.']'; // 压制
-                        $title .= '['.$paras_resolution.']'; // 分辨率
-                        $title .= '['.$paras_sub.']'; // 字幕
-                        $title .= '['.$paras_format.']'; // 格式
-                        if($paras_status) $title .= '['.$paras_status.']'; // 状态
-
-                        $wikilink = 'http://www.imdb.com/title/'. $wikilink;
-                        $content = '[img]'.$result->Poster.'[/img]<br />'.$result->Plot;
-                    }
-
-                    break;
-
-                case '3':
-                    // 音乐
-                    $url = 'https://api.douban.com/v2/music/'.$wikilink;
+                // 影视
+                if ($w_type == 12) {
+                    // 豆瓣
+                    $url = 'https://api.douban.com/v2/movie/subject/'.$wikilink;
                     if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey='.Wekit::C('site', 'app.torrent.titlegen.douban');
                     $result = json_decode(PwUpdateInfo::curl($url));
-                    $title = '['.$result->attrs->pubdate.']'; // 年份
-                    $title .= '['.$result->attrs->title.']'; // 标题
-                    $title .= '['.$result->attrs->singer.']'; // 艺人
+                    $title = '['.$result->countries[0].']'; // 国别
+                    $title .= '['.$result->year.']'; // 年份
+                    $title .= '['.$result->title.']'; // 影片中文名
+
+                    // 又名
+                    $title .= '[';
+                    foreach ($result->aka as $aka) {
+                        if ($aka!=$result->title) $title .= $aka . ' / ';
+                    }
+                    $title = substr($title,0,strlen($title)-3);
+                    $title .= ']';
+
+                    if($paras_se) $title .= '['.$paras_se.']'; // 季度、集数
+
+                    // 类型
+                    $title .= '[';
+                    foreach ($result->genres as $genre) {
+                        $title .= $genre . ' / ';
+                    }
+                    $title = substr($title,0,strlen($title)-3);
+                    $title .= ']';
+
+                    $title .= '['.$paras_rip.']'; // 压制
+                    $title .= '['.$paras_resolution.']'; // 分辨率
+                    $title .= '['.$paras_sub.']'; // 字幕
                     $title .= '['.$paras_format.']'; // 格式
-                    $title .= '['.$paras_bps.']'; // 码率
+                    if($paras_status) $title .= '['.$paras_status.']'; // 状态
+
                     $wikilink = $result->alt;
-                    $content = '[img]'.$result->image.'[/img]<br />'.$result->summary;
-                    break;
+                    $content = '[img]'.$result->images->medium.'[/img]<br />'.$result->summary;
+                } elseif ($w_type == 2) {
+                    // IMDB
+                    $url = 'http://omdbapi.com/?i='.$wikilink;
+                    $result = json_decode(PwUpdateInfo::curl($url));
+                    $title = '['.$result->Country.']'; // 国别
+                    $title .= '['.$result->Year.']'; // 年份
+                    $title .= '['.$result->Title.']'; // 影片名
+
+                    if($paras_se) $title .= '['.$paras_se.']'; // 季度、集数
+
+                    // 类型
+                    $title .= '['.str_replace(', ', ' ', $result->Genre).']';
+
+                    $title .= '['.$paras_rip.']'; // 压制
+                    $title .= '['.$paras_resolution.']'; // 分辨率
+                    $title .= '['.$paras_sub.']'; // 字幕
+                    $title .= '['.$paras_format.']'; // 格式
+                    if($paras_status) $title .= '['.$paras_status.']'; // 状态
+
+                    $wikilink = 'http://www.imdb.com/title/'. $wikilink;
+                    $content = '[img]'.$result->Poster.'[/img]<br />'.$result->Plot;
+                }
+
+                break;
+
+                case '3':
+                // 音乐
+                $url = 'https://api.douban.com/v2/music/'.$wikilink;
+                if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) $url .= '?apikey='.Wekit::C('site', 'app.torrent.titlegen.douban');
+                $result = json_decode(PwUpdateInfo::curl($url));
+                $title = '['.$result->attrs->pubdate.']'; // 年份
+                $title .= '['.$result->attrs->title.']'; // 标题
+                $title .= '['.$result->attrs->singer.']'; // 艺人
+                $title .= '['.$paras_format.']'; // 格式
+                $title .= '['.$paras_bps.']'; // 码率
+                $wikilink = $result->alt;
+                $content = '[img]'.$result->image.'[/img]<br />'.$result->summary;
+                break;
 
                 case '4':
-                    // 软件
-                    $title = '['.$paras_platform.']'; // 平台
-                    $title .= '['.$paras_name.']'; // 中文名
-                    if ($paras_oname) $title .= '['.$paras_oname.']'; // 原名
-                    $title .= '['.$paras_lang.']'; // 语言
-                    $title .= '['.$paras_format.']'; // 格式
-                    break;
+                // 软件
+                $title = '['.$paras_platform.']'; // 平台
+                $title .= '['.$paras_name.']'; // 中文名
+                if ($paras_oname) $title .= '['.$paras_oname.']'; // 原名
+                $title .= '['.$paras_lang.']'; // 语言
+                $title .= '['.$paras_format.']'; // 格式
+                break;
 
                 case '5':
-                    // 其他
-                    $title .= '['.$paras_name.']'; // 中文名
-                    if ($paras_oname) $title .= '['.$paras_oname.']'; // 原名
-                    break;
+                // 其他
+                $title .= '['.$paras_name.']'; // 中文名
+                if ($paras_oname) $title .= '['.$paras_oname.']'; // 原名
+                break;
             }
 
             echo json_encode(array('title'=>$title, 'wikilink'=>$wikilink, 'content'=>$content));
@@ -220,21 +220,21 @@ class IndexController extends PwBaseController
             switch ($event) {
                 case '':
                 case 'started':
-                    $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
-                    $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
-                    $status = ($left > 0) ? 'do' : 'done';
-                    break;
+                $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
+                $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
+                $status = ($left > 0) ? 'do' : 'done';
+                break;
                 case 'stopped':
-                    $this->_getTorrentPeerDS()->deleteTorrentPeer($self['id']);
-                    $status = 'stop';
-                    break;
+                $this->_getTorrentPeerDS()->deleteTorrentPeer($self['id']);
+                $status = 'stop';
+                break;
                 case 'completed':
-                    $dm->setFinishedAt(Pw::getTime())->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
-                    $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
-                    $status = 'done';
-                    break;
+                $dm->setFinishedAt(Pw::getTime())->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
+                $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
+                $status = 'done';
+                break;
                 default:
-                    PwAnnounce::showError('Invalid event from client!');
+                PwAnnounce::showError('Invalid event from client!');
             }
         } else {
             $sockres = @pfsockopen($ip, $port, $errno, $errstr, 5);
