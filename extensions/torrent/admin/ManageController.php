@@ -117,4 +117,3 @@ class ManageController extends AdminBaseController
         return Wekit::load('config.PwConfig');
     }
 }
-?>
