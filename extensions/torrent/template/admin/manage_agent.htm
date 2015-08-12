@@ -75,7 +75,7 @@
 $(function() {
     var ct = 0;
     var group_list = $('#J_groupList');
-    
+
     //添加新组
     $('#J_inset_new_group').click(function(e){
         e.preventDefault();
@@ -97,7 +97,7 @@ $(function() {
         new_group_name.val('');
         ct++;
     });
-    
+
     //删除未提交的组
     Wind.use('dialog',function() {
         group_list.on('click', 'a.J_new_group_del', function(e) {

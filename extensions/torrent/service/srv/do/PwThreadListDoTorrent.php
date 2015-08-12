@@ -1,15 +1,19 @@
 <?php
-defined('WEKIT_VERSION') or exit(403);
+
+defined('WEKIT_VERSION') || exit('Forbidden');
+
 Wind::import('SRV:forum.srv.threadList.do.PwThreadListDoBase');
 
 class PwThreadListDoTorrent extends PwThreadListDoBase
 {
-    
-    public function __construct() {
+
+    public function __construct()
+    {
     }
-    
-    public function bulidThread($thread) {
-        if (isset($thread['special']) && $thread['special'] == 'torrent' && Wekit::C('site','theme.site.default') == 'pt' && !empty(Wekit::C('site','app.torrent.theme.showpeers'))) {
+
+    public function bulidThread($thread)
+    {
+        if (isset($thread['special']) && $thread['special'] == 'torrent' && Wekit::C('site', 'theme.site.default') == 'pt' && !empty(Wekit::C('site', 'app.torrent.theme.showpeers'))) {
             $torrent = Wekit::load('EXT:torrent.service.PwTorrent')->getTorrentByTid($thread['tid']);
             $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->getTorrentPeerByTorrent($torrent['id']);
             $seeder = $leecher = 0;
@@ -26,4 +30,3 @@ class PwThreadListDoTorrent extends PwThreadListDoBase
         return $thread;
     }
 }
-?>

@@ -1,11 +1,14 @@
 <?php
+
 defined('WEKIT_VERSION') || exit('Forbidden');
+
 Wind::import('SRV:forum.srv.post.do.PwPostDoBase');
 Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
 Wind::import('EXT:torrent.service.srv.helper.PwBencode');
 Wind::import('EXT:torrent.service.dm.PwTorrentDm');
 Wind::import('EXT:torrent.service.dm.PwTorrentFileDm');
 Wind::import('EXT:torrent.service.dao.PwTorrentUserDao');
+
 class PwPostDoTorrent extends PwPostDoBase
 {
     protected $user;
@@ -20,7 +23,8 @@ class PwPostDoTorrent extends PwPostDoBase
     protected $totalength;
     protected $type;
     protected $action;
-    public function __construct(PwPost $pwpost, $tid = null, $wikilink = '') {
+    public function __construct(PwPost $pwpost, $tid = null, $wikilink = '')
+    {
         $this->user = $pwpost->user;
         $this->special = $pwpost->special;
         $this->tid = $tid ? intval($tid) : null;
@@ -29,19 +33,26 @@ class PwPostDoTorrent extends PwPostDoBase
         $this->action = $this->tid ? 'modify' : 'add';
         $this->passkey = PwPasskey::getPassKey($this->user->uid);
     }
-    public function createHtmlBeforeContent() {
+    public function createHtmlBeforeContent()
+    {
         PwHook::template('displayPostTorrentHtml', 'EXT:torrent.template.post_injector_before_torrent', true, $this);
     }
-    public function dataProcessing($postDm) {
+    public function dataProcessing($postDm)
+    {
         $postDm->setSpecial('torrent');
         return $postDm;
     }
-    public function addThread($tid) {
+    public function addThread($tid)
+    {
         return $this->addTorrentt($tid);
     }
-    public function check($postDm) {
+    public function check($postDm)
+    {
         $bencode = new PwBencode();
-        if (!is_array($deniedfts)) $deniedfts = array();
+        if (!is_array($deniedfts)) {
+            $deniedfts = array();
+        }
+
         if (isset($_FILES['torrent'])) {
             $file = pathinfo($_FILES['torrent']['name']);
             if ($file['extension'] != 'torrent') {
@@ -76,7 +87,7 @@ class PwPostDoTorrent extends PwPostDoBase
                 $totalLength = 0;
                 foreach ($flist as $fn) {
                     list($ll, $ff) = $bencode->doDictionaryCheck($fn, 'length(integer):path(list)');
-                    $totalLength+= $ll;
+                    $totalLength += $ll;
                     $ffa = array();
                     foreach ($ff as $ffe) {
                         if ($ffe['type'] != 'string') {
@@ -103,7 +114,7 @@ class PwPostDoTorrent extends PwPostDoBase
             }
             $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.url') . '/announce.php'));
             $dictionary['value']['info']['value']['private'] = $bencode->doDecode('i1e');
-            
+
             if (in_array('source', Wekit::C('site', 'app.torrent.check'))) {
                 $dictionary['value']['info']['value']['source'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.name')));
             }
@@ -123,13 +134,14 @@ class PwPostDoTorrent extends PwPostDoBase
             $this->filelist = $fileList;
             $this->totalength = $totalLength;
             $this->type = $type;
-            
+
             return true;
         } else {
             return new PwError('必须上传一个种子文件！');
         }
     }
-    public function addTorrentt($tid) {
+    public function addTorrentt($tid)
+    {
         $dm = new PwTorrentDm();
         $dm->setTid($tid)->setInfoHash($this->infohash)->setOwner($this->user->uid)->setVisible('yes')->setAnonymous('yes')->setSize($this->totalength)->setNumfiles(count($this->filelist))->setType($this->type)->setWikilink($this->wikilink)->setFileName($this->filename)->setSaveAs($this->filesavename)->setSpState(1)->setAdded(date('Y-m-d H:i:s'))->setLastAction(date('Y-m-d H:i:s'));
         $result = $this->_getTorrentDS()->addTorrent($dm);
@@ -146,24 +158,31 @@ class PwPostDoTorrent extends PwPostDoBase
             }
         }
         $bencode = new PwBencode();
-        if (!is_dir(WEKIT_PATH . '../torrent')) mkdir(WEKIT_PATH . '../torrent', 0755);
+        if (!is_dir(WEKIT_PATH . '../torrent')) {
+            mkdir(WEKIT_PATH . '../torrent', 0755);
+        }
+
         $fp = fopen(WEKIT_PATH . '../torrent/' . $result . '.torrent', 'w');
         if ($fp) {
             @fwrite($fp, $bencode->doEncode($this->dictionary));
             fclose($fp);
         }
         return true;
-    } 
-    private function _getTorrentUserDS() {
+    }
+    private function _getTorrentUserDS()
+    {
         return Wekit::load('EXT:torrent.service.PwTorrentUser');
     }
-    private function _checkHash($hash) {
+    private function _checkHash($hash)
+    {
         return true;
     }
-    private function _getTorrentDS() {
+    private function _getTorrentDS()
+    {
         return Wekit::load('EXT:torrent.service.PwTorrent');
     }
-    private function _getTorrentFileDS() {
+    private function _getTorrentFileDS()
+    {
         return Wekit::load('EXT:torrent.service.PwTorrentFile');
     }
 }

@@ -1,7 +1,11 @@
 <?php
+
+defined('WEKIT_VERSION') || exit('Forbidden');
+
 class PwPasskey
 {
-    public static function getPassKey($uid) {
+    public static function getPassKey($uid)
+    {
         $user = new PwUserBo($uid, true);
         $torrentUserDs = Wekit::load('EXT:torrent.service.PwTorrentUser');
         $torrentUser = $torrentUserDs->getTorrentUserByUid($uid);
@@ -21,7 +25,8 @@ class PwPasskey
         }
         return $user->passkey;
     }
-    public static function makePassKey($user) {
+    public static function makePassKey($user)
+    {
         return sha1($user->username . Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s') . $user->info['password']);
     }
 }
