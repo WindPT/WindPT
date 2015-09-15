@@ -2,41 +2,6 @@
 
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-/*
-Programming info
-
-All functions output a small array, which we'll call $return for now.
-
-$return[0] is the data expected of the function
-$return[1] is the offset over the whole bencoded data of the next
-piece of data.
-
-numberdecode returns [0] as the integer read, and [1]-1 points to the
-symbol that was interprented as the end of the interger (either "e" or
-":").
-numberdecode is used for integer decodes both for i11e and 11:hello there
-so it is tolerant of the ending symbol.
-
-decodelist returns $return[0] as an integer indexed array like you would use in C
-for all the entries. $return[1]-1 is the "e" that ends the list, so [1] is the next
-useful byte.
-
-decodeDict returns $return[0] as an array of text-indexed entries. For example,
-$return[0]["announce"] = "http://www.whatever.com:6969/announce";
-$return[1]-1 again points to the "e" that ends the dictionary.
-
-decodeEntry returns [0] as an integer in the case $offset points to
-i12345e or a string if $offset points to 11:hello there style strings.
-It also calls decodeDict or decodeList if it encounters a d or an l.
-
-Known bugs:
-- The program doesn't pay attention to the string it's working on.
-A zero-sized or truncated data block will cause string offset errors
-before they get rejected by the decoder. This is worked around by
-suppressing errors.
- */
-
-// Protect our namespace using a class
 class PwTorrentDecode
 {
     public function numberdecode($wholefile, $offset)

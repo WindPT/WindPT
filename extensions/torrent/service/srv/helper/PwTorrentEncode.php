@@ -2,8 +2,6 @@
 
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-// We'll protect the namespace of our code
-// using a class
 class PwTorrentEncode
 {
     // Dictionary keys must be sorted. foreach tends to iterate over the order

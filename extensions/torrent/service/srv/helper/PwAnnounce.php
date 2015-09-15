@@ -40,40 +40,33 @@ class PwAnnounce
     public static function getPeersByTorrentId($torrent_id = 0, $peer_id = '')
     {
         $peer_list = self::_getTorrentPeerDS()->getTorrentPeerByTorrent($torrent_id);
+        /*
         if (is_array($peer_list)) {
-            foreach ($peer_list as $key => $peer) {
-                if ($peer_id == $peer['peer_id']) {
-                    unset($peer_list[$key]);
-                }
-            }
+        foreach ($peer_list as $key => $peer) {
+        if ($peer_id == $peer['peer_id']) {
+        unset($peer_list[$key]);
         }
+        }
+        }
+         */
         return $peer_list;
     }
     public static function sendPeerList($peer_string)
     {
         header('Content-Type: text/plain; charset=utf-8');
         header('Pragma: no-cache');
-        if (stristr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip") && extension_loaded('zlib') && ini_get("zlib.output_compression") == 0) {
-            if (ini_get('output_handler') != 'ob_gzhandler') {
-                // only for non compact
-                ob_start("ob_gzhandler");
-            } else {
-                ob_start();
-            }
-        } else {
-            ob_start();
-        }
-        echo $peer_string;
-        exit();
+        exit($peer_string);
     }
     public static function updatePeerCount($torrent, $peer_list)
     {
-        if (!$torrent['leechers'] && !$torrent['seeders'] && is_array($peer_list)) {
+        $torrent['seeders'] = 0;
+        $torrent['leechers'] = 0;
+        if (is_array($torrent) && is_array($peer_list)) {
             foreach ($peer_list as $peer) {
                 if ($peer['seeder'] == 'yes') {
-                    $torrent['seeders'] = $torrent['seeders'] + 1;
+                    $torrent['seeders']++;
                 } else {
-                    $torrent['leechers'] = $torrent['leechers'] + 1;
+                    $torrent['leechers']++;
                 }
             }
         }

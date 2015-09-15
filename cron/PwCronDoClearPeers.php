@@ -6,7 +6,6 @@ Wind::import('SRV:cron.srv.base.AbstractCronBase');
 
 class PwCronDoClearPeers extends AbstractCronBase
 {
-
     public function run($cronId)
     {
         $fids = Wekit::C('site', 'app.torrent.pt_threads');
@@ -28,7 +27,6 @@ class PwCronDoClearPeers extends AbstractCronBase
                         Wekit::load('EXT:torrent.service.PwTorrentPeer')->deleteTorrentPeer($peer['id']);
                     }
                 }
-
             }
         }
     }

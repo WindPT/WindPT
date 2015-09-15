@@ -4,11 +4,6 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 
 class PwThreadsDeleteDoTorrent
 {
-
-    /**
-     * @param int $id 帖子tid
-     * @return void
-     */
     public function appDo($id)
     {
         $torrentDao = Wekit::load('EXT:torrent.service.dao.PwTorrentDao');

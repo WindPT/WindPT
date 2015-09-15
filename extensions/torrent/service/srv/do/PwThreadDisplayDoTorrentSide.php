@@ -6,15 +6,10 @@ Wind::import('SRV:forum.srv.threadDisplay.do.PwThreadDisplayDoBase');
 
 class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
 {
-
-    public function __construct()
-    {
-    }
-
     public function createHtmlAfterUserInfo($user, $read)
     {
         if (!in_array('threadside', Wekit::C('site', 'app.torrent.showuserinfo'))) {
-            return null;
+            return '';
         }
         $torrents = Wekit::load('EXT:torrent.service.dao.PwTorrentDao')->fetchTorrentByUid($user['uid']);
         $histories = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->fetchTorrentHistoryByUid($user['uid']);

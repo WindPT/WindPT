@@ -4,14 +4,10 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 
 class PwSpaceProfileDoTorrent
 {
-
-    /**
-     * @param array $space
-     */
     public function appDo($space)
     {
         if (!in_array('profile', Wekit::C('site', 'app.torrent.showuserinfo'))) {
-            return null;
+            return '';
         }
         $user = Wekit::load('EXT:torrent.service.dao.PwTorrentUserDao')->getTorrentUserByUid($space->{'spaceUid'});
         $torrents = Wekit::load('EXT:torrent.service.dao.PwTorrentDao')->fetchTorrentByUid($space->{'spaceUid'});

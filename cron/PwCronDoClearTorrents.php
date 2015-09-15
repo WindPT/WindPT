@@ -6,7 +6,6 @@ Wind::import('SRV:cron.srv.base.AbstractCronBase');
 
 class PwCronDoClearTorrents extends AbstractCronBase
 {
-
     public function deleteThread($topic)
     {
         $tid = $topic['tid'];
