@@ -1,13 +1,13 @@
 WindPT
 ======
 
-A plugin for PHPWind 9.0 to build a private BitTorrent tracker.
+A plugin for PHPWind 9 to build a private BitTorrent tracker.
 
 This project is still in early stage, DO NOT use it on production environment, pull requests are welcome.
 
-If you find any bugs or mistakes, please let me know by submitting a issue or making patches and pr to `dev` branch.
+If you find any bugs or mistakes, please let me know by submitting issues or making pull requests.
 
-** You should create a directory named `torrent` under the root of PHPWind manually if php have no permission to `write` under the root ** .
+**You should create a directory named `torrent` with mask 0755 under the root of PHPWind manually if php have no permission to `write`.**
 
 ```
 /
