@@ -404,11 +404,26 @@ class IndexController extends PwBaseController
 
     public function downloadAction()
     {
-        // Get the torrent file
         $id = $this->getInput('id');
-        $result = $this->check();
-        if ($result instanceof PwError) {
-            $this->showError($result->getError());
+        $passkey = $this->getInput('passkey');
+
+        if (!$this->loginUser->uid && empty($passkey)) {
+            $this->showError('必须登录才能进行本操作！');
+        } elseif (is_string($passkey)) {
+            $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passkey);
+            if (empty($user)) {
+                $this->showError('Passkey 错误！');
+            } else {
+                $uid = $user['uid'];
+            }
+        } else {
+            $uid = $this->loginUser->uid;
+            $passkey = PwPasskey::getPassKey($uid);
+        }
+
+        $userBan = Wekit::load('SRV:user.dao.PwUserBanDao')->getBanInfo($uid);
+        if ($userBan) {
+            $this->showError('用户处于封禁期！');
         }
 
         $file = WEKIT_PATH . '../torrent/' . $id . '.torrent';
@@ -419,7 +434,6 @@ class IndexController extends PwBaseController
         // Change announce to user's private announce
         $bencode = new PwBencode();
         $dictionary = $bencode->doDecodeFile($file);
-        $passkey = PwPasskey::getPassKey($this->loginUser->uid);
         $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('/app/torrent/index/announce?passkey=' . $passkey)));
 
         // Generate file name
@@ -443,16 +457,90 @@ class IndexController extends PwBaseController
         exit($bencode->doEncode($dictionary));
     }
 
-    private function check()
+    public function subscribeAction()
     {
+        $id = $this->getInput('id');
+        $unsub = $this->getInput('unsub');
+
         if (!$this->loginUser->uid) {
-            return new PwError('必须登录才能进行本操作！');
+            $this->showError('必须登录才能进行本操作！');
         }
+
         $userBan = Wekit::load('SRV:user.dao.PwUserBanDao')->getBanInfo($this->loginUser->uid);
         if ($userBan) {
-            return new PwError('用户处于封禁期！');
+            $this->showError('用户处于封禁期！');
         }
-        return true;
+
+        $torrent = Wekit::load('EXT:torrent.service.dao.PwTorrentDao')->getTorrent($id);
+        if (empty($torrent)) {
+            $this->showError('种子文件不存在！');
+        }
+
+        $torrent = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUidAndTorrent($this->loginUser->uid, $id);
+        if (!empty($torrent)) {
+            if ($unsub == 'true') {
+                $this->_getTorrentSubscribeDs()->deleteTorrentSubscribe($torrent['id']);
+                exit('{"status":0}');
+            } else {
+                exit('{"status":1, "message":"已订阅该种子！"}');
+            }
+        }
+
+        Wind::import('EXT:torrent.service.dm.PwTorrentSubscribeDm');
+
+        $dm = new PwTorrentSubscribeDm();
+        $dm->setUid($this->loginUser->uid)->setTorrent($id);
+        $this->_getTorrentSubscribeDs()->addTorrentSubscribe($dm);
+
+        exit('{"status":0}');
+    }
+
+    public function rssAction()
+    {
+        $uid = $this->getInput('uid');
+        $passkey = $this->getInput('passkey');
+
+        $userBan = Wekit::load('SRV:user.dao.PwUserBanDao')->getBanInfo($uid);
+        if ($userBan) {
+            $this->showError('用户处于封禁期！');
+        }
+
+        $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passkey);
+        if (empty($user) || $user['uid'] != $uid) {
+            $this->showError('Passkey 错误！');
+        }
+
+        header('Content-Type: application/xml; charset=utf-8');
+
+        echo '<rss version="2.0">';
+        echo '<channel>';
+        echo '<title>WindPT Torrents</title>';
+        echo '<link>' . Wekit::C('site', 'info.url') . '</link>';
+        echo '<description>' . Wekit::C('site', 'info.name') . ' Powered by WindPT</description>';
+        echo '<language>zh-cn</language>';
+        echo '<copyright>Copyright (c) ' . Wekit::C('site', 'info.name') . ' ' . date('Y') . ', all rights reserved</copyright>';
+        echo '<pubDate>' . date('D, d M Y H:i:s O') . '</pubDate>';
+        echo '<generator>WindPT RSS Generator</generator>';
+        echo '<ttl>60</ttl>';
+
+        $torrents = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUid($this->loginUser->uid);
+
+        foreach ($torrents as $torrent) {
+            echo '<item>';
+            echo '<title><![CDATA[' . $torrent['filename'] . ']]></title>';
+            echo '<link><![CDATA[' . WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid']) . ']]></link>';
+            echo '<pubDate>' . date('D, d M Y H:i:s O', $torrent['created_time']) . '</pubDate>';
+            echo '<description><![CDATA[' . $torrent['subject'] . ']]></description>';
+            echo '<enclosure type="application/x-bittorrent" length="' . $torrent['size'] . '" url="' . str_replace('&', '&amp;', WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['torrent'] . '&passkey=' . $passkey)) . '" />';
+            echo '<author><![CDATA[' . $torrent['created_username'] . ']]></author>';
+            echo '<category domain="' . WindUrlHelper::createUrl('/bbs/thread/run?fid=' . $torrent['fid']) . '"><![CDATA[' . $torrent['name'] . ']]></category>';
+            echo '</item>';
+        }
+
+        echo '</channel>';
+        echo '</rss>';
+
+        exit();
     }
 
     private function _getTorrentDS()
@@ -478,5 +566,10 @@ class IndexController extends PwBaseController
     private function _getTorrentHistoryDs()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentHistory');
+    }
+
+    private function _getTorrentSubscribeDs()
+    {
+        return Wekit::load('EXT:torrent.service.PwTorrentSubscribe');
     }
 }

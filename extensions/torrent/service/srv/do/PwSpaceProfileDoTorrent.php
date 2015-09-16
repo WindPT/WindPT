@@ -34,6 +34,7 @@ class PwSpaceProfileDoTorrent
         echo '<div class="space_profile"><h3><strong>PT个人信息</strong></h3>';
         if ($space->{'visitUid'} == $space->{'spaceUid'}) {
             echo '<dl class="cc"><dt>Passkey：</dt><dd><span id="passkey" style="background-color:rgb(51,51,51); color:rgb(51,51,51);">' . $passkey . '</span>&nbsp;<button id="btnToggle" onclick="if ($(\'#btnToggle\').text() == \'显示\') {$(\'#passkey\').css(\'background\', \'white\'); $(\'#btnToggle\').text(\'隐藏\');} else {$(\'#passkey\').css(\'background\', \'rgb(51,51,51)\');$(\'#btnToggle\').text(\'显示\');}">显示</button></dd></dl>';
+            echo '<dl class="cc"><dt>订阅地址：</dt><dd><a href="' . WindUrlHelper::createUrl('/app/torrent/index/rss?uid=' . $space->{'spaceUid'} . '&passkey=' . $passkey) . '">RSS 链接（请勿泄露）</a></dd></dl>';
         }
 
         echo '<dl class="cc"><dt>下载：</dt><dd>' . $downloaded_total . ' M</dd></dl>';

@@ -40,8 +40,9 @@
                 <strong>种子原名：</strong>
                 <span>{$torrent['filename']}</span>
                 <strong><a href="{@WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['id'])}">下载种子</a></strong>
+                <strong><a href="{@WindUrlHelper::createUrl('/app/torrent/index/subscribe?id=' . $torrent['id'])}" id="subTorrent">订阅/取消</a></strong>
             </li>
-            <li style="color: #F00; padding-left: 3em;">请妥善保管您的种子文件，种子文件中包含您的个人信息，泄露可能导致上传下载数据异常</li>
+            <li style="color: #F00; padding-left: 3em;">请妥善保管您的种子文件和订阅链接，种子文件和订阅链接中包含您的个人信息，泄露可能导致上传下载数据异常</li>
             <li>
                 <strong>添加时间：</strong>
                 <span>{$torrent['added']}</span>
@@ -73,6 +74,30 @@
     Wind.ready(function() {
         $('#toggleFileList').click(function() {
             $('#fileList').slideToggle();
+        });
+
+        $('#subTorrent').click(function() {
+            var link = $(this).attr('href');
+
+            $.get(link, function(data) {
+                if (data.status == 0) {
+                    alert('订阅成功！');
+                } else if (data.status == 1) {
+                    if (confirm('已经订阅过该种子，是否取消订阅？')) {
+                        $.get(link + '&unsub=true', function(data) {
+                            if (data.status == 0) {
+                                alert('取消订阅成功！');
+                            } else {
+                                alert(data.message);
+                            }
+                        }, 'json');
+                    }
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+
+            return false;
         });
     });
     </script>
