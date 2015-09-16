@@ -37,9 +37,11 @@
     <div class="torrent cc">
         <ul>
             <li>
-                <strong>文件名：{$passkey}</strong>
-                <span><a href="{@url:app/index/download?app=torrent&id=$torrent['id']}">{$torrent['filename']}</a></span>
+                <strong>种子原名：</strong>
+                <span>{$torrent['filename']}</span>
+                <strong><a href="{@WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['id'])}">下载种子</a></strong>
             </li>
+            <li style="color: #F00; padding-left: 3em;">请妥善保管您的种子文件，种子文件中包含您的个人信息，泄露可能导致上传下载数据异常</li>
             <li>
                 <strong>添加时间：</strong>
                 <span>{$torrent['added']}</span>
@@ -57,7 +59,7 @@
         </ul>
         <ul class="file">
             <!--# if(isset($torrent['list'])) { #-->
-            <li onclick="$('#fileList').slideToggle();">文件列表：（点击展开/收拢）</li>
+            <li id="toggleFileList">文件列表：（点击展开/收拢）</li>
             <div id="fileList" style="display:none;">
             <li><span>文件名</span><span>文件大小</span></li>
             <!--# foreach($torrent['list'] as $file) { #-->
@@ -67,4 +69,11 @@
             <!--# } #-->
         </ul>
     </div>
+    <script>
+    Wind.ready(function() {
+        $('#toggleFileList').click(function() {
+            $('#fileList').slideToggle();
+        });
+    });
+    </script>
 </hook>

@@ -38,7 +38,7 @@ CREATE TABLE `pw_app_torrent` (
   `endsticky` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `info_hash` (`info_hash`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `pw_app_torrent_agent_allowed_family`
@@ -52,7 +52,7 @@ CREATE TABLE `pw_app_torrent_agent_allowed_family` (
   `allowhttps` enum('yes','no') NOT NULL DEFAULT 'no',
   `hits` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `pw_app_torrent_agent_allowed_family`
@@ -71,7 +71,7 @@ CREATE TABLE `pw_app_torrent_file` (
   `filename` varchar(255) NOT NULL DEFAULT '',
   `size` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `pw_app_torrent_history`
@@ -87,7 +87,7 @@ CREATE TABLE `pw_app_torrent_history` (
   `downloaded_last` bigint(20) NOT NULL DEFAULT '0',
   `status` enum('do','done','stop') NOT NULL DEFAULT 'do',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `pw_app_torrent_peer`
@@ -112,7 +112,7 @@ CREATE TABLE `pw_app_torrent_peer` (
   `finishedat` int(10) unsigned NOT NULL DEFAULT '0',
   `passkey` char(40) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `pw_app_torrent_user`
@@ -125,6 +125,6 @@ CREATE TABLE `pw_app_torrent_user` (
   `uploaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;

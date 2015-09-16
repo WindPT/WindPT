@@ -95,4 +95,4 @@ class PwTorrentEncode
         }
         $fd .= 'e';
     }
-} // End of class declaration.
+}

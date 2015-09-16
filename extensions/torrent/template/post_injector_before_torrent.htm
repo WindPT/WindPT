@@ -165,120 +165,123 @@
             </div>
         </div>
     </div>
-    <div class="cc post_extend" style="color:#FF0000">Private Tracker 地址（点击文本框复制到剪贴板，请不要泄露给其他人）：<input id="tracker" type="text" class="input" name="tracker" value="{@WindUrlHelper::createUrl('/app/index/announce?app=torrent&passkey='.$pargs->passkey)}" data-clipboard-text="{@WindUrlHelper::createUrl('/app/index/announce?app=torrent&passkey='.$pargs->passkey)}" style="width:640px;"></div>
+    <div class="cc post_extend" style="color:#FF0000">Private Tracker 地址（点击文本框复制到剪贴板，请不要泄露给其他人）：<input id="tracker" type="text" class="input" name="tracker" value="{@WindUrlHelper::createUrl('/app/torrent/index/announce?passkey='.$pargs->passkey)}" data-clipboard-text="{@WindUrlHelper::createUrl('/app/torrent/index/announce?passkey='.$pargs->passkey)}" style="width:640px;"></div>
 
-    <script src="src/extensions/torrent/res/js/ZeroClipboard.min.js"></script>
     <script>
-    var client = new ZeroClipboard( document.getElementById("tracker") );
+    Wind.js('/src/extensions/torrent/res/js/ZeroClipboard.min.js', function() {
+        var client = new ZeroClipboard(document.getElementById('tracker'));
 
-    client.on( "load", function(client) {
-      client.on( "complete", function(client, args) {
-        alert("Tracker已复制到剪贴板！");
-      } );
-    } );
-
-    <!--# if (Wekit::C('site','app.torrent.titlegen.ifopen') > 1) { #-->
-    $('#J_atc_title').attr('readonly', 'readonly').attr('placeholder', '请使用标题生成器');
-    <!--# } #-->
-
-    $('[name="t_type"]').change(function() {
-        $('.t_attr, .t_attr_t').hide();
-        $('select[name="quote"] option').hide();
-        switch($(this).val()) {
-            case '1':
-            $('#t_b').show();
-            $('input[name="wikilink"]').attr('placeholder', '26305561');
-            $('select[name="quote"] option[value="11"]').show();
-            $('select[name="quote"]').val('11');
-            break;
-            case '2':
-            $('#t_v').show();
-            $('input[name="wikilink"]').attr('placeholder', '10741834');
-            $('select[name="quote"] option[value="12"]').show();
-            $('select[name="quote"] option[value="2"]').show();
-            $('select[name="quote"]').val('12');
-            break;
-            case '21':
-            $('#t_v').show();
-            $('#t_vs').show();
-            $('input[name="wikilink"]').attr('placeholder', '25845393');
-            $('select[name="quote"] option[value="12"]').show();
-            $('select[name="quote"] option[value="2"]').show();
-            $('select[name="quote"]').val('12');
-            break;
-            case '3':
-            $('#t_a').show();
-            $('input[name="wikilink"]').attr('placeholder', '11603071');
-            $('select[name="quote"] option[value="13"]').show();
-            $('select[name="quote"]').val('13');
-            break;
-            case '4':
-            $('#t_s').show();
-            $('.t_attr_t').show();
-            $('input[name="wikilink"]').attr('placeholder', 'https://zh.wikipedia.org/wiki/Microsoft_Windows');
-            $('select[name="quote"] option[value="0"]').show();
-            $('select[name="quote"]').val('0');
-            break;
-            case '5':
-            $('.t_attr_t').show();
-            $('input[name="wikilink"]').attr('placeholder', 'https://zh.wikipedia.org/wiki/%E6%9D%A8%E6%B0%B8%E4%BF%A1');
-            $('select[name="quote"] option[value="0"]').show();
-            $('select[name="quote"]').val('0');
-        }
+        client.on('load', function(client) {
+            client.on('complete', function(client, args) {
+                alert('Tracker 已复制到剪贴板！');
+            });
+        });
     });
 
-    $('select[name="quote"]').change(function() {
-        switch($(this).val()) {
-            case '12':
-            $('input[name="wikilink"]').attr('placeholder', '10741834');
-            break;
-            case '2':
-            $('input[name="wikilink"]').attr('placeholder', 'tt0111161');
-        }
-    });
+    Wind.ready(function() {
+        <!--# if (Wekit::C('site','app.torrent.titlegen.ifopen') > 1) { #-->
+        $('#J_atc_title').attr('readonly', 'readonly').attr('placeholder', '请使用标题生成器');
+        <!--# } #-->
 
-    $('#UpdateInfo').click(function() {
-        var url = "{@WindUrlHelper::createUrl('/app/torrent/index/updateInfo')}";
+        $('[name="t_type"]').change(function() {
+            $('.t_attr, .t_attr_t').hide();
+            $('select[name="quote"] option').hide();
+            switch ($(this).val()) {
+                case '1':
+                    $('#t_b').show();
+                    $('input[name="wikilink"]').attr('placeholder', '26305561');
+                    $('select[name="quote"] option[value="11"]').show();
+                    $('select[name="quote"]').val('11');
+                    break;
+                case '2':
+                    $('#t_v').show();
+                    $('input[name="wikilink"]').attr('placeholder', '10741834');
+                    $('select[name="quote"] option[value="12"]').show();
+                    $('select[name="quote"] option[value="2"]').show();
+                    $('select[name="quote"]').val('12');
+                    break;
+                case '21':
+                    $('#t_v').show();
+                    $('#t_vs').show();
+                    $('input[name="wikilink"]').attr('placeholder', '25845393');
+                    $('select[name="quote"] option[value="12"]').show();
+                    $('select[name="quote"] option[value="2"]').show();
+                    $('select[name="quote"]').val('12');
+                    break;
+                case '3':
+                    $('#t_a').show();
+                    $('input[name="wikilink"]').attr('placeholder', '11603071');
+                    $('select[name="quote"] option[value="13"]').show();
+                    $('select[name="quote"]').val('13');
+                    break;
+                case '4':
+                    $('#t_s').show();
+                    $('.t_attr_t').show();
+                    $('input[name="wikilink"]').attr('placeholder', 'https://zh.wikipedia.org/wiki/Microsoft_Windows');
+                    $('select[name="quote"] option[value="0"]').show();
+                    $('select[name="quote"]').val('0');
+                    break;
+                case '5':
+                    $('.t_attr_t').show();
+                    $('input[name="wikilink"]').attr('placeholder', 'https://zh.wikipedia.org/wiki/%E6%9D%A8%E6%B0%B8%E4%BF%A1');
+                    $('select[name="quote"] option[value="0"]').show();
+                    $('select[name="quote"]').val('0');
+            }
+        });
 
-        var paras = {};
-        switch($('[name="t_type"]').val()) {
-            case '2':
-            case '21':
-            paras = {
-                resolution: $('[name="t_v_r"]').val(),
-                format: $('[name="t_v_f"]').val(),
-                rip: $('[name="t_v_q"]').val(),
-                sub: $('[name="t_v_s"]').val(),
-                se: $('[name="t_vs_se"]').val(),
-                status: $('[name="t_vs_s"]').val(),
-            };
-            break;
-            case '3':
-            paras = {
-                format: $('[name="t_a_f"]').val(),
-                bps: $('[name="t_a_b"]').val(),
-            };
-            break;
-            case '4':
-            case '5':
-            paras = {
-                platform: $('[name="t_s_p"]').val(),
-                lang: $('[name="t_s_l"]').val(),
-                format: $('[name="t_s_f"]').val(),
-                name: $('[name="t_n_c"]').val(),
-                oname: $('[name="t_n_o"]').val(),
-            };
-        }
+        $('select[name="quote"]').change(function() {
+            switch ($(this).val()) {
+                case '12':
+                    $('input[name="wikilink"]').attr('placeholder', '10741834');
+                    break;
+                case '2':
+                    $('input[name="wikilink"]').attr('placeholder', 'tt0111161');
+            }
+        });
 
-        paras.t_type = $('[name="t_type"]').val();
-        paras.w_type = $('[name="quote"]').val();
-        paras.wikilink = $('[name="wikilink"]').val();
+        $('#UpdateInfo').click(function() {
+            var url = "{@WindUrlHelper::createUrl('/app/torrent/index/updateInfo')}";
 
-        $.post( url, paras, function( data ) {
-            $('input[name="atc_title"]').val( data.title );
-            $('input[name="wikilink"]').val( data.wikilink );
-            $('iframe.wind_editor_iframe').contents().find('body.editor_content').text( data.content );
-        }, 'json');
+            var paras = {};
+            switch ($('[name="t_type"]').val()) {
+                case '2':
+                case '21':
+                    paras = {
+                        resolution: $('[name="t_v_r"]').val(),
+                        format: $('[name="t_v_f"]').val(),
+                        rip: $('[name="t_v_q"]').val(),
+                        sub: $('[name="t_v_s"]').val(),
+                        se: $('[name="t_vs_se"]').val(),
+                        status: $('[name="t_vs_s"]').val(),
+                    };
+                    break;
+                case '3':
+                    paras = {
+                        format: $('[name="t_a_f"]').val(),
+                        bps: $('[name="t_a_b"]').val(),
+                    };
+                    break;
+                case '4':
+                case '5':
+                    paras = {
+                        platform: $('[name="t_s_p"]').val(),
+                        lang: $('[name="t_s_l"]').val(),
+                        format: $('[name="t_s_f"]').val(),
+                        name: $('[name="t_n_c"]').val(),
+                        oname: $('[name="t_n_o"]').val(),
+                    };
+            }
+
+            paras.t_type = $('[name="t_type"]').val();
+            paras.w_type = $('[name="quote"]').val();
+            paras.wikilink = $('[name="wikilink"]').val();
+
+            $.post(url, paras, function(data) {
+                $('input[name="atc_title"]').val(data.title);
+                $('input[name="wikilink"]').val(data.wikilink);
+                $('iframe.wind_editor_iframe').contents().find('body.editor_content').text(data.content);
+            }, 'json');
+        });
     });
     </script>
 </hook>

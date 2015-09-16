@@ -24,14 +24,17 @@ class PwBencode
                 return;
         }
     }
+
     public function doEncodeString($s)
     {
         return strlen($s) . ":$s";
     }
+
     public function doEncodeInt($i)
     {
         return "i" . $i . "e";
     }
+
     public function doEncodeList($a)
     {
         $s = "l";
@@ -41,6 +44,7 @@ class PwBencode
         $s .= "e";
         return $s;
     }
+
     public function doEncodeDictionary($d)
     {
         $s = "d";
@@ -54,6 +58,7 @@ class PwBencode
         $s .= "e";
         return $s;
     }
+
     public function doDecodeFile($file, $max_size = 290000)
     {
         $open = fopen($file, "rb");
@@ -65,6 +70,7 @@ class PwBencode
         fclose($open);
         return $this->doDecode($string);
     }
+
     public function doDecode($s)
     {
         if (preg_match('/^(\d+):/', $s, $m)) {
@@ -100,6 +106,7 @@ class PwBencode
                 return;
         }
     }
+
     public function doDecodeList($s)
     {
         if ($s[0] != "l") {
@@ -131,6 +138,7 @@ class PwBencode
         $ss .= "e";
         return array('type' => "list", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
     }
+
     public function doDecodeDictionary($s)
     {
         if ($s[0] != "d") {
@@ -174,6 +182,7 @@ class PwBencode
         $ss .= "e";
         return array('type' => "dictionary", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
     }
+
     public function doDictionaryCheck($d, $s)
     {
         if ($d["type"] != "dictionary") {
@@ -206,6 +215,7 @@ class PwBencode
         }
         return $ret;
     }
+
     public function doDictionaryGet($d, $k, $t)
     {
         if ($d["type"] != "dictionary") {

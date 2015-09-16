@@ -13,6 +13,7 @@ class PwTorrentPeer
 
         return $this->_getDao($fetchmode)->getTorrentPeer($id);
     }
+
     public function addTorrentPeer(PwTorrentPeerDm $dm)
     {
         if (($result = $dm->beforeAdd()) !== true) {
@@ -20,18 +21,22 @@ class PwTorrentPeer
         }
         return $this->_getDao(self::FETCH_MAIN)->addTorrentPeer($dm->getData());
     }
+
     public function getTorrentPeerByPeerID($peer_id, $fetchmode = self::FETCH_MAIN)
     {
         return $this->_getDao($fetchmode)->getTorrentPeerByPeerID($peer_id);
     }
+
     public function getTorrentPeerByPeerIDAndTorrentID($peer_id, $torrent_id, $fetchmode = self::FETCH_MAIN)
     {
         return $this->_getDao($fetchmode)->getTorrentPeerByPeerIDAndTorrentID($peer_id, $torrent_id);
     }
+
     public function getTorrentPeerByTorrent($tid, $fetchmode = self::FETCH_MAIN)
     {
         return $this->_getDao($fetchmode)->getTorrentPeerByTorrent($tid);
     }
+
     public function getTorrentPeerByTorrentAndUid($tid, $uid)
     {
         if (empty($tid) || empty($uid)) {
@@ -40,6 +45,7 @@ class PwTorrentPeer
 
         return $this->_getDao(self::FETCH_MAIN)->getTorrentPeerByTorrentAndUid($tid, $uid);
     }
+
     public function updateTorrentPeer(PwTorrentPeerDm $dm, $fetchmode = self::FETCH_MAIN)
     {
         if (($result = $dm->beforeUpdate()) !== true) {
@@ -47,6 +53,7 @@ class PwTorrentPeer
         }
         return $this->_getDao($fetchmode)->updateTorrentPeer($dm->id, $dm->getData(), $dm->getIncreaseData());
     }
+
     public function deleteTorrentPeer($id)
     {
         if (empty($id)) {
@@ -55,12 +62,14 @@ class PwTorrentPeer
 
         return $this->_getDao(self::FETCH_MAIN)->deleteTorrentPeer($id);
     }
+
     protected function _getDaoMap()
     {
         return array(
             self::FETCH_MAIN => 'EXT:torrent.service.dao.PwTorrentPeerDao',
         );
     }
+
     protected function _getDao($fetchmode = self::FETCH_MAIN)
     {
         return Wekit::loadDaoFromMap($fetchmode, $this->_getDaoMap(), 'PwTorrentPeer');

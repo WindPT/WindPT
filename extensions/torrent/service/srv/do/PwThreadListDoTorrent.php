@@ -6,6 +6,8 @@ Wind::import('SRV:forum.srv.threadList.do.PwThreadListDoBase');
 
 class PwThreadListDoTorrent extends PwThreadListDoBase
 {
+    public function __construct() {}
+
     public function bulidThread($thread)
     {
         if (isset($thread['special']) && $thread['special'] == 'torrent' && Wekit::C('site', 'theme.site.default') == 'pt' && !empty(Wekit::C('site', 'app.torrent.theme.showpeers'))) {

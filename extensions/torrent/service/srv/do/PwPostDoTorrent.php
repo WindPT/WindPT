@@ -23,6 +23,7 @@ class PwPostDoTorrent extends PwPostDoBase
     protected $totalength;
     protected $type;
     protected $action;
+
     public function __construct(PwPost $pwpost, $tid = null, $wikilink = '')
     {
         $this->user = $pwpost->user;
@@ -33,19 +34,23 @@ class PwPostDoTorrent extends PwPostDoBase
         $this->action = $this->tid ? 'modify' : 'add';
         $this->passkey = PwPasskey::getPassKey($this->user->uid);
     }
+
     public function createHtmlBeforeContent()
     {
         PwHook::template('displayPostTorrentHtml', 'EXT:torrent.template.post_injector_before_torrent', true, $this);
     }
+
     public function dataProcessing($postDm)
     {
         $postDm->setSpecial('torrent');
         return $postDm;
     }
+
     public function addThread($tid)
     {
         return $this->addTorrentt($tid);
     }
+
     public function check($postDm)
     {
         $bencode = new PwBencode();
@@ -140,6 +145,7 @@ class PwPostDoTorrent extends PwPostDoBase
             return new PwError('必须上传一个种子文件！');
         }
     }
+
     public function addTorrentt($tid)
     {
         $dm = new PwTorrentDm();
@@ -169,18 +175,22 @@ class PwPostDoTorrent extends PwPostDoBase
         }
         return true;
     }
+
     private function _getTorrentUserDS()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentUser');
     }
+
     private function _checkHash($hash)
     {
         return true;
     }
+
     private function _getTorrentDS()
     {
         return Wekit::load('EXT:torrent.service.PwTorrent');
     }
+
     private function _getTorrentFileDS()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentFile');

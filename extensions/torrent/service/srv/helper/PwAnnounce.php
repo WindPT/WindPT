@@ -13,6 +13,7 @@ class PwAnnounce
         echo 'd' . $bencode->doEncodeString('failure reason:') . $bencode->doEncodeString($message) . 'e';
         exit(0);
     }
+
     public static function cal($exp)
     {
         if (Wekit::C('site', 'app.torrent.calfunc') == 'curl') {
@@ -37,6 +38,7 @@ class PwAnnounce
         }
         return intval($result);
     }
+
     public static function getPeersByTorrentId($torrent_id = 0, $peer_id = '')
     {
         $peer_list = self::_getTorrentPeerDS()->getTorrentPeerByTorrent($torrent_id);
@@ -51,12 +53,7 @@ class PwAnnounce
          */
         return $peer_list;
     }
-    public static function sendPeerList($peer_string)
-    {
-        header('Content-Type: text/plain; charset=utf-8');
-        header('Pragma: no-cache');
-        exit($peer_string);
-    }
+
     public static function updatePeerCount($torrent, $peer_list)
     {
         $torrent['seeders'] = 0;
@@ -72,11 +69,13 @@ class PwAnnounce
         }
         return $torrent;
     }
+
     public static function buildWaitTime($torrent)
     {
         $bencode = new PwBencode();
         return 'd' . $bencode->doEncodeString('interval') . 'i840e' . $bencode->doEncodeString('min interval') . 'i30e' . $bencode->doEncodeString('complete') . 'i' . $torrent['seeders'] . 'e' . $bencode->doEncodeString('incomplete') . 'i' . $torrent['leechers'] . 'e';
     }
+
     public static function buildPeerList($peer_list, $compact, $no_peer_id, $string)
     {
         $bencode = new PwBencode();
@@ -101,6 +100,7 @@ class PwAnnounce
         }
         return $string . 'e';
     }
+
     private static function _getTorrentPeerDS()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentPeer');

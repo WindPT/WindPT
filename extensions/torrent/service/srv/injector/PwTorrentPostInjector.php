@@ -10,6 +10,7 @@ class PwTorrentPostInjector extends PwBaseHookInjector
     {
         return new PwPostDoTorrent($this->bp);
     }
+
     public function doadd()
     {
         $wikilink = $this->getInput('wikilink', 'post');
