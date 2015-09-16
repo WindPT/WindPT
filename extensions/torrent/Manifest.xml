@@ -3,9 +3,9 @@
     <application>
         <name>微PT</name>
         <alias>torrent</alias>
-        <version>0.9.13</version>
+        <version>0.9.2</version>
         <pw-version>9.0</pw-version>
-        <description>基于PW9.0的PT应用，安装后在版块发帖类型中添加（种子帖）即可，提供丰富的设置并允许通过 PHPWind 内置的封禁功能禁止用户对 tracker 的访问。配合对应主题使用效果更佳。</description>
+        <description>PHPWind 9 PT Tracker 插件，安装后在版块发帖类型中添加“种子帖”，提供丰富的设置并允许通过 PHPWind 内置的封禁功能禁止用户对 tracker 的访问。配合对应主题使用效果更佳。</description>
         <logo>images/logo.jpg</logo>
         <type>app</type>
         <charset>UTF-8</charset>
