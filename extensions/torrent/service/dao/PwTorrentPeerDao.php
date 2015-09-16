@@ -29,7 +29,7 @@ class PwTorrentPeerDao extends PwBaseDao
 
     public function getTorrentPeerByTorrent($tid)
     {
-        $sql = $this->_bindSql('SELECT * FROM %s WHERE torrent = ? AND connectable="yes"', $this->getTable());
+        $sql = $this->_bindSql('SELECT * FROM %s WHERE torrent = ?', $this->getTable());
         $smt = $this->getConnection()->createStatement($sql);
         return $smt->queryAll(array($tid), 'id');
     }
