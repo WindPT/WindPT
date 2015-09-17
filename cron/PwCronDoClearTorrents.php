@@ -3,22 +3,21 @@
 defined('WEKIT_VERSION') || exit('Forbidden');
 
 Wind::import('SRV:cron.srv.base.AbstractCronBase');
+Wind::import('SRV:forum.dm.PwTopicDm');
+Wind::import('SRV:recycle.dm.PwTopicRecycleDm');
 
 class PwCronDoClearTorrents extends AbstractCronBase
 {
-    public function deleteThread($topic)
+    private function deleteThread($topic)
     {
         $tid = $topic['tid'];
         $fid = $topic['fid'];
         $subject = $topic['subject'];
         $created_userid = $topic['created_userid'];
 
-        Wind::import('SRV:forum.dm.PwTopicDm');
-        Wind::import('SRV:recycle.dm.PwTopicRecycleDm');
-
         $dm = new PwTopicRecycleDm();
         $dm->setTid($tid)->setFid($fid)->setOperateTime(time())->setOperateUsername('system')->setReason('长期断种');
-        var_dump(Wekit::load('recycle.PwTopicRecycle')->add($dm));
+        Wekit::load('recycle.PwTopicRecycle')->add($dm);
 
         $dm = new PwTopicDm($tid);
         $dm->setDisabled(2)->setTopped(0)->setDigest(0);
@@ -35,23 +34,17 @@ class PwCronDoClearTorrents extends AbstractCronBase
             return null;
         }
 
-        $fids = Wekit::C('site', 'app.torrent.pt_threads');
-        if (empty($fids)) {
-            return null;
-        }
+        $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrent();
 
-        foreach ($fids as $fid) {
-            $topics = Wekit::load('forum.PwThread')->getThreadByFid($fid, 0);
-            foreach ($topics as $topic) {
-                if ($topic['special'] != 'torrent' || $topic['disabled'] > 0) {
-                    continue;
-                }
+        foreach ($torrents as $torrent) {
+            $topic = Wekit::load('forum.PwThread')->getThread($torrent['tid']);
 
-                $torrent = Wekit::load('EXT:torrent.service.dao.PwTorrentDao')->getTorrentByTid($topic['tid']);
-                if (strtotime($torrent['last_action']) < strtotime('-' . $torrentimeout . ' day')) {
-                    $this->deleteThread($topic);
-                }
+            if ($topic['disabled'] > 0) {
+                continue;
+            }
 
+            if (strtotime($torrent['last_action']) < strtotime('-' . $torrentimeout . ' day')) {
+                $this->deleteThread($topic);
             }
         }
     }

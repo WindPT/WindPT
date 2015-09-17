@@ -33,6 +33,11 @@ class PwTorrent
         return $this->_getDao($fetchmod)->fetchTorrentByUid($tid);
     }
 
+    public function fetchTorrent($fetchmode = self::FETCH_MAIN)
+    {
+        return $this->_getDao($fetchmode)->fetchTorrent();
+    }
+
     public function getTorrentByInfoHash($info_hash, $fetchmod = self::FETCH_MAIN)
     {
         if (empty($info_hash)) {
