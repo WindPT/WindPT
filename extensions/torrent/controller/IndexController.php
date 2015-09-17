@@ -258,6 +258,12 @@ class IndexController extends PwBaseController
             PwAnnounce::showError('Torrent not registered with this tracker!');
         }
 
+        // Check if torrent was removed
+        $topic = Wekit::load('forum.PwThread')->getThread($torrent['tid']);
+        if ($topic['disabled'] > 0) {
+            PwAnnounce::showError('Torrent removed!');
+        }
+
         // Get peers list
         $peers = PwAnnounce::getPeersByTorrentId($torrent['id'], $self['peer_id']);
 
@@ -431,13 +437,20 @@ class IndexController extends PwBaseController
             $this->showError('种子文件不存在！');
         }
 
+        $torrent = $this->_getTorrentDS()->getTorrent($id);
+
+        // Check if torrent was removed
+        $topic = Wekit::load('forum.PwThread')->getThread($torrent['tid']);
+        if ($topic['disabled'] > 0) {
+            $this->showError('种子已被删除！');
+        }
+
         // Change announce to user's private announce
         $bencode = new PwBencode();
         $dictionary = $bencode->doDecodeFile($file);
         $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('/app/torrent/index/announce?passkey=' . $passkey)));
 
         // Generate file name
-        $torrent = $this->_getTorrentDS()->getTorrent($id);
         $torrentnameprefix = Wekit::C('site', 'app.torrent.torrentnameprefix');
         if ($torrentnameprefix == '') {
             $torrentnameprefix = Wekit::C('site', 'info.name');
@@ -526,6 +539,9 @@ class IndexController extends PwBaseController
         $torrents = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUid($this->loginUser->uid);
 
         foreach ($torrents as $torrent) {
+            if ($torrent['disabled'] > 0) {
+                continue;
+            }
             echo '<item>';
             echo '<title><![CDATA[' . $torrent['filename'] . ']]></title>';
             echo '<link><![CDATA[' . WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid']) . ']]></link>';
