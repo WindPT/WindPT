@@ -6,16 +6,16 @@ class PwThreadsDeleteDoTorrent
 {
     public function appDo($id)
     {
-        $torrentDao = Wekit::load('EXT:torrent.service.dao.PwTorrentDao');
-        $fileDao = Wekit::load('EXT:torrent.service.dao.PwTorrentFileDao');
+        $torrentDs = Wekit::load('EXT:torrent.service.PwTorrent');
+        $fileDs = Wekit::load('EXT:torrent.service.PwTorrentFile');
 
-        $torrent = $torrentDao->getTorrentByTid($id);
-        $files = $fileDao->getTorrentFileByTorrent($torrent['id']);
+        $torrent = $torrentDs->getTorrentByTid($id);
+        $files = $fileDs->getTorrentFileByTorrent($torrent['id']);
         foreach ($files as $file) {
-            $fileDao->deleteTorrentFile($file['id']);
+            $fileDs->deleteTorrentFile($file['id']);
         }
 
-        $torrentDao->deleteTorrent($torrent['id']);
+        $torrentDs->deleteTorrent($torrent['id']);
         @unlink(WEKIT_PATH . '../torrent/' . $torrent['id'] . '.torrent');
     }
 }

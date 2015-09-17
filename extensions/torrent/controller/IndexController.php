@@ -247,7 +247,7 @@ class IndexController extends PwBaseController
         }
 
         // Check if user was banned
-        $userBan = Wekit::load('SRV:user.dao.PwUserBanDao')->getBanInfo($user['uid']);
+        $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($user['uid']);
         if ($userBan) {
             PwAnnounce::showError('User was banned!');
         }
@@ -421,7 +421,7 @@ class IndexController extends PwBaseController
             $passkey = PwPasskey::getPassKey($uid);
         }
 
-        $userBan = Wekit::load('SRV:user.dao.PwUserBanDao')->getBanInfo($uid);
+        $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($uid);
         if ($userBan) {
             $this->showError('用户处于封禁期！');
         }
@@ -466,12 +466,12 @@ class IndexController extends PwBaseController
             $this->showError('必须登录才能进行本操作！');
         }
 
-        $userBan = Wekit::load('SRV:user.dao.PwUserBanDao')->getBanInfo($this->loginUser->uid);
+        $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($this->loginUser->uid);
         if ($userBan) {
             $this->showError('用户处于封禁期！');
         }
 
-        $torrent = Wekit::load('EXT:torrent.service.dao.PwTorrentDao')->getTorrent($id);
+        $torrent = Wekit::load('EXT:torrent.service.PwTorrent')->getTorrent($id);
         if (empty($torrent)) {
             $this->showError('种子文件不存在！');
         }
@@ -500,7 +500,7 @@ class IndexController extends PwBaseController
         $uid = $this->getInput('uid');
         $passkey = $this->getInput('passkey');
 
-        $userBan = Wekit::load('SRV:user.dao.PwUserBanDao')->getBanInfo($uid);
+        $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($uid);
         if ($userBan) {
             $this->showError('用户处于封禁期！');
         }

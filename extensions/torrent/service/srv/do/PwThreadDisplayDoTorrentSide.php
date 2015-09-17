@@ -13,8 +13,8 @@ class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
         if (!in_array('threadside', Wekit::C('site', 'app.torrent.showuserinfo'))) {
             return '';
         }
-        $torrents = Wekit::load('EXT:torrent.service.dao.PwTorrentDao')->fetchTorrentByUid($user['uid']);
-        $histories = Wekit::load('EXT:torrent.service.dao.PwTorrentHistoryDao')->fetchTorrentHistoryByUid($user['uid']);
+        $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($user['uid']);
+        $histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($user['uid']);
 
         $posted = count($torrents);
 

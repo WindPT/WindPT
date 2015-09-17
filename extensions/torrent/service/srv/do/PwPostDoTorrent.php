@@ -7,7 +7,6 @@ Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
 Wind::import('EXT:torrent.service.srv.helper.PwBencode');
 Wind::import('EXT:torrent.service.dm.PwTorrentDm');
 Wind::import('EXT:torrent.service.dm.PwTorrentFileDm');
-Wind::import('EXT:torrent.service.dao.PwTorrentUserDao');
 
 class PwPostDoTorrent extends PwPostDoBase
 {
@@ -173,16 +172,6 @@ class PwPostDoTorrent extends PwPostDoBase
             @fwrite($fp, $bencode->doEncode($this->dictionary));
             fclose($fp);
         }
-        return true;
-    }
-
-    private function _getTorrentUserDS()
-    {
-        return Wekit::load('EXT:torrent.service.PwTorrentUser');
-    }
-
-    private function _checkHash($hash)
-    {
         return true;
     }
 
