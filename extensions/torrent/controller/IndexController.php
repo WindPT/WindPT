@@ -126,7 +126,7 @@ class IndexController extends PwBaseController
                         }
 
                         $wikilink = $result->alt;
-                        $content = '[img]' . $result->images->medium . '[/img]<br />' . $result->summary;
+                        $content = '[img]' . $result->images->large . '[/img]<br />' . $result->summary;
                     } elseif ($w_type == 2) {
                         // IMDB
                         $url = 'http://omdbapi.com/?i=' . $wikilink;
@@ -400,11 +400,6 @@ class IndexController extends PwBaseController
         $peer_string = PwAnnounce::buildWaitTime($torrent);
         $peer_string = PwAnnounce::buildPeerList($peers, $compact, $no_peer_id, $peer_string);
 
-        header('Content-Type: text/plain; charset=utf-8');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Pragma: public');
-
         exit($peer_string);
     }
 
@@ -463,9 +458,6 @@ class IndexController extends PwBaseController
         header('Content-type: application/octet-streamn');
         header('Content-Disposition: attachment; filename="' . $torrentnameprefix . rawurlencode($torrent['save_as']) . '].torrent"; charset=utf-8');
         header('Content-Transfer-Encoding: binary');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Pragma: public');
 
         exit($bencode->doEncode($dictionary));
     }
