@@ -18,21 +18,6 @@
 </div>
 
 <form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/app/torrent/manage/dorun')}">
-<div class="h_a">全局参数设置</div>
-<div class="table_full">
-    <table width="100%">
-        <col class="th" />
-        <col width="400" />
-        <col />
-        <tr>
-            <th>资源板块 ID</th>
-            <td>
-                <input name="pt_threads" type="text" class="input length_5" value="{$config['app.torrent.pt_threads']}">
-            </td>
-            <td><div class="fun_tips">用半角逗号分隔，主要影响计划任务、主题资源板块导航菜单</div></td>
-        </tr>
-    </table>
-</div>
 <div class="h_a">展示设置</div>
 <div class="table_full">
     <table width="100%">
@@ -73,7 +58,7 @@
             <td>
                 <input name="titlegendouban" type="text" class="input length_5" value="{$config['app.torrent.titlegen.douban']}">
             </td>
-            <td><div class="fun_tips">是否开启标题生成器，选择“强制”则用户不能手动设置种子贴标题</div></td>
+            <td><div class="fun_tips">豆瓣 API 请求频率限制为150次/分钟，设置 apikey 可以提高限制到 500次/分钟</div></td>
         </tr>
         <tr>
             <th>发布前动作</th>

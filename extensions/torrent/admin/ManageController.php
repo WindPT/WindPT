@@ -6,12 +6,6 @@ Wind::import('ADMIN:library.AdminBaseController');
 
 class ManageController extends AdminBaseController
 {
-    /*
-    public function beforeAction($handlerAdapter) {
-    parent::beforeAction($handlerAdapter);
-    }
-     */
-
     public function run()
     {
         $service = $this->_loadConfigService();
@@ -19,7 +13,6 @@ class ManageController extends AdminBaseController
         $cronDs = Wekit::load('SRV:cron.PwCron');
         $cronList['ClearPeers'] = $cronDs->getCronByFile('PwCronDoClearPeers');
         $cronList['ClearTorrents'] = $cronDs->getCronByFile('PwCronDoClearTorrents');
-        $config['app.torrent.pt_threads'] = implode(',', $config['app.torrent.pt_threads']);
         $this->setOutput($config, 'config');
         $this->setOutput($cronList, 'cronList');
     }
@@ -48,6 +41,7 @@ class ManageController extends AdminBaseController
         $service = $this->_loadConfigService();
         $config = $service->getValues('site');
         if ($config['theme.site.default'] == 'pt') {
+            $config['app.torrent.theme.pt_threads'] = implode(',', $config['app.torrent.theme.pt_threads']);
             $this->setOutput($config, 'config');
         } else {
             $this->setTemplate('');
@@ -57,11 +51,7 @@ class ManageController extends AdminBaseController
 
     public function dorunAction()
     {
-        list($pt_threads, $showuserinfo, $titlegenifopen, $titlegendouban, $check, $deniedfts, $torrentnameprefix, $peertimeout, $torrentimeout) = $this->getInput(array('pt_threads', 'showuserinfo', 'titlegenifopen', 'titlegendouban', 'check', 'deniedfts', 'torrentnameprefix', 'peertimeout', 'torrentimeout'), 'post');
-        $pt_threads = explode(',', $pt_threads);
-        foreach ($pt_threads as $key => $value) {
-            $pt_threads[$key] = intval($value);
-        }
+        list($showuserinfo, $titlegenifopen, $titlegendouban, $check, $deniedfts, $torrentnameprefix, $peertimeout, $torrentimeout) = $this->getInput(array('showuserinfo', 'titlegenifopen', 'titlegendouban', 'check', 'deniedfts', 'torrentnameprefix', 'peertimeout', 'torrentimeout'), 'post');
         foreach ($deniedfts as $key => $value) {
             if (empty($value)) {
                 continue;
@@ -78,7 +68,7 @@ class ManageController extends AdminBaseController
         }
 
         $config = new PwConfigSet('site');
-        $config->set('app.torrent.pt_threads', $pt_threads)->set('app.torrent.showuserinfo', $showuserinfo)->set('app.torrent.titlegen.ifopen', $titlegenifopen)->set('app.torrent.titlegen.douban', $titlegendouban)->set('app.torrent.check', $check)->set('app.torrent.torrentnameprefix', $torrentnameprefix)->set('app.torrent.cron.peertimeout', intval($peertimeout))->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
+        $config->set('app.torrent.showuserinfo', $showuserinfo)->set('app.torrent.titlegen.ifopen', $titlegenifopen)->set('app.torrent.titlegen.douban', $titlegendouban)->set('app.torrent.check', $check)->set('app.torrent.torrentnameprefix', $torrentnameprefix)->set('app.torrent.cron.peertimeout', intval($peertimeout))->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
         if (!empty($deniedfts)) {
             $config->set('app.torrent.deniedfts', $_deniedfts);
         }
@@ -145,8 +135,18 @@ class ManageController extends AdminBaseController
 
     public function dothemeAction()
     {
-        list($qmenuifopen, $showpeers) = $this->getInput(array('qmenuifopen', 'showpeers'), 'post');
+        list($qmenuifopen, $pt_threads, $showpeers) = $this->getInput(array('qmenuifopen', 'pt_threads', 'showpeers'), 'post');
+
         $config = new PwConfigSet('site');
+
+        if (!empty($pt_threads)) {
+            $pt_threads = explode(',', $pt_threads);
+            foreach ($pt_threads as $key => $value) {
+                $pt_threads[$key] = intval($value);
+            }
+            $config->set('app.torrent.pt_threads', $pt_threads);
+        }
+
         $config->set('app.torrent.theme.qmenuifopen', intval($qmenuifopen))->set('app.torrent.theme.showpeers', $showpeers);
         $config->flush();
         $this->showMessage('ADMIN:success');

@@ -56,7 +56,7 @@
         </div>
         <template source="TPL:common.header_login" load="true" />
 
-        <!--# if (Wekit::C('site','app.torrent.theme.qmenuifopen') == 1 && !empty(Wekit::C('site','app.torrent.pt_threads'))) { #-->
+        <!--# if (Wekit::C('site','app.torrent.theme.qmenuifopen') == 1 && !empty(Wekit::C('site','app.torrent.theme.pt_threads'))) { #-->
         <!--快捷菜单按钮-->
         <a class="qmenu">快捷菜单</a>
 
@@ -78,7 +78,7 @@
             <!--# foreach ($forumdb[0] as $k => $cate) { #-->
                 <!--# if ($forumdb[$cate['fid']]) { #-->
                     <!--# foreach ($forumdb[$cate['fid']] as $forums) { #-->
-                        <!--# if (in_array($forums['fid'], Wekit::C('site','app.torrent.pt_threads'))) { #-->
+                        <!--# if (in_array($forums['fid'], Wekit::C('site','app.torrent.theme.pt_threads'))) { #-->
                 <li>
                 <a href="{@url:bbs/thread/run?fid=$forums['fid']}">{@strip_tags($forums['name'])}</a>
                 </li>
