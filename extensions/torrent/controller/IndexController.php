@@ -15,24 +15,12 @@ class IndexController extends PwBaseController
 {
     private $passkey;
 
-    /*
-    public function beforeAction($handlerAdapter) {
-    parent::beforeAction($handlerAdapter);
-    }
-     */
-
-    public function run()
-    {
-        exit('WindPT private BitTorrent tracker');
-    }
-
     public function updateInfoAction()
     {
         if (Wekit::C('site', 'app.torrent.titlegen.ifopen') > 0) {
             $t_type = $this->getInput('t_type', 'post');
             $w_type = $this->getInput('w_type', 'post');
             $wikilink = $this->getInput('wikilink', 'post');
-            //$paras = $this->getInput('paras', 'post');
             $paras_se = $this->getInput('se', 'post');
             $paras_rip = $this->getInput('rip', 'post');
             $paras_resolution = $this->getInput('resolution', 'post');
@@ -323,7 +311,6 @@ class IndexController extends PwBaseController
             } else {
                 $rotio = 1;
             }
-
         } else {
             $uploaded_add = max(0, $uploaded - $history['uploaded_last']);
             $downloaded_add = max(0, $downloaded - $history['downloaded_last']);
@@ -357,11 +344,13 @@ class IndexController extends PwBaseController
             $_credits = Wekit::C('site', 'app.torrent.credits');
             $user_torrents = count($this->_getTorrentDS()->fetchTorrentByUid($user['uid']));
             $histories = $this->_getTorrentHistoryDs()->fetchTorrentHistoryByUid($user['uid']);
+
             foreach ($histories as $history) {
                 $downloaded_total += $history['downloaded'];
                 $uploaded_total += $history['uploaded'];
             }
             unset($histories);
+
             if ($downloaded_total != 0) {
                 $rotio_total = round($uploaded_total / $downloaded_total, 2);
             } else {
