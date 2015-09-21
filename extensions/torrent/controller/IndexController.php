@@ -451,12 +451,12 @@ class IndexController extends PwBaseController
             $torrentnameprefix = Wekit::C('site', 'info.name');
         }
 
-        $torrentnameprefix = '[' . $torrentnameprefix . '][';
+        $filename = rawurlencode('[' . $torrentnameprefix . '][' . $torrent['save_as'] . ']');
 
         // Send torrent file to broswer
         header('Content-Description: File Transfer');
         header('Content-type: application/octet-streamn');
-        header('Content-Disposition: attachment; filename="' . $torrentnameprefix . rawurlencode($torrent['save_as']) . '].torrent"; charset=utf-8');
+        header('Content-Disposition: attachment; charset=utf-8; filename="' . $filename . '.torrent"; filename*=UTF-8\'\'' . $filename . '.torrent');
         header('Content-Transfer-Encoding: binary');
 
         exit($bencode->doEncode($dictionary));
