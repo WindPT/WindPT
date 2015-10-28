@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest>
     <application>
-        <name>微PT</name>
+        <name>WindPT</name>
         <alias>torrent</alias>
         <version>0.9.3</version>
         <pw-version>9.0</pw-version>
