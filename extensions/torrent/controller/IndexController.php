@@ -186,6 +186,8 @@ class IndexController extends PwBaseController
                     if ($paras_oname) {
                         $title .= '[' . $paras_oname . ']';
                     }
+                    $title .= '[' . $paras_lang . ']';     // 语言
+                    $title .= '[' . $paras_format . ']';     // 格式
                     break;
             }
 
