@@ -3,10 +3,10 @@
 defined('WEKIT_VERSION') || exit('Forbidden');
 
 Wind::import('SRV:user.bo.PwUserBo');
-Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
-Wind::import('EXT:torrent.service.srv.helper.PwBencode');
-Wind::import('EXT:torrent.service.srv.helper.PwUpdateInfo');
 Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
+Wind::import('EXT:torrent.service.srv.helper.PwBencode');
+Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
+Wind::import('EXT:torrent.service.srv.helper.PwUpdateInfo');
 Wind::import('EXT:torrent.service.dm.PwTorrentDm');
 Wind::import('EXT:torrent.service.dm.PwTorrentPeerDm');
 Wind::import('EXT:torrent.service.dm.PwTorrentHistoryDm');
@@ -386,8 +386,7 @@ class IndexController extends PwBaseController
         $this->_getTorrentDS()->updateTorrent($dm);
 
         // Output peers list to client
-        $peer_string = PwAnnounce::buildWaitTime($torrent);
-        $peer_string = PwAnnounce::buildPeerList($peers, $compact, $no_peer_id, $peer_string);
+        $peer_string = PwAnnounce::buildPeerList($torrent, $peers, $compact, $no_peer_id);
 
         exit($peer_string);
     }

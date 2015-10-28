@@ -70,16 +70,12 @@ class PwAnnounce
         return $torrent;
     }
 
-    public static function buildWaitTime($torrent)
+    public static function buildPeerList($torrent, $peer_list, $compact, $no_peer_id)
     {
         $bencode = new PwBencode();
-        return 'd' . $bencode->doEncodeString('interval') . 'i840e' . $bencode->doEncodeString('min interval') . 'i30e' . $bencode->doEncodeString('complete') . 'i' . $torrent['seeders'] . 'e' . $bencode->doEncodeString('incomplete') . 'i' . $torrent['leechers'] . 'e';
-    }
 
-    public static function buildPeerList($peer_list, $compact, $no_peer_id, $string)
-    {
-        $bencode = new PwBencode();
-        $string .= $bencode->doEncodeString('peers');
+        $string  = 'd' . $bencode->doEncodeString('interval') . 'i840e' . $bencode->doEncodeString('min interval') . 'i30e' . $bencode->doEncodeString('complete') . 'i' . $torrent['seeders'] . 'e' . $bencode->doEncodeString('incomplete') . 'i' . $torrent['leechers'] . 'e' . $bencode->doEncodeString('peers');
+
         $peer_string = '';
         if (is_array($peer_list)) {
             $count = count($peer_list);
