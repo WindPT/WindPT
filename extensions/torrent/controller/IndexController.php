@@ -250,7 +250,7 @@ class IndexController extends PwBaseController
 
         // Check if torrent was removed
         $topic = Wekit::load('forum.PwThread')->getThread($torrent['tid']);
-        if ($topic['disabled'] > 0) {
+        if ($topic['disabled'] > 0 && !in_array($user['groupid'], array(3, 4, 5))) {
             PwAnnounce::showError('Torrent removed!');
         }
 
@@ -521,7 +521,7 @@ class IndexController extends PwBaseController
         $torrents = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUid($this->loginUser->uid);
 
         foreach ($torrents as $torrent) {
-            if ($torrent['disabled'] > 0) {
+            if ($torrent['disabled'] > 0 && !in_array($user['groupid'], array(3, 4, 5))) {
                 continue;
             }
             echo '<item>';
