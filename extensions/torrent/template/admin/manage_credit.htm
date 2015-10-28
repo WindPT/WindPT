@@ -1,101 +1,131 @@
 <!doctype html>
 <html>
+
 <head>
-<template source='TPL:admin.common.head' />
+    <template source='TPL:admin.common.head' />
 </head>
+
 <body>
-<div class="wrap">
-
-<div class="nav">
-    <ul class="cc">
-        <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/run')}">基本设置</a></li>
-        <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/agent')}">客户端设置</a></li>
-        <li class="current"><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/credit')}">积分设置</a></li>
-        <!--# if($config['theme.site.default']=='pt') { #-->
-        <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/theme')}">主题设置</a></li>
-        <!--# } #-->
-    </ul>
-</div>
-
-<form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/app/torrent/manage/docredit')}">
-<div class="h_a">自定义积分开关</div>
-<div class="table_full">
-    <table width="100%">
-        <col class="th" />
-        <col width="400" />
-        <col />
-        <tr>
-            <th>启用自定义积分</th>
-            <td>
-            <ul class="switch_list cc">
-                <li><label><input type="radio" name="creditifopen" value="1" {@pw::ifcheck($config['app.torrent.creditifopen'] == 1)}><span>开启</span></label></li>
-                <li><label><input type="radio" name="creditifopen" value="0" {@Pw::ifcheck($config['app.torrent.creditifopen'] == 0)}><span>关闭</span></label></li>
+    <div class="wrap">
+        <div class="nav">
+            <ul class="cc">
+                <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/run')}">基本设置</a></li>
+                <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/agent')}">客户端设置</a></li>
+                <li class="current"><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/credit')}">积分设置</a></li>
+                <!--# if($config['theme.site.default']=='pt') { #-->
+                <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/theme')}">主题设置</a></li>
+                <!--# } #-->
             </ul>
-            </td>
-            <td><div class="fun_tips">启用后允许 WindPT 根据 tracker 数据修改用户积分</div></td>
-        </tr>
-    </table>
-</div>
-<!--# if ($config['app.torrent.creditifopen']) { #-->
-<div class="h_a">自定义积分设置</div>
-<div class="table_full">
-    <table width="100%" id="J_group_table">
-        <col width="100">
-        <col width="80">
-        <col />
-        <!--# foreach ($creditType as $key => $type) { #-->
-        <tr>
-            <th>{$type}</th>
-            <td>
-                <label><input type="checkbox" name="credits[{$key}][enabled]" value="1" {@Pw::ifcheck($config['app.torrent.credits'][$key]['enabled'] == 1)}><span>启用</span></label>
-            </td>
-            <td>
-                <input type="text" name="credits[{$key}][func]" class="input" value="{$config['app.torrent.credits'][$key]['func']}" style="width: 100%;">
-            </td>
-        </tr>
-        <!--# } #-->
-        <tr><td colspan="3">可用的变量： %downloaded% 当前种子下载量（增量）, %downloaded_total% 用户总下载量, %uploaded% 当前种子上传量（增量）, %uploaded_total% 用户总上传量, %rotio% 当前种子分享率, %rotio_total% 用户总分享率, %time% 当前peer连接时长, %credit% 当前积分持有量, %torrents% 用户发布种子数</td></tr>
-    </table>
-</div>
-<div class="h_a">运算器设置</div>
-<div class="table_full">
-    <table width="100%">
-        <col class="th" />
-        <col width="400" />
-        <col />
-        <tr>
-            <th><label><input type="radio" name="calfunc" value="exec" {@pw::ifcheck($config['app.torrent.calfunc'] != 'curl')}><span>exec()</span></label></th>
-            <td>
-            <!--# if ($config['app.torrent.calfunc'] != 'curl') { #-->
-            <ul class="switch_list cc">
-                <li><label><input type="radio" name="calcmd" value="expr" {@Pw::ifcheck($config['app.torrent.calcmd'] == 'expr')}><span>expr</span></label></li>
-                <li><label><input type="radio" name="calcmd" value="bc" {@pw::ifcheck($config['app.torrent.calcmd'] == 'bc')}><span>bc -l</span></label></li>
-                <li><label><input type="radio" name="calcmd" value="dc" {@Pw::ifcheck($config['app.torrent.calcmd'] == 'dc')}><span>dc</span></label></li>
-            </ul>
+        </div>
+        <form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/app/torrent/manage/docredit')}">
+            <div class="h_a">自定义积分开关</div>
+            <div class="table_full">
+                <table width="100%">
+                    <col class="th" />
+                    <col width="400" />
+                    <col />
+                    <tr>
+                        <th>启用自定义积分</th>
+                        <td>
+                            <ul class="switch_list cc">
+                                <li>
+                                    <label>
+                                        <input type="radio" name="creditifopen" value="1" {@pw::ifcheck($config[ 'app.torrent.creditifopen']==1 )}><span>开启</span></label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="creditifopen" value="0" {@Pw::ifcheck($config[ 'app.torrent.creditifopen']==0 )}><span>关闭</span></label>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <div class="fun_tips">启用后允许 WindPT 根据 tracker 数据修改用户积分</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <!--# if ($config['app.torrent.creditifopen']) { #-->
+            <div class="h_a">自定义积分设置</div>
+            <div class="table_full">
+                <table width="100%" id="J_group_table">
+                    <col width="100" />
+                    <col width="80" />
+                    <col />
+                    <!--# foreach ($creditType as $key => $type) { #-->
+                    <tr>
+                        <th>{$type}</th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="credits[{$key}][enabled]" value="1" {@Pw::ifcheck($config[ 'app.torrent.credits'][$key][ 'enabled']==1 )}><span>启用</span></label>
+                        </td>
+                        <td>
+                            <input type="text" name="credits[{$key}][func]" class="input" value="{$config['app.torrent.credits'][$key]['func']}" style="width: 100%;">
+                        </td>
+                    </tr>
+                    <!--# } #-->
+                    <tr>
+                        <td colspan="3">可用的变量： %downloaded% 当前种子下载量（增量）, %downloaded_total% 用户总下载量, %uploaded% 当前种子上传量（增量）, %uploaded_total% 用户总上传量, %rotio% 当前种子分享率, %rotio_total% 用户总分享率, %time% 当前peer连接时长, %credit% 当前积分持有量, %torrents% 用户发布种子数</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="h_a">运算器设置</div>
+            <div class="table_full">
+                <table width="100%">
+                    <col class="th" />
+                    <col width="400" />
+                    <col />
+                    <tr>
+                        <th>
+                            <label>
+                                <input type="radio" name="calfunc" value="exec" {@pw::ifcheck($config[ 'app.torrent.calfunc'] !='curl' )}><span>exec()</span></label>
+                        </th>
+                        <td>
+                            <!--# if ($config['app.torrent.calfunc'] != 'curl') { #-->
+                            <ul class="switch_list cc">
+                                <li>
+                                    <label>
+                                        <input type="radio" name="calcmd" value="expr" {@Pw::ifcheck($config[ 'app.torrent.calcmd']=='expr' )}><span>expr</span></label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="calcmd" value="bc" {@pw::ifcheck($config[ 'app.torrent.calcmd']=='bc' )}><span>bc -l</span></label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="calcmd" value="dc" {@Pw::ifcheck($config[ 'app.torrent.calcmd']=='dc' )}><span>dc</span></label>
+                                </li>
+                            </ul>
+                            <!--# } #-->
+                        </td>
+                        <td>
+                            <div class="fun_tips">使用 Linux 系统指令进行计算，有一定风险</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label>
+                                <input type="radio" name="calfunc" value="curl" {@pw::ifcheck($config[ 'app.torrent.calfunc']=='curl' )}><span>curl()</span></label>
+                        </th>
+                        <td>
+                            <!--# if ($config['app.torrent.calfunc'] == 'curl') { #-->
+                            <input type="text" name="calcmd" class="input" value="{$config['app.torrent.calcmd']}" style="width: 100%;">
+                            <!--# } #-->
+                        </td>
+                        <td>
+                            <div class="fun_tips">使用 curl 借助远程服务进行运算，需要专门后端支持，用 %s 取代 URL 中的算式部分</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
             <!--# } #-->
-            </td>
-            <td><div class="fun_tips">使用 Linux 系统指令进行计算，有一定风险</div></td>
-        </tr>
-        <tr>
-            <th><label><input type="radio" name="calfunc" value="curl" {@pw::ifcheck($config['app.torrent.calfunc'] == 'curl')}><span>curl()</span></label></th>
-            <td>
-            <!--# if ($config['app.torrent.calfunc'] == 'curl') { #-->
-            <input type="text" name="calcmd" class="input" value="{$config['app.torrent.calcmd']}" style="width: 100%;">
-            <!--# } #-->
-            </td>
-            <td><div class="fun_tips">使用 curl 借助远程服务进行运算，需要专门后端支持，用 %s 取代 URL 中的算式部分</div></td>
-        </tr>
-    </table>
-</div>
-<!--# } #-->
-<div class="btn_wrap">
-    <div class="btn_wrap_pd">
-        <button class="btn btn_submit mr10 J_ajax_submit_btn" type="submit">提交</button>
+            <div class="btn_wrap">
+                <div class="btn_wrap_pd">
+                    <button class="btn btn_submit mr10 J_ajax_submit_btn" type="submit">提交</button>
+                </div>
+            </div>
+        </form>
     </div>
-</div>
-</form>
-
-</div>
-<template source='TPL:admin.common.footer' />
+    <template source='TPL:admin.common.footer' />
 </body>
+
 </html>
