@@ -7,6 +7,8 @@ WindPT
 
 This project is still in early stage, DO NOT use it on production environment, pull requests are welcome.
 
+This extension is designed to work with PHPWind 9.x, and `local search` plugin (a 3rd extension) is required by the theme bundled with this extension.
+
 If you find any bugs or mistakes, please let me know by submitting issues or making pull requests.
 
 **You should create a directory named `torrent` with mask 0755 under the root of PHPWind manually if php have no permission to `write`.**
