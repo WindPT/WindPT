@@ -41,7 +41,6 @@ class ManageController extends AdminBaseController
         $service = $this->_loadConfigService();
         $config = $service->getValues('site');
         if ($config['theme.site.default'] == 'pt') {
-            $config['app.torrent.theme.pt_threads'] = implode(',', $config['app.torrent.theme.pt_threads']);
             $this->setOutput($config, 'config');
         } else {
             $this->setTemplate('');
@@ -135,19 +134,10 @@ class ManageController extends AdminBaseController
 
     public function dothemeAction()
     {
-        list($qmenuifopen, $pt_threads, $showpeers) = $this->getInput(array('qmenuifopen', 'pt_threads', 'showpeers'), 'post');
+        $showpeers = $this->getInput('showpeers', 'post');
 
         $config = new PwConfigSet('site');
-
-        if (!empty($pt_threads)) {
-            $pt_threads = explode(',', $pt_threads);
-            foreach ($pt_threads as $key => $value) {
-                $pt_threads[$key] = intval($value);
-            }
-            $config->set('app.torrent.pt_threads', $pt_threads);
-        }
-
-        $config->set('app.torrent.theme.qmenuifopen', intval($qmenuifopen))->set('app.torrent.theme.showpeers', $showpeers);
+        $config->set('app.torrent.theme.showpeers', $showpeers);
         $config->flush();
         $this->showMessage('ADMIN:success');
     }
