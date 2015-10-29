@@ -490,6 +490,26 @@ class IndexController extends PwBaseController
         exit('{"status":0}');
     }
 
+    public function myAction()
+    {
+        Wind::import('SRV:space.bo.PwSpaceModel');
+
+        $spaceUid = $this->loginUser->uid;
+
+        $space = new PwSpaceModel($spaceUid);
+
+        if (!$space->space['uid']) {
+            $this->showError('login.not');
+        }
+
+        $torrents = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUid($this->loginUser->uid);
+
+        $this->setTheme('space', $space->space['space_style']);
+
+        $this->setOutput($space, 'space');
+        $this->setOutput($torrents, 'torrents');
+    }
+
     public function rssAction()
     {
         $uid = $this->getInput('uid');

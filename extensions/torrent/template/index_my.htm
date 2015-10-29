@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+
+<head>
+    <template source='TPL:common.head' load='true' />
+    <link href="{@theme:css}/style.css?v={@NEXT_RELEASE}" rel="stylesheet" />
+
+    <style>
+    .space_profile dd {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    </style>
+</head>
+
+<body {@$space->space['backbround']|html}>
+    <div class="wrap">
+        <template source='TPL:common.header' load='true' />
+        <div class="space_page">
+            <template source='TPL:space.common.nav' load='true' />
+            <div class="cc">
+                <div class="space_content">
+                    <div class="box">
+                        <div class="hd">
+                            <h2>我的种子订阅</h2>
+                        </div>
+                        <div class="space_profile">
+                            <h3>
+                                <strong>订阅列表</strong>
+                            </h3>
+                            <dl class="cc">
+                                <dd>种子标题</dd>
+                                <dt>操作</dt>
+                            </dl>
+                            <!--# foreach($torrents as $torrent) { #-->
+                            <dl class="cc">
+                                <dd><a href="{@WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid'])}">{$torrent['subject']}</a></dd>
+                                <dt><a href="{@WindUrlHelper::createUrl('/app/torrent/index/subscribe?id=' . $torrent['id'] . '&unsub=true')}" class="unsub">取消订阅</a></dt>
+                            </dl>
+                            <!--# } #-->
+                        </div>
+                    </div>
+                </div>
+                <div class="space_sidebar">
+                    <template source='TPL:space.common.sidebar' load='true' />
+                </div>
+            </div>
+        </div>
+        <template source='TPL:common.footer' load='true' />
+    </div>
+    <script>
+    Wind.use('jquery', 'global', 'dialog', 'ajaxForm', 'tabs', 'draggable', 'uploadPreview', function() {
+        Wind.js(GV.JS_ROOT + 'pages/space/space_index.js?v=' + GV.JS_VERSION);
+
+        $('.unsub').click(function() {
+            var link = $(this).attr('href');
+            $.get(link, function(data) {
+                if (data.status == 0) {
+                    alert('取消订阅成功！');
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+        });
+    });
+    </script>
+</body>
+
+</html>
