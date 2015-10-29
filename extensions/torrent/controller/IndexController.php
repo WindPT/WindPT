@@ -2,15 +2,6 @@
 
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-Wind::import('SRV:user.bo.PwUserBo');
-Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
-Wind::import('EXT:torrent.service.srv.helper.PwBencode');
-Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
-Wind::import('EXT:torrent.service.srv.helper.PwUpdateInfo');
-Wind::import('EXT:torrent.service.dm.PwTorrentDm');
-Wind::import('EXT:torrent.service.dm.PwTorrentPeerDm');
-Wind::import('EXT:torrent.service.dm.PwTorrentHistoryDm');
-
 class IndexController extends PwBaseController
 {
     private $passkey;
@@ -32,6 +23,8 @@ class IndexController extends PwBaseController
             $paras_name = $this->getInput('name', 'post');
             $paras_oname = $this->getInput('oname', 'post');
             $paras_lang = $this->getInput('lang', 'post');
+
+            Wind::import('EXT:torrent.service.srv.helper.PwUpdateInfo');
 
             switch ($t_type) {
                 case '1':
@@ -213,6 +206,8 @@ class IndexController extends PwBaseController
         $ip = Wind::getComponent('request')->getClientIp();
         $seeder = ($left > 0) ? 'no' : 'yes';
 
+        Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
+
         // Check if a BitTorrent client
         $allowedClients = $this->_getTorrentAgentDS()->fetchTorrentAgent();
         foreach ($allowedClients as $allowedClient) {
@@ -260,6 +255,8 @@ class IndexController extends PwBaseController
         // Get this peer
         $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
 
+        Wind::import('EXT:torrent.service.dm.PwTorrentPeerDm');
+
         if (!empty($self)) {
             // Check if already started
             if ($ip != $self['ip']) {
@@ -304,6 +301,9 @@ class IndexController extends PwBaseController
 
         // Update user's history with this torrent
         $history = $this->_getTorrentHistoryDs()->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
+
+        Wind::import('EXT:torrent.service.dm.PwTorrentHistoryDm');
+
         if (!$history) {
             $dm = new PwTorrentHistoryDm();
             $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
@@ -373,8 +373,10 @@ class IndexController extends PwBaseController
                 $changes[$key] = $credit_c;
                 $changed++;
             }
+
             if ($changed) {
                 Wind::import('SRV:credit.bo.PwCreditBo');
+                Wind::import('SRV:user.bo.PwUserBo');
                 $creditBo = PwCreditBo::getInstance();
                 $creditBo->sets($user['uid'], $changes);
                 $creditBo->addLog('pt_tracker', $changes, new PwUserBo($user['uid']));
@@ -382,6 +384,7 @@ class IndexController extends PwBaseController
         }
 
         // Update peer
+        Wind::import('EXT:torrent.service.dm.PwTorrentDm');
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
         $dm = new PwTorrentDm($torrent['id']);
         $dm->setSeeders($torrent['seeders'])->setLeechers($torrent['leechers'])->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'));
@@ -408,6 +411,8 @@ class IndexController extends PwBaseController
                 $uid = $user['uid'];
             }
         } else {
+            Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
+
             $uid = $this->loginUser->uid;
             $passkey = PwPasskey::getPassKey($uid);
         }
@@ -431,7 +436,7 @@ class IndexController extends PwBaseController
         }
 
         // Change announce to user's private announce
-        $bencode = new PwBencode();
+        $bencode = Wekit::load('EXT:torrent.service.srv.helper.PwBencode');
         $dictionary = $bencode->doDecodeFile($file);
         $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('/app/torrent/index/announce?passkey=' . $passkey)));
 

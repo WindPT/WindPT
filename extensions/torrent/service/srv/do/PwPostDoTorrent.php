@@ -5,8 +5,6 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 Wind::import('SRV:forum.srv.post.do.PwPostDoBase');
 Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
 Wind::import('EXT:torrent.service.srv.helper.PwBencode');
-Wind::import('EXT:torrent.service.dm.PwTorrentDm');
-Wind::import('EXT:torrent.service.dm.PwTorrentFileDm');
 
 class PwPostDoTorrent extends PwPostDoBase
 {
@@ -147,14 +145,18 @@ class PwPostDoTorrent extends PwPostDoBase
 
     public function addTorrentt($tid)
     {
-        $dm = new PwTorrentDm();
+        $dm = Wekit::load('EXT:torrent.service.dm.PwTorrentDm');
         $dm->setTid($tid)->setInfoHash($this->infohash)->setOwner($this->user->uid)->setVisible('yes')->setAnonymous('yes')->setSize($this->totalength)->setNumfiles(count($this->filelist))->setType($this->type)->setWikilink($this->wikilink)->setFileName($this->filename)->setSaveAs($this->filesavename)->setSpState(1)->setAdded(date('Y-m-d H:i:s'))->setLastAction(date('Y-m-d H:i:s'));
+
         $result = $this->_getTorrentDS()->addTorrent($dm);
+
         if ($result instanceof PwError) {
             return $result;
         }
-        $filedm = new PwTorrentFileDm();
+
         if (is_array($this->filelist)) {
+            $filedm = Wekit::load('EXT:torrent.service.dm.PwTorrentFileDm');
+
             foreach ($this->filelist as $file) {
                 $filedm->setTorrent($result);
                 $filedm->setFileName($file[0]);
@@ -162,16 +164,19 @@ class PwPostDoTorrent extends PwPostDoBase
                 $this->_getTorrentFileDS()->addTorrentFile($filedm);
             }
         }
-        $bencode = new PwBencode();
+
         if (!is_dir(WEKIT_PATH . '../torrent')) {
             mkdir(WEKIT_PATH . '../torrent', 0755);
         }
 
         $fp = fopen(WEKIT_PATH . '../torrent/' . $result . '.torrent', 'w');
+
         if ($fp) {
+            $bencode = new PwBencode();
             @fwrite($fp, $bencode->doEncode($this->dictionary));
             fclose($fp);
         }
+
         return true;
     }
 

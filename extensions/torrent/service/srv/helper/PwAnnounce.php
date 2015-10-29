@@ -2,7 +2,6 @@
 
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-Wind::import('EXT:torrent.service.PwTorrentAgentAllowedFamily');
 Wind::import('EXT:torrent.service.srv.helper.PwBencode');
 
 class PwAnnounce
