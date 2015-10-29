@@ -487,6 +487,8 @@ class IndexController extends PwBaseController
         $dm->setUid($this->loginUser->uid)->setTorrent($id);
         $this->_getTorrentSubscribeDs()->addTorrentSubscribe($dm);
 
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+
         exit('{"status":0}');
     }
 
