@@ -509,12 +509,26 @@ class IndexController extends PwBaseController
             $this->showError('login.not');
         }
 
+        $space->setTome($spaceUid, $this->loginUser->uid);
+        $space->setVisitUid($this->loginUser->uid);
+
         $torrents = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUid($this->loginUser->uid);
 
         $this->setTheme('space', $space->space['space_style']);
 
         $this->setOutput($space, 'space');
         $this->setOutput($torrents, 'torrents');
+
+        // seo设置
+        Wind::import('SRV:seo.bo.PwSeoBo');
+        $seoBo = PwSeoBo::getInstance();
+        $lang = Wind::getComponent('i18n');
+        $seoBo->setCustomSeo(
+            $lang->getMessage('SEO:space.profile.run.title',
+                array($space->spaceUser['username'], $space->space['space_name'])), '',
+            $lang->getMessage('SEO:space.profile.run.description',
+                array($space->spaceUser['username'])));
+        Wekit::setV('seo', $seoBo);
     }
 
     public function rssAction()
