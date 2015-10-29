@@ -431,7 +431,7 @@ class IndexController extends PwBaseController
 
         // Check if torrent was removed
         $topic = Wekit::load('forum.PwThread')->getThread($torrent['tid']);
-        if ($topic['disabled'] > 0) {
+        if ($topic['disabled'] > 0 && !in_array($user['groupid'], array(3, 4, 5))) {
             $this->showError('种子已被删除！');
         }
 
