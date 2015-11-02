@@ -30,16 +30,21 @@ class PwCronDoClearTorrents extends AbstractCronBase
     public function run($cronId)
     {
         $torrentimeout = Wekit::C('site', 'app.torrent.cron.torrentimeout');
+
         if ($torrentimeout < 1) {
             return null;
         }
 
         $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrent();
 
+        if (!is_array($torrents)) {
+            return;
+        }
+
         foreach ($torrents as $torrent) {
             $topic = Wekit::load('forum.PwThread')->getThread($torrent['tid']);
 
-            if ($topic['disabled'] > 0) {
+            if (is_array($topic) && $topic['disabled'] > 0) {
                 continue;
             }
 

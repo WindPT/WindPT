@@ -32,6 +32,7 @@ class PwAnnounce
     {
         $torrent['seeders'] = 0;
         $torrent['leechers'] = 0;
+
         if (is_array($torrent) && is_array($peer_list)) {
             foreach ($peer_list as $peer) {
                 if ($peer['seeder'] == 'yes') {
@@ -41,6 +42,7 @@ class PwAnnounce
                 }
             }
         }
+
         return $torrent;
     }
 
@@ -51,8 +53,11 @@ class PwAnnounce
         $string  = 'd' . $bencode->doEncodeString('interval') . 'i840e' . $bencode->doEncodeString('min interval') . 'i30e' . $bencode->doEncodeString('complete') . 'i' . $torrent['seeders'] . 'e' . $bencode->doEncodeString('incomplete') . 'i' . $torrent['leechers'] . 'e' . $bencode->doEncodeString('peers');
 
         $peer_string = '';
+
         if (is_array($peer_list)) {
+
             $count = count($peer_list);
+
             foreach ($peer_list as $peer) {
                 if ($compact) {
                     $peer_string .= str_pad(pack('Nn', ip2long($peer['ip']), $peer['port']), 6);
@@ -63,11 +68,13 @@ class PwAnnounce
                 }
             }
         }
+
         if ($compact) {
             $string .= $bencode->doEncodeString($peer_string);
         } else {
             $string .= 'l' . $peer_string . 'e';
         }
+
         return $string . 'e';
     }
 

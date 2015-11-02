@@ -63,7 +63,7 @@
             <li><strong>文件数量：</strong><span>共有{$torrent['numfiles']}个文件</span><strong>文件大小：</strong><span>{$torrent['size']}</span></li>
         </ul>
         <ul class="file">
-            <!--# if(isset($torrent['list'])) { #-->
+            <!--# if(is_array($torrent['list'])) { #-->
             <li id="toggleFileList">文件列表：（点击展开/收拢）</li>
             <div id="fileList" style="display:none;">
                 <li><span>文件名</span><span>文件大小</span></li>

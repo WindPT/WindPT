@@ -6,9 +6,12 @@ class PwSpaceProfileDoTorrent
 {
     public function appDo($space)
     {
-        if (!in_array('profile', Wekit::C('site', 'app.torrent.showuserinfo'))) {
-            return '';
+        $showuserinfo = Wekit::C('site', 'app.torrent.showuserinfo');
+
+        if (is_array($showuserinfo) && !in_array('profile', $showuserinfo)) {
+            return;
         }
+
         $user = Wekit::load('EXT:torrent.service.PwTorrentUser')->getTorrentUserByUid($space->{'spaceUid'});
         $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($space->{'spaceUid'});
         $histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($space->{'spaceUid'});
@@ -17,9 +20,11 @@ class PwSpaceProfileDoTorrent
 
         $posted = count($torrents);
 
-        foreach ($histories as $history) {
-            $downloaded_total += $history['downloaded'];
-            $uploaded_total += $history['uploaded'];
+        if (is_array($histories)) {
+            foreach ($histories as $history) {
+                $downloaded_total += $history['downloaded'];
+                $uploaded_total += $history['uploaded'];
+            }
         }
 
         $downloaded_total = floor($downloaded_total / 1048567);

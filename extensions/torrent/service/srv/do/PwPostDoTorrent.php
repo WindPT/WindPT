@@ -86,49 +86,76 @@ class PwPostDoTorrent extends PwPostDoBase
                 if (!count($flist)) {
                     return new PwError('种子不存在任何文件，请检查种子是否正确！');
                 }
+
                 $totalLength = 0;
-                foreach ($flist as $fn) {
-                    list($ll, $ff) = $bencode->doDictionaryCheck($fn, 'length(integer):path(list)');
-                    $totalLength += $ll;
-                    $ffa = array();
-                    foreach ($ff as $ffe) {
-                        if ($ffe['type'] != 'string') {
+
+                if (is_array($flist)) {
+                    foreach ($flist as $fn) {
+                        list($ll, $ff) = $bencode->doDictionaryCheck($fn, 'length(integer):path(list)');
+
+                        $totalLength += $ll;
+
+                        $ffa = array();
+
+                        if (is_array($ff)) {
+                            foreach ($ff as $ffe) {
+                                if ($ffe['type'] != 'string') {
+                                    return new PwError('种子存在文件名错误，请检查种子是否正确！');
+                                }
+                                $ffa[] = $ffe['value'];
+                            }
+                        }
+
+                        if (!count($ffa)) {
                             return new PwError('种子存在文件名错误，请检查种子是否正确！');
                         }
-                        $ffa[] = $ffe['value'];
+
+                        $ffe = implode('/', $ffa);
+                        $fileList[] = array($ffe, $ll);
                     }
-                    if (!count($ffa)) {
-                        return new PwError('种子存在文件名错误，请检查种子是否正确！');
-                    }
-                    $ffe = implode('/', $ffa);
-                    $fileList[] = array($ffe, $ll);
                 }
                 $type = 'multi';
             }
-            if (in_array('deniedfts', Wekit::C('site', 'app.torrent.check'))) {
-                $deniedfts = Wekit::C('site', 'app.torrent.deniedfts');
-                foreach ($fileList as $file) {
-                    $ft = substr(strrchr($file[0], '.'), 1);
-                    if (in_array($ft, $deniedfts)) {
-                        return new PwError('种子内存在禁止发布的文件类型！');
+
+            $torrentcheck = Wekit::C('site', 'app.torrent.check');
+
+            if (is_array($torrentcheck)) {
+                if (in_array('deniedfts', $torrentcheck)) {
+                    $deniedfts = Wekit::C('site', 'app.torrent.deniedfts');
+
+                    if (is_array($deniedfts)) {
+                        foreach ($fileList as $file) {
+                            $ft = substr(strrchr($file[0], '.'), 1);
+                            if (in_array($ft, $deniedfts)) {
+                                return new PwError('种子内存在禁止发布的文件类型！');
+                            }
+                        }
                     }
                 }
+
+                if (in_array('source', $torrentcheck)) {
+                    $dictionary['value']['info']['value']['source'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.name')));
+                }
             }
+
             $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.url') . '/announce.php'));
             $dictionary['value']['info']['value']['private'] = $bencode->doDecode('i1e');
 
-            if (in_array('source', Wekit::C('site', 'app.torrent.check'))) {
-                $dictionary['value']['info']['value']['source'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.name')));
-            }
             unset($dictionary['value']['announce-list']);
             unset($dictionary['value']['nodes']);
+
             $dictionary = $bencode->doDecode($bencode->doEncode($dictionary));
+
             list($announce, $info) = $bencode->doDictionaryCheck($dictionary, 'announce(string):info');
+
             $infohash = pack('H*', sha1($info['string']));
+
             $check = $this->_getTorrentDS()->getTorrentByInfoHash($infohash);
+
             if ($check) {
                 return new PwError('不能发布重复种子资源');
             }
+
             $this->dictionary = $dictionary;
             $this->infohash = $infohash;
             $this->filename = $filename;

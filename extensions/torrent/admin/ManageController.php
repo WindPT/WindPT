@@ -51,13 +51,17 @@ class ManageController extends AdminBaseController
     public function dorunAction()
     {
         list($showuserinfo, $titlegenifopen, $titlegendouban, $check, $deniedfts, $torrentnameprefix, $peertimeout, $torrentimeout) = $this->getInput(array('showuserinfo', 'titlegenifopen', 'titlegendouban', 'check', 'deniedfts', 'torrentnameprefix', 'peertimeout', 'torrentimeout'), 'post');
-        foreach ($deniedfts as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
 
-            $_deniedfts[$key] = $value;
+        if (is_array($deniedfts)) {
+            foreach ($deniedfts as $key => $value) {
+                if (empty($value)) {
+                    continue;
+                }
+
+                $_deniedfts[$key] = $value;
+            }
         }
+
         if (empty($torrentnameprefix)) {
             $torrentnameprefix = Wekit::C('site', 'info.name');
         }
@@ -68,29 +72,35 @@ class ManageController extends AdminBaseController
 
         $config = new PwConfigSet('site');
         $config->set('app.torrent.showuserinfo', $showuserinfo)->set('app.torrent.titlegen.ifopen', $titlegenifopen)->set('app.torrent.titlegen.douban', $titlegendouban)->set('app.torrent.check', $check)->set('app.torrent.torrentnameprefix', $torrentnameprefix)->set('app.torrent.cron.peertimeout', intval($peertimeout))->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
+
         if (!empty($deniedfts)) {
             $config->set('app.torrent.deniedfts', $_deniedfts);
         }
 
         $config->flush();
+
         $this->showMessage('ADMIN:success');
     }
 
     public function docreditAction()
     {
         list($creditifopen, $credits) = $this->getInput(array('creditifopen', 'credits'), 'post');
-        $_credits = array();
-        !$credits && $credits = array();
-        foreach ($credits as $key => $credit) {
-            if (!$credit['enabled'] || empty($credit['func'])) {
-                continue;
-            }
 
-            $_credits[$key] = $credit;
+        $_credits = array();
+
+        if (is_array($credits)) {
+            foreach ($credits as $key => $credit) {
+                if (!$credit['enabled'] || empty($credit['func'])) {
+                    continue;
+                }
+
+                $_credits[$key] = $credit;
+            }
         }
 
         $config = new PwConfigSet('site');
         $config->set('app.torrent.creditifopen', intval($creditifopen))->set('app.torrent.credits', $_credits)->flush();
+
         $this->showMessage('ADMIN:success');
     }
 
@@ -101,26 +111,34 @@ class ManageController extends AdminBaseController
             $PwTorrentAgentDs->deleteTorrentAgent($this->getInput('id', 'post'));
         } else {
             Wind::import('EXT:torrent.service.dm.PwTorrentAgentDm');
+
             list($allowedClients, $newAllowedClients) = $this->getInput(array('allowedClients', 'newAllowedClients'), 'post');
-            foreach ($allowedClients as $key => $allowedClient) {
-                if (empty($allowedClient['family']) || empty($allowedClient['agent_pattern'])) {
-                    continue;
-                }
 
-                $dm = new PwTorrentAgentDm($key);
-                $dm->setFamily($allowedClient['family'])->setPeeridPattern($allowedClient['peer_id_pattern'])->setAgentPattern($allowedClient['agent_pattern'])->setAllowHttps($allowedClient['allowhttps']);
-                $PwTorrentAgentDs->updateTorrentAgent($dm);
+            if (is_array($allowedClients)) {
+                foreach ($allowedClients as $key => $allowedClient) {
+                    if (empty($allowedClient['family']) || empty($allowedClient['agent_pattern'])) {
+                        continue;
+                    }
+
+                    $dm = new PwTorrentAgentDm($key);
+                    $dm->setFamily($allowedClient['family'])->setPeeridPattern($allowedClient['peer_id_pattern'])->setAgentPattern($allowedClient['agent_pattern'])->setAllowHttps($allowedClient['allowhttps']);
+                    $PwTorrentAgentDs->updateTorrentAgent($dm);
+                }
             }
-            foreach ($newAllowedClients as $key => $allowedClient) {
-                if (empty($allowedClient['family']) || empty($allowedClient['agent_pattern'])) {
-                    continue;
-                }
 
-                $dm = new PwTorrentAgentDm();
-                $dm->setFamily($allowedClient['family'])->setPeeridPattern($allowedClient['peer_id_pattern'])->setAgentPattern($allowedClient['agent_pattern'])->setAllowHttps($allowedClient['allowhttps']);
-                $PwTorrentAgentDs->addTorrentAgent($dm);
+            if (is_array($newAllowedClients)) {
+                foreach ($newAllowedClients as $key => $allowedClient) {
+                    if (empty($allowedClient['family']) || empty($allowedClient['agent_pattern'])) {
+                        continue;
+                    }
+
+                    $dm = new PwTorrentAgentDm();
+                    $dm->setFamily($allowedClient['family'])->setPeeridPattern($allowedClient['peer_id_pattern'])->setAgentPattern($allowedClient['agent_pattern'])->setAllowHttps($allowedClient['allowhttps']);
+                    $PwTorrentAgentDs->addTorrentAgent($dm);
+                }
             }
         }
+
         $this->showMessage('ADMIN:success');
     }
 
@@ -131,6 +149,7 @@ class ManageController extends AdminBaseController
         $config = new PwConfigSet('site');
         $config->set('app.torrent.theme.showpeers', $showpeers);
         $config->flush();
+
         $this->showMessage('ADMIN:success');
     }
 

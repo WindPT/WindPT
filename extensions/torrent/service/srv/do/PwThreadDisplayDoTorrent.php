@@ -24,22 +24,30 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
         $torrent['size'] = $this->formatSize($torrent['size']);
         $torrent['info_hash'] = $this->formatHash($torrent['info_hash']);
         $torrent['list'] = $this->_getTorrentFileService()->getTorrentFileByTorrent($torrent['id']);
-        if (isset($torrent['list'])) {
+
+        if (is_array($torrent['list'])) {
             foreach ($torrent['list'] as $key => $value) {
                 $torrent['list'][$key]['size'] = $this->formatSize($value['size']);
             }
         }
-        $peers = $this->_getTorrentPeerService()->getTorrentPeerByTorrent($torrent['id']);
+
         $seeder = $leecher = 0;
-        foreach ($peers as $peer) {
-            if ($peer['seeder'] == 'yes') {
-                $seeder++;
-            } else {
-                $leecher++;
+
+        $peers = $this->_getTorrentPeerService()->getTorrentPeerByTorrent($torrent['id']);
+
+        if (is_array($peers)) {
+            foreach ($peers as $peer) {
+                if ($peer['seeder'] == 'yes') {
+                    $seeder++;
+                } else {
+                    $leecher++;
+                }
             }
         }
+
         $torrent['seeder'] = ($seeder == 0) ? '断种' : $seeder;
         $torrent['leecher'] = $leecher;
+
         $this->torrent = $torrent;
     }
 

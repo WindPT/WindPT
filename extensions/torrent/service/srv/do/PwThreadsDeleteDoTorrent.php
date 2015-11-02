@@ -11,11 +11,15 @@ class PwThreadsDeleteDoTorrent
 
         $torrent = $torrentDs->getTorrentByTid($id);
         $files = $fileDs->getTorrentFileByTorrent($torrent['id']);
-        foreach ($files as $file) {
-            $fileDs->deleteTorrentFile($file['id']);
+
+        if (is_array($files)) {
+            foreach ($files as $file) {
+                $fileDs->deleteTorrentFile($file['id']);
+            }
         }
 
         $torrentDs->deleteTorrent($torrent['id']);
+
         @unlink(WEKIT_PATH . '../torrent/' . $torrent['id'] . '.torrent');
     }
 }

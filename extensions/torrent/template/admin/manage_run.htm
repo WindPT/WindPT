@@ -108,11 +108,13 @@
                                     <li>
                                         <span class="span_3">后缀名(小写)</span>
                                     </li>
+                                    <!--# if (is_array($config['app.torrent.deniedfts'])) { #-->
                                     <!--# foreach ($config['app.torrent.deniedfts'] as $deniedft) { #-->
                                     <li>
                                         <span class="span_3"><input name="deniedfts[]" type="text" class="input length_2" value="{$deniedft}"></span>
                                         <span class="span_4"><a href="#" class="J_ul_list_remove">[删除]</a></span>
                                     </li>
+                                    <!--# } #-->
                                     <!--# } #-->
                                 </ul>
                             </div>

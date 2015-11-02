@@ -38,6 +38,7 @@
                             </tr>
                         </thead>
                         <tbody id="J_groupList">
+                        <!--# if (is_array($allowedClients)) { #-->
                             <!--# foreach ($allowedClients as $allowedClient) { $key = $allowedClient['id'] #-->
                             <tr>
                                 <td>{$key}</td>
@@ -59,6 +60,7 @@
                                 <td><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/doagent')}" class="mr10 J_ajax_del" data-pdata="{'act': 'delete','id': '{$key}'}">[删除]</a></td>
                             </tr>
                             <!--# } #-->
+                        <!--# } #-->
                         </tbody>
                         <tbody id="J_groups_add_temp">
                             <tr>

@@ -63,11 +63,13 @@ class IndexController extends PwBaseController
                     if ($w_type == 12) {
                         // 豆瓣
                         $url = 'https://api.douban.com/v2/movie/subject/' . $wikilink;
+
                         if (!empty(Wekit::C('site', 'app.torrent.titlegen.douban'))) {
                             $url .= '?apikey=' . Wekit::C('site', 'app.torrent.titlegen.douban');
                         }
 
                         $result = json_decode(PwUpdateInfo::curl($url));
+
                         $title = '[' . $result->countries[0] . ']';     // 国别
                         $title .= '[' . $result->year . ']';     // 年份
                         $title .= '[' . $result->title . ']';     // 影片中文名
@@ -209,18 +211,24 @@ class IndexController extends PwBaseController
         Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
 
         // Check if a BitTorrent client
+        $allowed = false;
+
         $allowedClients = $this->_getTorrentAgentDS()->fetchTorrentAgent();
-        foreach ($allowedClients as $allowedClient) {
-            if (!preg_match($allowedClient['agent_pattern'], $agent)) {
-                continue;
-            }
 
-            if ($allowedClient['peer_id_pattern'] == '' || preg_match($allowedClient['peer_id_pattern'], $peerId)) {
-                $allowed = true;
-            }
+        if (is_array($allowedClients)) {
+            foreach ($allowedClients as $allowedClient) {
+                if (!preg_match($allowedClient['agent_pattern'], $agent)) {
+                    continue;
+                }
 
-            break;
+                if ($allowedClient['peer_id_pattern'] == '' || preg_match($allowedClient['peer_id_pattern'], $peerId)) {
+                    $allowed = true;
+                }
+
+                break;
+            }
         }
+
         if (!$allowed) {
             PwAnnounce::showError('This a a bittorrent application and can\'t be loaded into a browser!');
         }
@@ -343,14 +351,16 @@ class IndexController extends PwBaseController
             $WindApi = WindidApi::api('user');
             $pwUser = Wekit::load('user.PwUser');
             $crdtits = $WindApi->getUserCredit($user['uid']);
-            $_credits = Wekit::C('site', 'app.torrent.credits');
             $user_torrents = count($this->_getTorrentDS()->fetchTorrentByUid($user['uid']));
             $histories = $this->_getTorrentHistoryDs()->fetchTorrentHistoryByUid($user['uid']);
 
-            foreach ($histories as $history) {
-                $downloaded_total += $history['downloaded'];
-                $uploaded_total += $history['uploaded'];
+            if (is_array($histories)) {
+                foreach ($histories as $history) {
+                    $downloaded_total += $history['downloaded'];
+                    $uploaded_total += $history['uploaded'];
+                }
             }
+
             unset($histories);
 
             if ($downloaded_total != 0) {
@@ -371,15 +381,19 @@ class IndexController extends PwBaseController
             $m->e('time             = ' . intval($timeUsed));
             $m->e('torrents         = ' . intval($user_torrents));
 
-            foreach ($_credits as $key => $value) {
-                if ($value['enabled'] != '1') {
-                    continue;
+            $_credits = Wekit::C('site', 'app.torrent.credits');
+
+            if (is_array($_credits)) {
+                foreach ($_credits as $key => $value) {
+                    if ($value['enabled'] != '1') {
+                        continue;
+                    }
+
+                    $m->e('credit = ' . intval($crdtits['credit' . $key]));
+
+                    $changes[$key] = intval($m->e($exp));
+                    $changed++;
                 }
-
-                $m->e('credit = ' . intval($crdtits['credit' . $key]));
-
-                $changes[$key] = intval($m->e($exp));
-                $changed++;
             }
 
             if ($changed) {
@@ -569,19 +583,21 @@ class IndexController extends PwBaseController
 
         $torrents = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUid($this->loginUser->uid);
 
-        foreach ($torrents as $torrent) {
-            if ($torrent['disabled'] > 0 && !in_array($user['groupid'], array(3, 4, 5))) {
-                continue;
+        if (is_array($torrents)) {
+            foreach ($torrents as $torrent) {
+                if ($torrent['disabled'] > 0 && !in_array($user['groupid'], array(3, 4, 5))) {
+                    continue;
+                }
+                echo '<item>';
+                echo '<title><![CDATA[' . $torrent['filename'] . ']]></title>';
+                echo '<link><![CDATA[' . WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid']) . ']]></link>';
+                echo '<pubDate>' . date('D, d M Y H:i:s O', $torrent['created_time']) . '</pubDate>';
+                echo '<description><![CDATA[' . $torrent['subject'] . ']]></description>';
+                echo '<enclosure type="application/x-bittorrent" length="' . $torrent['size'] . '" url="' . str_replace('&', '&amp;', WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['torrent'] . '&passkey=' . $passkey)) . '" />';
+                echo '<author><![CDATA[' . $torrent['created_username'] . ']]></author>';
+                echo '<category domain="' . WindUrlHelper::createUrl('/bbs/thread/run?fid=' . $torrent['fid']) . '"><![CDATA[' . $torrent['name'] . ']]></category>';
+                echo '</item>';
             }
-            echo '<item>';
-            echo '<title><![CDATA[' . $torrent['filename'] . ']]></title>';
-            echo '<link><![CDATA[' . WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid']) . ']]></link>';
-            echo '<pubDate>' . date('D, d M Y H:i:s O', $torrent['created_time']) . '</pubDate>';
-            echo '<description><![CDATA[' . $torrent['subject'] . ']]></description>';
-            echo '<enclosure type="application/x-bittorrent" length="' . $torrent['size'] . '" url="' . str_replace('&', '&amp;', WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['torrent'] . '&passkey=' . $passkey)) . '" />';
-            echo '<author><![CDATA[' . $torrent['created_username'] . ']]></author>';
-            echo '<category domain="' . WindUrlHelper::createUrl('/bbs/thread/run?fid=' . $torrent['fid']) . '"><![CDATA[' . $torrent['name'] . ']]></category>';
-            echo '</item>';
         }
 
         echo '</channel>';

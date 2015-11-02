@@ -51,6 +51,7 @@
                     <col width="100" />
                     <col width="80" />
                     <col />
+                    <!--# if (is_array($creditType)) { #-->
                     <!--# foreach ($creditType as $key => $type) { #-->
                     <tr>
                         <th>{$type}</th>
@@ -62,6 +63,7 @@
                             <input type="text" name="credits[{$key}][func]" class="input" value="{$config['app.torrent.credits'][$key]['func']}" style="width: 100%;">
                         </td>
                     </tr>
+                    <!--# } #-->
                     <!--# } #-->
                     <tr>
                         <td colspan="3">可用的变量： downloaded 当前种子下载量, downloaded_total 用户总下载量, uploaded 当前种子上传量, uploaded_total 用户总上传量, rotio 当前种子分享率, rotio_total 用户总分享率, time 当前peer连接时长, credit 当前积分持有量, torrents 用户发布种子数</td>
