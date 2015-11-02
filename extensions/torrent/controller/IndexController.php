@@ -360,17 +360,25 @@ class IndexController extends PwBaseController
             }
 
             $timeUsed = time() - strtotime($self['started']);
-            $symbol = array('%downloaded%', '%downloaded_total%', '%uploaded%', '%uploaded_total%', '%rotio%', '%rotio_total%', '%time%', '%credit%', '%torrents%');
-            $numbers = array(intval($downloaded), intval($downloaded_total), intval($uploaded), intval($uploaded_total), intval($rotio), intval($rotio_total), intval($timeUsed), 0, intval($user_torrents));
+
+            $m = Wekit::load('EXT:torrent.service.srv.helper.PwEvalmath');
+            $m->e('downloaded       = ' . intval($downloaded));
+            $m->e('downloaded_total = ' . intval($downloaded_total));
+            $m->e('uploaded         = ' . intval($uploaded));
+            $m->e('uploaded_total   = ' . intval($uploaded_total));
+            $m->e('rotio            = ' . intval($rotio));
+            $m->e('rotio_total      = ' . intval($rotio_total));
+            $m->e('time             = ' . intval($timeUsed));
+            $m->e('torrents         = ' . intval($user_torrents));
+
             foreach ($_credits as $key => $value) {
                 if ($value['enabled'] != '1') {
                     continue;
                 }
 
-                $numbers[7] = intval($crdtits['credit' . $key]);
-                $exp = str_replace($symbol, $numbers, $value['func']);
-                $credit_c = PwAnnounce::cal($exp);
-                $changes[$key] = $credit_c;
+                $m->e('credit = ' . intval($crdtits['credit' . $key]));
+
+                $changes[$key] = intval($m->e($exp));
                 $changed++;
             }
 

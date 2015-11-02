@@ -78,8 +78,7 @@ class ManageController extends AdminBaseController
 
     public function docreditAction()
     {
-        list($creditifopen, $credits, $calfunc, $calcmd) = $this->getInput(array('creditifopen', 'credits', 'calfunc', 'calcmd'), 'post');
-        $_calcmd = array('expr', 'bc', 'dc');
+        list($creditifopen, $credits) = $this->getInput(array('creditifopen', 'credits'), 'post');
         $_credits = array();
         !$credits && $credits = array();
         foreach ($credits as $key => $credit) {
@@ -89,16 +88,9 @@ class ManageController extends AdminBaseController
 
             $_credits[$key] = $credit;
         }
-        if ($calfunc == 'exec' && !in_array($calcmd, $_calcmd)) {
-            $calcmd = 'bc';
-        }
-
-        if ($calfunc == 'curl' && in_array($calcmd, $_calcmd)) {
-            $calcmd = '';
-        }
 
         $config = new PwConfigSet('site');
-        $config->set('app.torrent.creditifopen', intval($creditifopen))->set('app.torrent.credits', $_credits)->set('app.torrent.calfunc', $calfunc)->set('app.torrent.calcmd', $calcmd)->flush();
+        $config->set('app.torrent.creditifopen', intval($creditifopen))->set('app.torrent.credits', $_credits)->flush();
         $this->showMessage('ADMIN:success');
     }
 

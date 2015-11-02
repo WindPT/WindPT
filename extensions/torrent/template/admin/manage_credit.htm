@@ -64,56 +64,7 @@
                     </tr>
                     <!--# } #-->
                     <tr>
-                        <td colspan="3">可用的变量： %downloaded% 当前种子下载量（增量）, %downloaded_total% 用户总下载量, %uploaded% 当前种子上传量（增量）, %uploaded_total% 用户总上传量, %rotio% 当前种子分享率, %rotio_total% 用户总分享率, %time% 当前peer连接时长, %credit% 当前积分持有量, %torrents% 用户发布种子数</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="h_a">运算器设置</div>
-            <div class="table_full">
-                <table width="100%">
-                    <col class="th" />
-                    <col width="400" />
-                    <col />
-                    <tr>
-                        <th>
-                            <label>
-                                <input type="radio" name="calfunc" value="exec" {@pw::ifcheck($config[ 'app.torrent.calfunc'] !='curl' )}><span>exec()</span></label>
-                        </th>
-                        <td>
-                            <!--# if ($config['app.torrent.calfunc'] != 'curl') { #-->
-                            <ul class="switch_list cc">
-                                <li>
-                                    <label>
-                                        <input type="radio" name="calcmd" value="expr" {@Pw::ifcheck($config[ 'app.torrent.calcmd']=='expr' )}><span>expr</span></label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="radio" name="calcmd" value="bc" {@pw::ifcheck($config[ 'app.torrent.calcmd']=='bc' )}><span>bc -l</span></label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="radio" name="calcmd" value="dc" {@Pw::ifcheck($config[ 'app.torrent.calcmd']=='dc' )}><span>dc</span></label>
-                                </li>
-                            </ul>
-                            <!--# } #-->
-                        </td>
-                        <td>
-                            <div class="fun_tips">使用 Linux 系统指令进行计算，有一定风险</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <label>
-                                <input type="radio" name="calfunc" value="curl" {@pw::ifcheck($config[ 'app.torrent.calfunc']=='curl' )}><span>curl()</span></label>
-                        </th>
-                        <td>
-                            <!--# if ($config['app.torrent.calfunc'] == 'curl') { #-->
-                            <input type="text" name="calcmd" class="input" value="{$config['app.torrent.calcmd']}" style="width: 100%;">
-                            <!--# } #-->
-                        </td>
-                        <td>
-                            <div class="fun_tips">使用 curl 借助远程服务进行运算，需要专门后端支持，用 %s 取代 URL 中的算式部分</div>
-                        </td>
+                        <td colspan="3">可用的变量： downloaded 当前种子下载量, downloaded_total 用户总下载量, uploaded 当前种子上传量, uploaded_total 用户总上传量, rotio 当前种子分享率, rotio_total 用户总分享率, time 当前peer连接时长, credit 当前积分持有量, torrents 用户发布种子数</td>
                     </tr>
                 </table>
             </div>

@@ -13,31 +13,6 @@ class PwAnnounce
         exit(0);
     }
 
-    public static function cal($exp)
-    {
-        if (Wekit::C('site', 'app.torrent.calfunc') == 'curl') {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, str_replace('%s', urlencode($exp), Wekit::C('site', 'app.torrent.calcmd')));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            $result = curl_exec($ch);
-            curl_close($ch);
-        } else {
-            switch (Wekit::C('site', 'app.torrent.calcmd') == 'expr') {
-                case 'expr':
-                    $cmd = 'xargs expr';
-                    break;
-                case 'dc':
-                    $cmd = 'dc';
-                    break;
-                default:
-                    $cmd = 'bc -l';
-            }
-            $result = exec('echo ' . escapeshellarg($exp) . ' | ' . $cmd);
-        }
-        return intval($result);
-    }
-
     public static function getPeersByTorrentId($torrent_id = 0, $peer_id = '')
     {
         $peer_list = self::_getTorrentPeerDS()->getTorrentPeerByTorrent($torrent_id);
