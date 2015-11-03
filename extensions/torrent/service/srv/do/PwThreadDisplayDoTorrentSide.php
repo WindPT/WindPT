@@ -3,6 +3,7 @@
 defined('WEKIT_VERSION') || exit('Forbidden');
 
 Wind::import('SRV:forum.srv.threadDisplay.do.PwThreadDisplayDoBase');
+Wind::import('EXT:torrent.service.srv.helper.PwUtils');
 
 class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
 {
@@ -19,8 +20,6 @@ class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
         $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($user['uid']);
         $histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($user['uid']);
 
-        $posted = count($torrents);
-
         if (is_array($histories)) {
             foreach ($histories as $history) {
                 $downloaded_total += $history['downloaded'];
@@ -28,15 +27,12 @@ class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
             }
         }
 
-        $downloaded_total = floor($downloaded_total / 1048567);
-        $uploaded_total = floor($uploaded_total / 1048567);
-
         if ($downloaded_total != 0) {
             $rotio = round($uploaded_total / $downloaded_total, 2);
         } else {
             $rotio = 'Inf.';
         }
 
-        echo '<div id="PTInfo">下载： ' . $downloaded_total . ' M<br>上传： ' . $uploaded_total . ' M<br>分享率： ' . $rotio . '<br>发布： ' . $posted . '</div>';
+        echo '<div id="PTInfo">下载： ' . PwUtils::readableDataTransfer($downloaded_total) . '<br>上传： ' . PwUtils::readableDataTransfer($uploaded_total) . '<br>分享率： ' . $rotio . '<br>发布： ' . count($torrents) . '</div>';
     }
 }

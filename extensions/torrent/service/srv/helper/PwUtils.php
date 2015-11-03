@@ -20,4 +20,33 @@ class PwUtils
         curl_close($ch);
         return $output;
     }
+
+    public static function readableDataTransfer($byte)
+    {
+        if ($byte > 1024) {
+            $kbytes = round($byte / 1024, 2);
+
+            if ($kbytes > 1024) {
+                $mbytes = round($kbytes / 1024, 2);
+
+                if ($mbytes > 1024) {
+                    $gbytes = round($mbytes / 1024, 2);
+
+                    if ($gbytes > 1024) {
+                        $result = round($gbytes / 1024, 2) . ' TB';
+                    } else {
+                        $result = $gbytes . ' GB';
+                    }
+                } else {
+                    $result = $mbytes . ' MB';
+                }
+            } else {
+                $result = $kbytes . ' KB';
+            }
+        } else {
+            $result = $byte . ' B';
+        }
+
+        return $result;
+    }
 }

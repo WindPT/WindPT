@@ -2,6 +2,8 @@
 
 defined('WEKIT_VERSION') || exit('Forbidden');
 
+Wind::import('EXT:torrent.service.srv.helper.PwUtils');
+
 class PwSpaceProfileDoTorrent
 {
     public function appDo($space)
@@ -18,17 +20,12 @@ class PwSpaceProfileDoTorrent
 
         $passkey = $user['passkey'];
 
-        $posted = count($torrents);
-
         if (is_array($histories)) {
             foreach ($histories as $history) {
                 $downloaded_total += $history['downloaded'];
                 $uploaded_total += $history['uploaded'];
             }
         }
-
-        $downloaded_total = floor($downloaded_total / 1048567);
-        $uploaded_total = floor($uploaded_total / 1048567);
 
         if ($downloaded_total != 0) {
             $rotio = round($uploaded_total / $downloaded_total, 2);
@@ -42,10 +39,10 @@ class PwSpaceProfileDoTorrent
             echo '<dl class="cc"><dt>订阅地址：</dt><dd><a href="' . WindUrlHelper::createUrl('/app/torrent/index/rss?uid=' . $space->{'spaceUid'} . '&passkey=' . $passkey) . '">RSS 链接（请勿泄露）</a><a href="' . WindUrlHelper::createUrl('/app/torrent/index/my') . '" class="btn">管理</a></dd></dl>';
         }
 
-        echo '<dl class="cc"><dt>下载：</dt><dd>' . $downloaded_total . ' M</dd></dl>';
-        echo '<dl class="cc"><dt>上传：</dt><dd>' . $uploaded_total . ' M</dd></dl>';
+        echo '<dl class="cc"><dt>下载：</dt><dd>' . PwUtils::readableDataTransfer($downloaded_total) . '</dd></dl>';
+        echo '<dl class="cc"><dt>上传：</dt><dd>' . PwUtils::readableDataTransfer($uploaded_total) . '</dd></dl>';
         echo '<dl class="cc"><dt>分享率：</dt><dd>' . $rotio . '</dd></dl>';
-        echo '<dl class="cc"><dt>发布：</dt><dd>' . $posted . '</dd></dl>';
+        echo '<dl class="cc"><dt>发布：</dt><dd>' . count($torrents) . '</dd></dl>';
         echo '</div>';
     }
 }
