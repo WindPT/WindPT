@@ -76,11 +76,12 @@ class IndexController extends PwBaseController
 
                         // 又名
                         $title .= '[';
+                        $i = 0;
                         foreach ($result->aka as $aka) {
-                            if ($aka != $result->title) {
+                            if ($i <= 2 && $aka != $result->title) {
                                 $title .= $aka . ' / ';
+                                $i++;
                             }
-
                         }
                         $title = substr($title, 0, strlen($title) - 3);
                         $title .= ']';
