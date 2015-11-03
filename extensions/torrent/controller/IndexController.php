@@ -230,6 +230,8 @@ class IndexController extends PwBaseController
         }
 
         if (!$allowed) {
+            header('Location: ' . WindUrlHelper::createUrl('/'));
+
             PwAnnounce::showError('This a a bittorrent application and can\'t be loaded into a browser!');
         }
 
