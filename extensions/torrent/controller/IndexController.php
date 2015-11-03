@@ -24,7 +24,7 @@ class IndexController extends PwBaseController
             $paras_oname = $this->getInput('oname', 'post');
             $paras_lang = $this->getInput('lang', 'post');
 
-            Wind::import('EXT:torrent.service.srv.helper.PwUpdateInfo');
+            Wind::import('EXT:torrent.service.srv.helper.PwUtils');
 
             switch ($t_type) {
                 case '1':
@@ -34,7 +34,7 @@ class IndexController extends PwBaseController
                         $url .= '?apikey=' . Wekit::C('site', 'app.torrent.titlegen.douban');
                     }
 
-                    $result = json_decode(PwUpdateInfo::curl($url));
+                    $result = json_decode(PwUtils::curl($url));
                     $title = '[' . $result->pubdate . ']';     // 年份
                     $title .= '[' . $result->title . ']';     // 标题
 
@@ -72,7 +72,7 @@ class IndexController extends PwBaseController
                             $url .= '?apikey=' . Wekit::C('site', 'app.torrent.titlegen.douban');
                         }
 
-                        $result = json_decode(PwUpdateInfo::curl($url));
+                        $result = json_decode(PwUtils::curl($url));
 
                         $title = '[' . $result->countries[0] . ']';     // 国别
                         $title .= '[' . $result->year . ']';     // 年份
@@ -122,7 +122,7 @@ class IndexController extends PwBaseController
                     } elseif ($w_type == 2) {
                         // IMDB
                         $url = 'http://omdbapi.com/?i=' . $wikilink;
-                        $result = json_decode(PwUpdateInfo::curl($url));
+                        $result = json_decode(PwUtils::curl($url));
                         $title = '[' . $result->Country . ']';     // 国别
                         $title .= '[' . $result->Year . ']';     // 年份
                         $title .= '[' . $result->Title . ']';     // 影片名
@@ -158,7 +158,7 @@ class IndexController extends PwBaseController
                         $url .= '?apikey=' . Wekit::C('site', 'app.torrent.titlegen.douban');
                     }
 
-                    $result = json_decode(PwUpdateInfo::curl($url));
+                    $result = json_decode(PwUtils::curl($url));
                     $title = '[' . $result->attrs->pubdate . ']';     // 年份
                     $title .= '[' . $result->attrs->title . ']';     // 标题
                     $title .= '[' . $result->attrs->singer . ']';     // 艺人

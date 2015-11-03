@@ -2,7 +2,7 @@
 
 defined('WEKIT_VERSION') || exit('Forbidden');
 
-class PwUpdateInfo
+class PwUtils
 {
     public static function curl($url)
     {
