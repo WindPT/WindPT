@@ -11,7 +11,8 @@ This extension is designed to work with PHPWind 9.x, and `local search` plugin (
 
 If you find any bugs or mistakes, please let me know by submitting issues or making pull requests.
 
-**You should create a directory named `torrent` with mask 0755 under the root of PHPWind manually if php have no permission to `write`.**
+* You should create a directory named `torrent` with mask 0755 under the root of PHPWind manually if php have no permission to `write`.
+* This extension and its bundled theme should be enabled manually on the Dashboard of PHPWind.
 
 ```
 /
