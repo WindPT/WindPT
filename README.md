@@ -7,11 +7,11 @@ WindPT
 
 [![Releases Downloads](https://img.shields.io/github/downloads/labs7in0/WindPT/latest/total.svg)](https://github.com/labs7in0/WindPT/releases/latest)
 
-This project is still in early stage, DO NOT use it on production environment, pull requests are welcome.
+This project is still under development, pull requests and issues are welcome.
 
 This extension is designed to work with PHPWind 9.x, and `local search` plugin (a 3rd extension) is required by the theme bundled with this extension.
 
-If you find any bugs or mistakes, please let me know by submitting issues or making pull requests.
+## HOWTO
 
 * You should create a directory named `torrent` with mask 0755 under the root of PHPWind manually if php have no permission to `write`.
 * This extension and its bundled theme should be enabled manually on the Dashboard of PHPWind.
@@ -34,7 +34,7 @@ If you find any bugs or mistakes, please let me know by submitting issues or mak
 
 [Donate us](https://7in0.me/#donate)
 
-##License
+## License
 
 GNU GENERAL PUBLIC LICENSE Version 2
 
