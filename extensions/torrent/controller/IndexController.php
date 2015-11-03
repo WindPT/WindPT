@@ -6,6 +6,13 @@ class IndexController extends PwBaseController
 {
     private $passkey;
 
+    public function run()
+    {
+        header('Location: ' . WindUrlHelper::createUrl('/'));
+
+        exit();
+    }
+
     public function updateInfoAction()
     {
         if (Wekit::C('site', 'app.torrent.titlegen.ifopen') > 0) {
