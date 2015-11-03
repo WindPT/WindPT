@@ -46,8 +46,12 @@ class IndexController extends PwBaseController
                     // 作者
                     if ($result->author) {
                         $title .= '[';
+                        $i = 0;
                         foreach ($result->author as $author) {
-                            $title .= $author . ' / ';
+                            if ($i <= 2) {
+                                $title .= $author . ' / ';
+                                $i++;
+                            }
                         }
                         $title = substr($title, 0, strlen($title) - 3);
                         $title .= ']';
@@ -93,8 +97,12 @@ class IndexController extends PwBaseController
 
                         // 类型
                         $title .= '[';
+                        $i = 0;
                         foreach ($result->genres as $genre) {
-                            $title .= $genre . ' / ';
+                            if ($i <= 2) {
+                                $title .= $genre . ' / ';
+                                $i++;
+                            }
                         }
                         $title = substr($title, 0, strlen($title) - 3);
                         $title .= ']';
