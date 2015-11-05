@@ -14,9 +14,9 @@ class PwSpaceProfileDoTorrent
             return;
         }
 
-        $user = Wekit::load('EXT:torrent.service.PwTorrentUser')->getTorrentUserByUid($space->{'spaceUid'});
-        $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($space->{'spaceUid'});
-        $histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($space->{'spaceUid'});
+        $user = Wekit::load('EXT:torrent.service.PwTorrentUser')->getTorrentUserByUid($space->spaceUid);
+        $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($space->spaceUid);
+        $histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($space->spaceUid);
 
         $passkey = $user['passkey'];
 
@@ -34,7 +34,7 @@ class PwSpaceProfileDoTorrent
         }
 
         echo '<div class="space_profile"><h3><strong>PT个人信息</strong></h3>';
-        if ($space->{'visitUid'} == $space->{'spaceUid'}) {
+        if ($space->visitUid == $space->spaceUid) {
             echo '<dl class="cc"><dt>Passkey：</dt><dd><span id="passkey" style="background-color:rgb(51,51,51); color:rgb(51,51,51);">' . $passkey . '</span>&nbsp;<button class="btn" id="btnToggle" onclick="if ($(\'#btnToggle\').text() == \'显示\') {$(\'#passkey\').css(\'background\', \'white\'); $(\'#btnToggle\').text(\'隐藏\');} else {$(\'#passkey\').css(\'background\', \'rgb(51,51,51)\');$(\'#btnToggle\').text(\'显示\');}">显示</button></dd></dl>';
             echo '<dl class="cc"><dt>订阅地址：</dt><dd><a href="' . WindUrlHelper::createUrl('/app/torrent/index/rss?passkey=' . $passkey) . '">RSS 链接（请勿泄露）</a><a href="' . WindUrlHelper::createUrl('/app/torrent/index/my') . '" class="btn">管理</a></dd></dl>';
         }
