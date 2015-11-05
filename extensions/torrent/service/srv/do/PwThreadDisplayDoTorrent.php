@@ -20,14 +20,17 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
     public function getData()
     {
         $torrent = $this->_getTorrentService()->getTorrentByTid($this->tid);
+
+        Wind::import('EXT:torrent.service.srv.helper.PwUtils');
+
         $torrent['seeders'] = $torrent['seeders'] + 1;
-        $torrent['size'] = $this->formatSize($torrent['size']);
-        $torrent['info_hash'] = $this->formatHash($torrent['info_hash']);
+        $torrent['size'] = PwUtils::readableDataTransfer($torrent['size']);
+        $torrent['info_hash'] = PwUtils::readableHash($torrent['info_hash']);
         $torrent['list'] = $this->_getTorrentFileService()->getTorrentFileByTorrent($torrent['id']);
 
         if (is_array($torrent['list'])) {
             foreach ($torrent['list'] as $key => $value) {
-                $torrent['list'][$key]['size'] = $this->formatSize($value['size']);
+                $torrent['list'][$key]['size'] = PwUtils::readableDataTransfer($value['size']);
             }
         }
 
@@ -55,26 +58,6 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
     {
         if ($read['pid'] == 0 && isset($this->torrent)) {
             PwHook::template('displayReadTorrentHtml', 'EXT:torrent.template.read_injector_before_torrent', true, $this->torrent);
-        }
-    }
-
-    private function formatHash($hash)
-    {
-        return preg_replace_callback('/./s', create_function('$matches', 'return sprintf("%02x", ord($matches[0]));'), str_pad($hash, 20));
-    }
-
-    private function formatSize($bytes)
-    {
-        if ($bytes < 1000 * 1024) {
-            return number_format($bytes / 1024, 2) . " KB";
-        } elseif ($bytes < 1000 * 1048576) {
-            return number_format($bytes / 1048576, 2) . " MB";
-        } elseif ($bytes < 1000 * 1073741824) {
-            return number_format($bytes / 1073741824, 2) . " GB";
-        } elseif ($bytes < 1000 * 1099511627776) {
-            return number_format($bytes / 1099511627776, 3) . " TB";
-        } else {
-            return number_format($bytes / 1125899906842624, 3) . " PB";
         }
     }
 

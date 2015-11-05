@@ -21,32 +21,23 @@ class PwUtils
         return $output;
     }
 
-    public static function readableDataTransfer($byte)
+    public static function readableDataTransfer($bytes)
     {
-        if ($byte > 1024) {
-            $kbytes = round($byte / 1024, 2);
-
-            if ($kbytes > 1024) {
-                $mbytes = round($kbytes / 1024, 2);
-
-                if ($mbytes > 1024) {
-                    $gbytes = round($mbytes / 1024, 2);
-
-                    if ($gbytes > 1024) {
-                        $result = round($gbytes / 1024, 2) . ' TB';
-                    } else {
-                        $result = $gbytes . ' GB';
-                    }
-                } else {
-                    $result = $mbytes . ' MB';
-                }
-            } else {
-                $result = $kbytes . ' KB';
-            }
+        if ($bytes < 1048576) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        } elseif ($bytes < 1073741824) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes < 1099511627776) {
+            return number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes < 1125899906842624) {
+            return number_format($bytes / 1099511627776, 3) . ' TB';
         } else {
-            $result = $byte . ' B';
+            return number_format($bytes / 1125899906842624, 3) . ' PB';
         }
+    }
 
-        return $result;
+    public static function readableHash($hash)
+    {
+        return preg_replace_callback('/./s', create_function('$matches', 'return sprintf("%02x", ord($matches[0]));'), str_pad($hash, 20));
     }
 }
