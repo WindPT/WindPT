@@ -285,7 +285,7 @@ class IndexController extends PwBaseController
 
         // Check if torrent was removed
         $topic = Wekit::load('forum.PwThread')->getThread($torrent['tid']);
-        if ($topic['disabled'] > 0 && !in_array($user['groupid'], array(3, 4, 5))) {
+        if ($topic['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
             PwAnnounce::showError('Torrent removed!');
         }
 
@@ -477,7 +477,7 @@ class IndexController extends PwBaseController
 
         // Check if torrent was removed
         $topic = Wekit::load('forum.PwThread')->getThread($torrent['tid']);
-        if ($topic['disabled'] > 0 && !in_array($user['groupid'], array(3, 4, 5))) {
+        if ($topic['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
             $this->showError('种子已被删除！');
         }
 
@@ -608,9 +608,10 @@ class IndexController extends PwBaseController
 
         if (is_array($torrents)) {
             foreach ($torrents as $torrent) {
-                if ($torrent['disabled'] > 0 && !in_array($user['groupid'], array(3, 4, 5))) {
+                if ($torrent['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
                     continue;
                 }
+
                 echo '<item>';
                 echo '<title><![CDATA[' . $torrent['filename'] . ']]></title>';
                 echo '<link><![CDATA[' . WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid']) . ']]></link>';
