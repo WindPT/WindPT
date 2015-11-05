@@ -31,6 +31,16 @@ class IndexController extends PwBaseController
             $paras_oname = $this->getInput('oname', 'post');
             $paras_lang = $this->getInput('lang', 'post');
 
+            if (!$this->loginUser->uid) {
+                $this->showError('必须登录才能进行本操作！');
+            }
+
+            // Check if user was banned
+            $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($this->loginUser->uid);
+            if ($userBan) {
+                $this->showError('用户处于封禁期！');
+            }
+
             Wind::import('EXT:torrent.service.srv.helper.PwUtils');
 
             switch ($t_type) {
