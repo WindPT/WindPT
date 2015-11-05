@@ -15,6 +15,7 @@ This extension is designed to work with PHPWind 9.x, and `local search` plugin (
 
 * You should create a directory named `torrent` with mask 0755 under the root of PHPWind manually if php have no permission to `write`.
 * This extension and its bundled theme should be enabled manually on the Dashboard of PHPWind.
+* Do not forget to add cron jobs on the Dashboard of PHPWind if you need the crons bundled in.
 
 ```
 /
