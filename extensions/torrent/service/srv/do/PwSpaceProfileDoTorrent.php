@@ -17,7 +17,7 @@ class PwSpaceProfileDoTorrent
         $user = Wekit::load('EXT:torrent.service.PwTorrentUser')->getTorrentUserByUid($space->spaceUid);
         $histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($space->spaceUid);
 
-        $this->torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($space->spaceUid);
+        $this->torrents = Wekit::load('forum.PwThread')->getThreadByUid($space->spaceUid);
 
 
         $this->passkey = $user['passkey'];

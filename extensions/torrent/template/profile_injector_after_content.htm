@@ -3,6 +3,12 @@
         #passkey.covered {
             background: rgb(51,51,51);
         }
+
+        #posted li {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
     </style>
     <div class="space_profile">
         <h3><strong>Tracker个人信息</strong></h3>
@@ -37,14 +43,29 @@
         </dl>
         <dl class="cc">
             <dt>发布：</dt>
-            <dd>{@count($pargs->torrents)}</dd>
+            <dd>{@count($pargs->torrents)}&nbsp;<button class="btn" id="btnTogglePosted">显示/隐藏</button></dd>
         </dl>
+        <div id="posted">
+            <!--# if (is_array($pargs->torrents)) { #-->
+            <!--# foreach($pargs->torrents as $torrent) { #-->
+            <ul>
+                <li><a href="{@WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid'])}">{$torrent['subject']}</a></li>
+            </ul>
+            <!--# } #-->
+            <!--# } #-->
+        </div>
     </div>
 
     <script>
     Wind.ready(function() {
+        $('#posted').hide();
+
         $('#btnTogglePasskey').click(function() {
             $('#passkey').toggleClass('covered');
+        });
+
+        $('#btnTogglePosted').click(function() {
+            $('#posted').slideToggle();
         });
     });
     </script>
