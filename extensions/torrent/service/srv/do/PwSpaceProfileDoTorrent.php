@@ -15,10 +15,12 @@ class PwSpaceProfileDoTorrent
         }
 
         $user = Wekit::load('EXT:torrent.service.PwTorrentUser')->getTorrentUserByUid($space->spaceUid);
-        $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($space->spaceUid);
         $histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($space->spaceUid);
 
-        $passkey = $user['passkey'];
+        $this->torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($space->spaceUid);
+
+
+        $this->passkey = $user['passkey'];
 
         if (is_array($histories)) {
             foreach ($histories as $history) {
@@ -28,21 +30,14 @@ class PwSpaceProfileDoTorrent
         }
 
         if ($downloaded_total != 0) {
-            $rotio = round($uploaded_total / $downloaded_total, 2);
+            $this->rotio = round($uploaded_total / $downloaded_total, 2);
         } else {
-            $rotio = 'Inf.';
+            $this->rotio = 'Inf.';
         }
 
-        echo '<div class="space_profile"><h3><strong>PT个人信息</strong></h3>';
-        if ($space->visitUid == $space->spaceUid) {
-            echo '<dl class="cc"><dt>Passkey：</dt><dd><span id="passkey" style="background-color:rgb(51,51,51); color:rgb(51,51,51);">' . $passkey . '</span>&nbsp;<button class="btn" id="btnToggle" onclick="if ($(\'#btnToggle\').text() == \'显示\') {$(\'#passkey\').css(\'background\', \'white\'); $(\'#btnToggle\').text(\'隐藏\');} else {$(\'#passkey\').css(\'background\', \'rgb(51,51,51)\');$(\'#btnToggle\').text(\'显示\');}">显示</button></dd></dl>';
-            echo '<dl class="cc"><dt>订阅地址：</dt><dd><a href="' . WindUrlHelper::createUrl('/app/torrent/index/rss?passkey=' . $passkey) . '">RSS 链接（请勿泄露）</a><a href="' . WindUrlHelper::createUrl('/app/torrent/index/my') . '" class="btn">管理</a></dd></dl>';
-        }
+        $this->downloaded_total = PwUtils::readableDataTransfer($downloaded_total);
+        $this->uploaded_total = PwUtils::readableDataTransfer($uploaded_total);
 
-        echo '<dl class="cc"><dt>下载：</dt><dd>' . PwUtils::readableDataTransfer($downloaded_total) . '</dd></dl>';
-        echo '<dl class="cc"><dt>上传：</dt><dd>' . PwUtils::readableDataTransfer($uploaded_total) . '</dd></dl>';
-        echo '<dl class="cc"><dt>分享率：</dt><dd>' . $rotio . '</dd></dl>';
-        echo '<dl class="cc"><dt>发布：</dt><dd>' . count($torrents) . '</dd></dl>';
-        echo '</div>';
+        PwHook::template('displayProfileTorrentHtml', 'EXT:torrent.template.profile_injector_after_content', true, $this);
     }
 }

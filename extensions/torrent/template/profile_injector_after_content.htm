@@ -1,0 +1,51 @@
+<hook-action name="displayProfileTorrentHtml" args='pargs'>
+    <style>
+        #passkey.covered {
+            background: rgb(51,51,51);
+        }
+    </style>
+    <div class="space_profile">
+        <h3><strong>Tracker个人信息</strong></h3>
+        <!--# if ($space->visitUid == $space->spaceUid) { #-->
+        <dl class="cc">
+            <dt>Passkey：</dt>
+            <dd>
+                <span class="covered" id="passkey" style="color:rgb(51,51,51);">{$pargs->passkey}</span>&nbsp;
+                <button class="btn" id="btnTogglePasskey">显示/隐藏</button>
+            </dd>
+        </dl>
+
+        <dl class="cc">
+            <dt>订阅地址：</dt>
+            <dd>
+                <a href="{@WindUrlHelper::createUrl('/app/torrent/index/rss?passkey=' . $pargs->passkey)}">RSS 链接（请勿泄露）</a>&nbsp;<a href="{@WindUrlHelper::createUrl('/app/torrent/index/my')}" class="btn">管理</a>
+            </dd>
+        </dl>
+        <!--# } #-->
+
+        <dl class="cc">
+            <dt>下载：</dt>
+            <dd>{$pargs->downloaded_total}</dd>
+        </dl>
+        <dl class="cc">
+            <dt>上传：</dt>
+            <dd>{$pargs->uploaded_total}</dd>
+        </dl>
+        <dl class="cc">
+            <dt>分享率：</dt>
+            <dd>{$pargs->rotio}</dd>
+        </dl>
+        <dl class="cc">
+            <dt>发布：</dt>
+            <dd>{@count($pargs->torrents)}</dd>
+        </dl>
+    </div>
+
+    <script>
+    Wind.ready(function() {
+        $('#btnTogglePasskey').click(function() {
+            $('#passkey').toggleClass('covered');
+        });
+    });
+    </script>
+</hook>
