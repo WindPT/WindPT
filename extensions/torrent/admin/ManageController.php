@@ -36,18 +36,6 @@ class ManageController extends AdminBaseController
         $this->setOutput($allowedClients, 'allowedClients');
     }
 
-    public function themeAction()
-    {
-        $service = $this->_loadConfigService();
-        $config = $service->getValues('site');
-        if ($config['theme.site.default'] == 'pt') {
-            $this->setOutput($config, 'config');
-        } else {
-            $this->setTemplate('');
-            echo '必须使用 PT 专用主题才能进行设置。';
-        }
-    }
-
     public function dorunAction()
     {
         list($showuserinfo, $titlegenifopen, $titlegendouban, $check, $deniedfts, $torrentnameprefix, $peertimeout, $torrentimeout) = $this->getInput(array('showuserinfo', 'titlegenifopen', 'titlegendouban', 'check', 'deniedfts', 'torrentnameprefix', 'peertimeout', 'torrentimeout'), 'post');
@@ -75,6 +63,12 @@ class ManageController extends AdminBaseController
 
         if (!empty($deniedfts)) {
             $config->set('app.torrent.deniedfts', $_deniedfts);
+        }
+
+        $sconfig = $this->_loadConfigService()->getValues('site');
+        if ($sconfig['theme.site.default'] == 'pt') {
+            $showpeers = $this->getInput('showpeers', 'post');
+            $config->set('app.torrent.theme.showpeers', $showpeers);
         }
 
         $config->flush();
@@ -138,17 +132,6 @@ class ManageController extends AdminBaseController
                 }
             }
         }
-
-        $this->showMessage('ADMIN:success');
-    }
-
-    public function dothemeAction()
-    {
-        $showpeers = $this->getInput('showpeers', 'post');
-
-        $config = new PwConfigSet('site');
-        $config->set('app.torrent.theme.showpeers', $showpeers);
-        $config->flush();
 
         $this->showMessage('ADMIN:success');
     }

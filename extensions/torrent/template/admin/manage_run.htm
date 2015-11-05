@@ -12,9 +12,6 @@
                 <li class="current"><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/run')}">基本设置</a></li>
                 <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/agent')}">客户端设置</a></li>
                 <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/credit')}">积分设置</a></li>
-                <!--# if($config['theme.site.default']=='pt') { #-->
-                <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/theme')}">主题设置</a></li>
-                <!--# } #-->
             </ul>
         </div>
         <form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/app/torrent/manage/dorun')}">
@@ -25,7 +22,7 @@
                     <col width="400" />
                     <col />
                     <tr>
-                        <th>展示PT用户信息</th>
+                        <th>展示Tracker信息</th>
                         <td>
                             <ul class="one_list cc">
                                 <li>
@@ -39,9 +36,37 @@
                             </ul>
                         </td>
                         <td>
-                            <div class="fun_tips">选择在那些页面展示用户的PT状态信息</div>
+                            <div class="fun_tips">选择在哪些页面展示用户Trakcer数据</div>
                         </td>
                     </tr>
+                    <!--# if($config['theme.site.default']=='pt') { #-->
+                    <tr>
+                        <th>展示Peer信息</th>
+                        <td>
+                            <ul class="one_list cc">
+                                <li>
+                                    <label>
+                                        <input name="showpeers[]" type="checkbox" value="index" {@pw::ifcheck(in_array( 'index' ,$config[ 'app.torrent.theme.showpeers']))}><span>站点默认首页</span></label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input name="showpeers[]" type="checkbox" value="forum_my" {@pw::ifcheck(in_array( 'forum_my' ,$config[ 'app.torrent.theme.showpeers']))}><span>我的版块帖子列表</span></label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input name="showpeers[]" type="checkbox" value="cate" {@pw::ifcheck(in_array( 'cate' ,$config[ 'app.torrent.theme.showpeers']))}><span>一级板块帖子列表</span></label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input name="showpeers[]" type="checkbox" value="widget" {@pw::ifcheck(in_array( 'widget' ,$config[ 'app.torrent.theme.showpeers']))}><span>二级板块帖子列表</span></label>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <div class="fun_tips">选择在哪些页面展示种子Peer信息</div>
+                        </td>
+                    </tr>
+                    <!--# } #-->
                 </table>
             </div>
             <div class="h_a">发布设置</div>
