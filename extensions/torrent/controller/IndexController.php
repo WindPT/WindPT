@@ -222,6 +222,7 @@ class IndexController extends PwBaseController
         $no_peer_id = $this->getInput('no_peer_id');
         $agent = $_SERVER['HTTP_USER_AGENT'];
         $ip = Wind::getComponent('request')->getClientIp();
+        $status = ($left > 0) ? 'do' : 'done';
         $seeder = ($left > 0) ? 'no' : 'yes';
 
         Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
@@ -250,6 +251,9 @@ class IndexController extends PwBaseController
 
             PwAnnounce::showError('This a a bittorrent application and can\'t be loaded into a browser!');
         }
+
+        header('Content-Type: text/plain; charset=utf-8');
+        header('Pragma: no-cache');
 
         // Verify passkey
         $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passkey);
@@ -295,7 +299,6 @@ class IndexController extends PwBaseController
                 case 'started':
                     $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
-                    $status = ($left > 0) ? 'do' : 'done';
                     break;
                 case 'stopped':
                     $this->_getTorrentPeerDS()->deleteTorrentPeer($self['id']);
@@ -322,10 +325,9 @@ class IndexController extends PwBaseController
             $dm->setTorrent($torrent['id'])->setUserid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
             $this->_getTorrentPeerDS()->addTorrentPeer($dm);
             $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
-            $status = ($left > 0) ? 'do' : 'done';
         }
 
-        // Update user's history with this torrent
+        // Update user's history about this torrent
         $history = $this->_getTorrentHistoryDs()->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
 
         Wind::import('EXT:torrent.service.dm.PwTorrentHistoryDm');
@@ -357,10 +359,6 @@ class IndexController extends PwBaseController
             $this->_getTorrentHistoryDs()->updateTorrentHistory($dm);
             $uploaded = $uploaded_add;
             $downloaded = $downloaded_add;
-            unset($uploaded_add);
-            unset($downloaded_add);
-            unset($uploaded_total);
-            unset($downloaded_total);
         }
 
         // Update user's credits
@@ -378,8 +376,6 @@ class IndexController extends PwBaseController
                     $uploaded_total += $history['uploaded'];
                 }
             }
-
-            unset($histories);
 
             if ($downloaded_total != 0) {
                 $rotio_total = round($uploaded_total / $downloaded_total, 2);
