@@ -3,7 +3,7 @@
     <application>
         <name>PT</name>
         <alias>pt</alias>
-        <version>1.0</version>
+        <version>1.1</version>
         <pw-version>9.0</pw-version>
         <charset>UTF-8</charset>
         <type>style</type>
