@@ -573,17 +573,16 @@ class IndexController extends PwBaseController
 
     public function rssAction()
     {
-        $uid = $this->getInput('uid');
         $passkey = $this->getInput('passkey');
 
-        $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($uid);
-        if ($userBan) {
-            $this->showError('用户处于封禁期！');
+        $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passkey);
+        if (empty($user)) {
+            $this->showError('Passkey 错误！');
         }
 
-        $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passkey);
-        if (empty($user) || $user['uid'] != $uid) {
-            $this->showError('Passkey 错误！');
+        $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($user['uid']);
+        if ($userBan) {
+            $this->showError('用户处于封禁期！');
         }
 
         header('Content-Type: application/xml; charset=utf-8');
