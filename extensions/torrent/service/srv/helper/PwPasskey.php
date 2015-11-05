@@ -32,6 +32,14 @@ class PwPasskey
 
     public static function makePassKey($user)
     {
-        return sha1($user->username . Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s') . $user->info['password']);
+        $passkey = sha1($user->uid . $user->username . Pw::getTime());
+
+        $u = Wekit::load('EXT:torrent.service.PwTorrentUser')->getTorrentUserByPasskey($passkey);
+
+        if (!empty($u)) {
+            return self::makePassKey($user);
+        } else {
+            return $passkey;
+        }
     }
 }
