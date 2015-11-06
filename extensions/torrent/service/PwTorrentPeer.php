@@ -14,14 +14,6 @@ class PwTorrentPeer
         return $this->_getDao($fetchmode)->getTorrentPeer($id);
     }
 
-    public function addTorrentPeer(PwTorrentPeerDm $dm)
-    {
-        if (($result = $dm->beforeAdd()) !== true) {
-            return $result;
-        }
-        return $this->_getDao(self::FETCH_MAIN)->addTorrentPeer($dm->getData());
-    }
-
     public function getTorrentPeerByPeerID($peer_id, $fetchmode = self::FETCH_MAIN)
     {
         return $this->_getDao($fetchmode)->getTorrentPeerByPeerID($peer_id);
@@ -37,18 +29,26 @@ class PwTorrentPeer
         return $this->_getDao($fetchmode)->getTorrentPeerByTorrent($tid);
     }
 
-    public function getTorrentPeerByTorrentAndUid($tid, $uid)
+    public function getTorrentPeerByTorrentAndUid($tid, $uid, $fetchmode = self::FETCH_MAIN)
     {
         if (empty($tid) || empty($uid)) {
             return false;
         }
 
-        return $this->_getDao(self::FETCH_MAIN)->getTorrentPeerByTorrentAndUid($tid, $uid);
+        return $this->_getDao($fetchmode)->getTorrentPeerByTorrentAndUid($tid, $uid);
     }
 
-    public function fetchTorrentPeerByUid($uid)
+    public function fetchTorrentPeerByUid($uid, $fetchmode = self::FETCH_MAIN)
     {
-        return $this->_getDao(self::FETCH_MAIN)->fetchTorrentPeerByUid($uid);
+        return $this->_getDao($fetchmode)->fetchTorrentPeerByUid($uid);
+    }
+
+    public function addTorrentPeer(PwTorrentPeerDm $dm)
+    {
+        if (($result = $dm->beforeAdd()) !== true) {
+            return $result;
+        }
+        return $this->_getDao(self::FETCH_MAIN)->addTorrentPeer($dm->getData());
     }
 
     public function updateTorrentPeer(PwTorrentPeerDm $dm, $fetchmode = self::FETCH_MAIN)

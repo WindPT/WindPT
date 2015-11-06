@@ -15,17 +15,17 @@ class PwTorrentAgent
         return $this->_getDao($fetchmode)->getTorrentAgent($id);
     }
 
+    public function fetchTorrentAgent($fetchmode = self::FETCH_MAIN)
+    {
+        return $this->_getDao($fetchmode)->fetchTorrentAgent();
+    }
+
     public function addTorrentAgent(PwTorrentAgentDm $dm)
     {
         if (($result = $dm->beforeAdd()) !== true) {
             return $result;
         }
         return $this->_getDao(self::FETCH_MAIN)->addTorrentAgent($dm->getData());
-    }
-
-    public function fetchTorrentAgent($fetchmode = self::FETCH_MAIN)
-    {
-        return $this->_getDao($fetchmode)->fetchTorrentAgent();
     }
 
     public function updateTorrentAgent(PwTorrentAgentDm $dm, $fetchmode = self::FETCH_MAIN)

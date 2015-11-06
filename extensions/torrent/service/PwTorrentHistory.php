@@ -15,12 +15,9 @@ class PwTorrentHistory
         return $this->_getDao($fetchmode)->getTorrentHistory($id);
     }
 
-    public function addTorrentHistory(PwTorrentHistoryDm $dm)
+    public function getTorrentHistoryByTorrentAndUid($torrent, $uid, $fetchmode = self::FETCH_MAIN)
     {
-        if (($result = $dm->beforeAdd()) !== true) {
-            return $result;
-        }
-        return $this->_getDao(self::FETCH_MAIN)->addTorrentHistory($dm->getData());
+        return $this->_getDao($fetchmode)->getTorrentHistoryByTorrentAndUid($torrent, $uid);
     }
 
     public function fetchTorrentHistoryByTorrent($torrent, $fetchmode = self::FETCH_MAIN)
@@ -33,9 +30,12 @@ class PwTorrentHistory
         return $this->_getDao($fetchmode)->fetchTorrentHistoryByUid($uid);
     }
 
-    public function getTorrentHistoryByTorrentAndUid($torrent, $uid, $fetchmode = self::FETCH_MAIN)
+    public function addTorrentHistory(PwTorrentHistoryDm $dm)
     {
-        return $this->_getDao($fetchmode)->getTorrentHistoryByTorrentAndUid($torrent, $uid);
+        if (($result = $dm->beforeAdd()) !== true) {
+            return $result;
+        }
+        return $this->_getDao(self::FETCH_MAIN)->addTorrentHistory($dm->getData());
     }
 
     public function updateTorrentHistory(PwTorrentHistoryDm $dm, $fetchmode = self::FETCH_MAIN)

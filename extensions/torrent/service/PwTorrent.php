@@ -15,22 +15,31 @@ class PwTorrent
         return $this->_getDao($fetchmode)->getTorrent($id);
     }
 
-    public function getTorrentByTid($tid, $fetchmod = self::FETCH_MAIN)
+    public function getTorrentByTid($tid, $fetchmode = self::FETCH_MAIN)
     {
         if (empty($tid)) {
             return array();
         }
 
-        return $this->_getDao($fetchmod)->getTorrentByTid($tid);
+        return $this->_getDao($fetchmode)->getTorrentByTid($tid);
     }
 
-    public function fetchTorrentByUid($uid, $fetchmod = self::FETCH_MAIN)
+    public function getTorrentByInfoHash($info_hash, $fetchmode = self::FETCH_MAIN)
+    {
+        if (empty($info_hash)) {
+            return array();
+        }
+
+        return $this->_getDao($fetchmode)->getTorrentByInfoHash($info_hash);
+    }
+
+    public function fetchTorrentByUid($uid, $fetchmode = self::FETCH_MAIN)
     {
         if (empty($uid)) {
             return array();
         }
 
-        return $this->_getDao($fetchmod)->fetchTorrentByUid($uid);
+        return $this->_getDao($fetchmode)->fetchTorrentByUid($uid);
     }
 
     public function fetchTorrent($fetchmode = self::FETCH_MAIN)
@@ -38,14 +47,6 @@ class PwTorrent
         return $this->_getDao($fetchmode)->fetchTorrent();
     }
 
-    public function getTorrentByInfoHash($info_hash, $fetchmod = self::FETCH_MAIN)
-    {
-        if (empty($info_hash)) {
-            return array();
-        }
-
-        return $this->_getDao($fetchmod)->getTorrentByInfoHash($info_hash);
-    }
 
     public function addTorrent(PwTorrentDm $dm)
     {

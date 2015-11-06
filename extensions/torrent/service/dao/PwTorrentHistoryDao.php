@@ -13,6 +13,13 @@ class PwTorrentHistoryDao extends PwBaseDao
         return $this->_get($id);
     }
 
+    public function getTorrentHistoryByTorrentAndUid($torrent, $uid)
+    {
+        $sql = $this->_bindTable("SELECT * FROM %s WHERE torrent = ? AND uid = ?");
+        $smt = $this->getConnection()->createStatement($sql);
+        return $smt->getOne(array($torrent, $uid));
+    }
+
     public function fetchTorrentHistoryByTorrent($torrent)
     {
         $sql = $this->_bindTable("SELECT * FROM %s WHERE torrent = ?");
@@ -25,13 +32,6 @@ class PwTorrentHistoryDao extends PwBaseDao
         $sql = $this->_bindTable("SELECT * FROM %s WHERE uid = ?");
         $smt = $this->getConnection()->createStatement($sql);
         return $smt->queryAll(array($uid));
-    }
-
-    public function getTorrentHistoryByTorrentAndUid($torrent, $uid)
-    {
-        $sql = $this->_bindTable("SELECT * FROM %s WHERE torrent = ? AND uid = ?");
-        $smt = $this->getConnection()->createStatement($sql);
-        return $smt->getOne(array($torrent, $uid));
     }
 
     public function addTorrentHistory($fields)

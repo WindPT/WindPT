@@ -15,14 +15,6 @@ class PwTorrentSubscribe
         return $this->_getDao($fetchmode)->getTorrentSubscribe($id);
     }
 
-    public function addTorrentSubscribe(PwTorrentSubscribeDm $dm)
-    {
-        if (($result = $dm->beforeAdd()) !== true) {
-            return $result;
-        }
-        return $this->_getDao(self::FETCH_MAIN)->addTorrentSubscribe($dm->getData());
-    }
-
     public function getTorrentSubscribeByUid($uid, $fetchmode = self::FETCH_MAIN)
     {
         return $this->_getDao($fetchmode)->getTorrentSubscribeByUid($uid);
@@ -36,6 +28,14 @@ class PwTorrentSubscribe
     public function fetchTorrentSubscribe($fetchmode = self::FETCH_MAIN)
     {
         return $this->_getDao($fetchmode)->fetchTorrentSubscribe();
+    }
+
+    public function addTorrentSubscribe(PwTorrentSubscribeDm $dm)
+    {
+        if (($result = $dm->beforeAdd()) !== true) {
+            return $result;
+        }
+        return $this->_getDao(self::FETCH_MAIN)->addTorrentSubscribe($dm->getData());
     }
 
     public function deleteTorrentSubscribe($id)

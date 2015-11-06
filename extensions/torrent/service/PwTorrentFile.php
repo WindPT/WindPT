@@ -15,17 +15,17 @@ class PwTorrentFile
         return $this->_getDao($fetchmode)->getTorrentFile($id);
     }
 
+    public function getTorrentFileByTorrent($id, $fetchmode = self::FETCH_MAIN)
+    {
+        return $this->_getDao($fetchmode)->getTorrentFileByTorrent($id);
+    }
+
     public function addTorrentFile(PwTorrentFileDm $dm)
     {
         if (($result = $dm->beforeAdd()) !== true) {
             return $result;
         }
         return $this->_getDao(self::FETCH_MAIN)->addTorrentFile($dm->getData());
-    }
-
-    public function getTorrentFileByTorrent($id, $fetchmode = self::FETCH_MAIN)
-    {
-        return $this->_getDao($fetchmode)->getTorrentFileByTorrent($id);
     }
 
     public function updateTorrentFile(PwTorrentFileDm $dm, $fetchmode = self::FETCH_MAIN)

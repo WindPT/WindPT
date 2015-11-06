@@ -15,14 +15,6 @@ class PwTorrentUser
         return $this->_getDao($fetchmode)->getTorrentUser($id);
     }
 
-    public function addTorrentUser(PwTorrentUserDm $dm)
-    {
-        if (($result = $dm->beforeAdd()) !== true) {
-            return $result;
-        }
-        return $this->_getDao(self::FETCH_MAIN)->addTorrentUser($dm->getData());
-    }
-
     public function getTorrentUserByUid($uid, $fetchmode = self::FETCH_MAIN)
     {
         return $this->_getDao($fetchmode)->getTorrentUserByUid($uid);
@@ -31,6 +23,14 @@ class PwTorrentUser
     public function getTorrentUserByPasskey($passkey, $fetchmode = self::FETCH_MAIN)
     {
         return $this->_getDao($fetchmode)->getTorrentUserByPasskey($passkey);
+    }
+
+    public function addTorrentUser(PwTorrentUserDm $dm)
+    {
+        if (($result = $dm->beforeAdd()) !== true) {
+            return $result;
+        }
+        return $this->_getDao(self::FETCH_MAIN)->addTorrentUser($dm->getData());
     }
 
     public function updateTorrentUser(PwTorrentUserDm $dm, $fetchmode = self::FETCH_MAIN)
