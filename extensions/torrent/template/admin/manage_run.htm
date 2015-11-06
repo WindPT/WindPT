@@ -27,6 +27,10 @@
                             <ul class="one_list cc">
                                 <li>
                                     <label>
+                                        <input name="showuserinfo[]" type="checkbox" value="headerinfo" {@pw::ifcheck(in_array( 'headerinfo' ,$config[ 'app.torrent.showuserinfo']))}><span>顶部个人信息</span></label>
+                                </li>
+                                <li>
+                                    <label>
                                         <input name="showuserinfo[]" type="checkbox" value="threadside" {@pw::ifcheck(in_array( 'threadside' ,$config[ 'app.torrent.showuserinfo']))}><span>帖子页边栏</span></label>
                                 </li>
                                 <li>

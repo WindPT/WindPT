@@ -53,6 +53,14 @@
                 <description>种子帖阅读页</description>
             </app_torrent>
         </c_read_run>
+        <s_header_info_2>
+            <app_torrent>
+                <class>EXT:torrent.service.srv.do.PwHeaderInfoDoTorrent</class>
+                <loadway>load</loadway>
+                <method>appDo</method>
+                <description>顶部信息</description>
+            </app_torrent>
+        </s_header_info_2>
         <s_space_nav>
             <app_torrent>
                 <class>EXT:torrent.service.srv.do.PwSpaceNavDoTorrent</class>
