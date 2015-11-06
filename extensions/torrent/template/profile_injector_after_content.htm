@@ -4,7 +4,7 @@
             background: rgb(51,51,51);
         }
 
-        #posted li {
+        #posted li, #histories dd {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -54,11 +54,39 @@
             <!--# } #-->
             <!--# } #-->
         </div>
+        <dl class="cc">
+            <dt>历史：</dt>
+            <dd>{@count($pargs->histories)}&nbsp;<button class="btn" id="btnToggleHistories">显示/隐藏</button></dd>
+        </dl>
+        <div id="histories">
+            <!--# if (is_array($pargs->histories)) { #-->
+            <!--# foreach($pargs->histories as $torrent) { #-->
+            <dl class="cc">
+                <dd><a href="{@WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid'])}">{$torrent['subject']}</a></dd>
+                <dt>
+                    <!--#
+                    switch ($torrent['status']) {
+                        case 'do':
+                            echo '下载中';
+                            break;
+                        case 'done':
+                            echo '完成';
+                            break;
+                        case 'stop':
+                            echo '未完成';
+                            break;
+                    }
+                    #-->
+                </dt>
+            </dl>
+            <!--# } #-->
+            <!--# } #-->
+        </div>
     </div>
 
     <script>
     Wind.ready(function() {
-        $('#posted').hide();
+        $('#posted, #histories').hide();
 
         $('#btnTogglePasskey').click(function() {
             $('#passkey').toggleClass('covered');
@@ -66,6 +94,10 @@
 
         $('#btnTogglePosted').click(function() {
             $('#posted').slideToggle();
+        });
+
+        $('#btnToggleHistories').click(function() {
+            $('#histories').slideToggle();
         });
     });
     </script>
