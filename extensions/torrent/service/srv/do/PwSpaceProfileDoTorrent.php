@@ -17,11 +17,22 @@ class PwSpaceProfileDoTorrent
 
         $user = Wekit::load('EXT:torrent.service.PwTorrentUser')->getTorrentUserByUid($space->spaceUid);
 
+        $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->fetchTorrentPeerByUid($space->spaceUid);
         $this->histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($space->spaceUid);
         $this->torrents = $PwThread->getThreadByUid($space->spaceUid);
 
-
         $this->passkey = $user['passkey'];
+
+        $this->seeding = $this->leeching = 0;
+        if (is_array($peers)) {
+            foreach ($peers as $peer) {
+                if ($peer['seeder'] == 'yes') {
+                    $this->seeding++;
+                } else {
+                    $this->leeching++;
+                }
+            }
+        }
 
         if (is_array($this->histories)) {
             $PwTorrent = Wekit::load('EXT:torrent.service.PwTorrent');

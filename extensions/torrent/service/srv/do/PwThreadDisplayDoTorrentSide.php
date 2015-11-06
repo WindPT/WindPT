@@ -17,8 +17,20 @@ class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
             return;
         }
 
+        $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->fetchTorrentPeerByUid($user['uid']);
         $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($user['uid']);
         $histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($user['uid']);
+
+        $seeding = $leeching = 0;
+        if (is_array($peers)) {
+            foreach ($peers as $peer) {
+                if ($peer['seeder'] == 'yes') {
+                    $seeding++;
+                } else {
+                    $leeching++;
+                }
+            }
+        }
 
         if (is_array($histories)) {
             foreach ($histories as $history) {
@@ -33,6 +45,6 @@ class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
             $rotio = 'Inf.';
         }
 
-        echo '<div id="PTInfo">下载： ' . PwUtils::readableDataTransfer($downloaded_total) . '<br>上传： ' . PwUtils::readableDataTransfer($uploaded_total) . '<br>分享率： ' . $rotio . '<br>发布： ' . count($torrents) . '</div>';
+        echo '<div id="PTInfo">下载：' . $leeching . '<br>做种：' . $seeding . '<br>下载量： ' . PwUtils::readableDataTransfer($downloaded_total) . '<br>上传量： ' . PwUtils::readableDataTransfer($uploaded_total) . '<br>分享率： ' . $rotio . '<br>发布： ' . count($torrents) . '</div>';
     }
 }
