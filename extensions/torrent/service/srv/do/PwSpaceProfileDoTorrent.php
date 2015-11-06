@@ -33,6 +33,7 @@ class PwSpaceProfileDoTorrent
                 $thread = $PwThread->getThread($torrent['tid']);
 
                 if ($thread) {
+                    $this->histories[$key]['tid'] = $torrent['tid'];
                     $this->histories[$key]['subject'] = $thread['subject'];
                 } else {
                     unset($this->histories[$key]);
