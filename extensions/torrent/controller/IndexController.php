@@ -564,6 +564,7 @@ class IndexController extends PwBaseController
 
         $this->setOutput($space, 'space');
         $this->setOutput($torrents, 'torrents');
+        $this->setOutput('my', 'src');
 
         // seo设置
         Wind::import('SRV:seo.bo.PwSeoBo');
