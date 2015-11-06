@@ -45,6 +45,6 @@ class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
             $rotio = 'Inf.';
         }
 
-        echo '<div id="PTInfo">下载：' . $leeching . '<br>做种：' . $seeding . '<br>下载量： ' . PwUtils::readableDataTransfer($downloaded_total) . '<br>上传量： ' . PwUtils::readableDataTransfer($uploaded_total) . '<br>分享率： ' . $rotio . '<br>发布： ' . count($torrents) . '</div>';
+        echo '<div id="PTInfo">下载：' . $leeching . '<br>做种：' . $seeding . '<br>发布： ' . count($torrents) . '<br>分享率： ' . $rotio . '<br>下载量： ' . PwUtils::readableDataTransfer($downloaded_total) . '<br>上传量： ' . PwUtils::readableDataTransfer($uploaded_total) . '</div>';
     }
 }
