@@ -28,7 +28,7 @@ class PwHeaderInfoDoTorrent
                 }
             }
 
-            echo '<a>下载：' . $leeching . ' 做种：' . $seeding . '</a>';
+            echo '<a href="' . WindUrlHelper::createUrl('space/profile/run?uid=' . $user->uid) . '">下载：' . $leeching . ' 做种：' . $seeding . '</a>';
         }
     }
 }
