@@ -260,6 +260,8 @@
         });
 
         $('#UpdateInfo').click(function() {
+            Wind.Util.ajaxBtnDisable($(this));
+
             var url = "{@WindUrlHelper::createUrl('/app/torrent/index/updateInfo')}";
 
             var paras = {};
@@ -300,7 +302,12 @@
                 $('input[name="atc_title"]').val(data.title);
                 $('input[name="wikilink"]').val(data.wikilink);
                 $('iframe.wind_editor_iframe').contents().find('body.editor_content').text(data.content);
+                Wind.Util.ajaxBtnEnable($(this));
             }, 'json');
+
+            setTimeout(function(){
+                Wind.Util.ajaxBtnEnable($(this));
+            }, 3000);
         });
     });
     </script>

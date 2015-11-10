@@ -526,9 +526,9 @@ class IndexController extends PwBaseController
         if (!empty($torrent)) {
             if ($unsub == 'true') {
                 $this->_getTorrentSubscribeDs()->deleteTorrentSubscribe($torrent['id']);
-                exit('{"status":0}');
+                $this->showMessage('取消订阅种子成功！');
             } else {
-                exit('{"status":1, "message":"已订阅该种子！"}');
+                $this->showError('已订阅该种子！');
             }
         }
 
@@ -538,9 +538,7 @@ class IndexController extends PwBaseController
         $dm->setUid($this->loginUser->uid)->setTorrent($id);
         $this->_getTorrentSubscribeDs()->addTorrentSubscribe($dm);
 
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
-
-        exit('{"status":0}');
+        $this->showMessage('订阅种子成功！');
     }
 
     public function myAction()
