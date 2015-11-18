@@ -45,7 +45,7 @@ class PwTorrentPeerDao extends PwBaseDao
     {
         $sql = $this->_bindTable('SELECT * FROM %s WHERE userid = ?');
         $smt = $this->getConnection()->createStatement($sql);
-        return $smt->getOne(array($uid));
+        return $smt->queryAll(array($uid));
     }
 
     public function addTorrentPeer($fields)
