@@ -54,7 +54,7 @@ class PwHookDoTorrent
             return $config;
         }
 
-        $config['app_torrent'] = array('评分', 'global', '你的帖子：{$subject}被{$username}评分;积分变化【{$cname}:{$affect}】', false);
+        $config['app_torrent'] = array('PT', 'global', '种子 {$torrent}', false);
 
         return $config;
     }

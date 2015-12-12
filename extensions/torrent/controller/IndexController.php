@@ -446,7 +446,9 @@ class IndexController extends PwBaseController
                 Wind::import('SRV:credit.bo.PwCreditBo');
                 Wind::import('SRV:user.bo.PwUserBo');
                 $creditBo = PwCreditBo::getInstance();
-                $creditBo->addLog('admin_set', $changes, new PwUserBo($user['uid']));
+                $creditBo->addLog('app_torrent', $changes, new PwUserBo($user['uid']), array(
+                    'torrent' => $torrent['id'],
+                ));
                 $creditBo->sets($user['uid'], $changes);
             }
         }

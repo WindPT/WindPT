@@ -68,7 +68,6 @@
                 <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>
                 <method>pwCreditOperationConfig</method>
                 <loadway>load</loadway>
-                <expression>config:app.torrent.creditifopen==1</expression>
                 <description>积分日志</description>
             </app_torrent>
         </s_PwCreditOperationConfig>
