@@ -15,26 +15,7 @@
         <author-icon>images/7in0.png</author-icon>
     </application>
     <res>res</res>
-    <installation-service>
-    </installation-service>
     <inject-services>
-        <s_PwThreadType>
-            <app_torrent>
-                <class>EXT:torrent.service.srv.PwTorrentTypeDo</class>
-                <loadway>load</loadway>
-                <method>typeOfTorrent</method>
-                <description>种子帖</description>
-            </app_torrent>
-        </s_PwThreadType>
-        <c_post_run>
-            <app_torrent>
-                <class>EXT:torrent.service.srv.injector.PwTorrentPostInjector</class>
-                <method>run</method>
-                <loadway>load</loadway>
-                <expression>special.get==torrent</expression>
-                <description>发布种子资源页</description>
-            </app_torrent>
-        </c_post_run>
         <c_post_doadd>
             <app_torrent>
                 <class>EXT:torrent.service.srv.injector.PwTorrentPostInjector</class>
@@ -44,6 +25,15 @@
                 <description>提交种子资源帖</description>
             </app_torrent>
         </c_post_doadd>
+        <c_post_run>
+            <app_torrent>
+                <class>EXT:torrent.service.srv.injector.PwTorrentPostInjector</class>
+                <method>run</method>
+                <loadway>load</loadway>
+                <expression>special.get==torrent</expression>
+                <description>发布种子资源页</description>
+            </app_torrent>
+        </c_post_run>
         <c_read_run>
             <app_torrent>
                 <class>EXT:torrent.service.srv.injector.PwTorrentReadInjector</class>
@@ -53,30 +43,6 @@
                 <description>种子帖阅读页</description>
             </app_torrent>
         </c_read_run>
-        <s_header_info_1>
-            <app_torrent>
-                <class>EXT:torrent.service.srv.do.PwHeaderInfoDoTorrent</class>
-                <loadway>load</loadway>
-                <method>appDo</method>
-                <description>顶部信息</description>
-            </app_torrent>
-        </s_header_info_1>
-        <s_space_nav>
-            <app_torrent>
-                <class>EXT:torrent.service.srv.do.PwSpaceNavDoTorrent</class>
-                <loadway>load</loadway>
-                <method>appDo</method>
-                <description>空间导航</description>
-            </app_torrent>
-        </s_space_nav>
-        <s_space_profile>
-            <app_torrent>
-                <class>EXT:torrent.service.srv.do.PwSpaceProfileDoTorrent</class>
-                <loadway>load</loadway>
-                <method>appDo</method>
-                <description>个人资料页</description>
-            </app_torrent>
-        </s_space_profile>
         <m_PwThreadDisplay>
             <app_torrent>
                 <class>EXT:torrent.service.srv.do.PwThreadDisplayDoTorrentSide</class>
@@ -89,21 +55,62 @@
                 <description>帖子列表页</description>
             </app_torrent>
         </m_PwThreadList>
-        <s_PwThreadsDao_delete>
+        <s_header_info_1>
             <app_torrent>
-                <class>EXT:torrent.service.srv.do.PwThreadsDeleteDoTorrent</class>
+                <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>
                 <loadway>load</loadway>
-                <method>appDo</method>
-                <description>删除种子贴时删除对应记录和种子文件</description>
+                <method>headerInfo1</method>
+                <description>顶部信息</description>
             </app_torrent>
-        </s_PwThreadsDao_delete>
+        </s_header_info_1>
+        <s_PwCreditOperationConfig>
+            <app_torrent>
+                <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>
+                <method>pwCreditOperationConfig</method>
+                <loadway>load</loadway>
+                <expression>config:app.torrent.creditifopen==1</expression>
+                <description>积分日志</description>
+            </app_torrent>
+        </s_PwCreditOperationConfig>
         <s_PwThreadsDao_batchDelete>
             <app_torrent>
-                <class>EXT:torrent.service.srv.do.PwThreadsBatchDeleteDoTorrent</class>
+                <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>
                 <loadway>load</loadway>
-                <method>appDo</method>
+                <method>pwThreadsDaoBatchDelete</method>
                 <description>批量删除种子贴时删除对应记录和种子文件</description>
             </app_torrent>
         </s_PwThreadsDao_batchDelete>
+        <s_PwThreadsDao_delete>
+            <app_torrent>
+                <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>
+                <loadway>load</loadway>
+                <method>pwThreadsDaoDelete</method>
+                <description>删除种子贴时删除对应记录和种子文件</description>
+            </app_torrent>
+        </s_PwThreadsDao_delete>
+        <s_PwThreadType>
+            <app_torrent>
+                <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>
+                <loadway>load</loadway>
+                <method>pwThreadType</method>
+                <description>种子帖</description>
+            </app_torrent>
+        </s_PwThreadType>
+        <s_space_nav>
+            <app_torrent>
+                <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>
+                <loadway>load</loadway>
+                <method>spaceNav</method>
+                <description>空间导航</description>
+            </app_torrent>
+        </s_space_nav>
+        <s_space_profile>
+            <app_torrent>
+                <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>
+                <loadway>load</loadway>
+                <method>spaceProfile</method>
+                <description>个人资料页</description>
+            </app_torrent>
+        </s_space_profile>
     </inject-services>
 </manifest>
