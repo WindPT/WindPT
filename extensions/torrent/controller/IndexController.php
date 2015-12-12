@@ -367,9 +367,10 @@ class IndexController extends PwBaseController
             $dm = new PwTorrentHistoryDm($history['id']);
             $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded)->setStatus($status);
             $this->_getTorrentHistoryDs()->updateTorrentHistory($dm);
-            $uploaded = $uploaded_add;
-            $downloaded = $downloaded_add;
         }
+
+        // Count Peers
+        $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
 
         // Update user's credits
         if (Wekit::C('site', 'app.torrent.creditifopen') == 1) {
@@ -392,16 +393,34 @@ class IndexController extends PwBaseController
                 $rotio_total = 1;
             }
 
+            $userpeers = $this->_getTorrentPeerDS()->fetchTorrentPeerByUid($user['uid']);
+            if (is_array($userpeers)) {
+                foreach ($userpeers as $p) {
+                    if ($p['seeder'] == 'yes') {
+                        $seeding++;
+                    } else {
+                        $leeching++;
+                    }
+                }
+            }
+
             $timeUsed = time() - strtotime($self['started']);
+            $timeLa = time() - strtotime($self['last_action']);
 
             $m = Wekit::load('EXT:torrent.service.srv.helper.PwEvalmath');
-            $m->e('downloaded       = ' . intval($downloaded));
+            $m->e('seeders          = ' . intval($torrent['seeders']));
+            $m->e('leechers         = ' . intval($torrent['leechers']));
+            $m->e('size             = ' . intval($torrent['size']));
+            $m->e('seeding          = ' . intval($seeding));
+            $m->e('leeching         = ' . intval($leeching));
+            $m->e('downloaded_add   = ' . intval($downloaded_add));
             $m->e('downloaded_total = ' . intval($downloaded_total));
-            $m->e('uploaded         = ' . intval($uploaded));
+            $m->e('uploaded_add     = ' . intval($uploaded_add));
             $m->e('uploaded_total   = ' . intval($uploaded_total));
             $m->e('rotio            = ' . intval($rotio));
             $m->e('rotio_total      = ' . intval($rotio_total));
             $m->e('time             = ' . intval($timeUsed));
+            $m->e('time_la          = ' . intval($timeLa));
             $m->e('torrents         = ' . intval($user_torrents));
 
             $_credits = Wekit::C('site', 'app.torrent.credits');
@@ -414,8 +433,12 @@ class IndexController extends PwBaseController
 
                     $m->e('credit = ' . intval($crdtits['credit' . $key]));
 
-                    $changes[$key] = intval($m->e($exp));
-                    $changed++;
+                    $c = intval($m->e($value['exp']));
+
+                    if ($c >= 1) {
+                        $changes[$key] = $c;
+                        $changed++;
+                    }
                 }
             }
 
@@ -423,14 +446,13 @@ class IndexController extends PwBaseController
                 Wind::import('SRV:credit.bo.PwCreditBo');
                 Wind::import('SRV:user.bo.PwUserBo');
                 $creditBo = PwCreditBo::getInstance();
+                $creditBo->addLog('admin_set', $changes, new PwUserBo($user['uid']));
                 $creditBo->sets($user['uid'], $changes);
-                $creditBo->addLog('pt_tracker', $changes, new PwUserBo($user['uid']));
             }
         }
 
         // Update peer
         Wind::import('EXT:torrent.service.dm.PwTorrentDm');
-        $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
         $dm = new PwTorrentDm($torrent['id']);
         $dm->setSeeders($torrent['seeders'])->setLeechers($torrent['leechers'])->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'));
         $this->_getTorrentDS()->updateTorrent($dm);

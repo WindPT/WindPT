@@ -84,7 +84,7 @@ class ManageController extends AdminBaseController
 
         if (is_array($credits)) {
             foreach ($credits as $key => $credit) {
-                if (!$credit['enabled'] || empty($credit['func'])) {
+                if (!$credit['enabled'] || empty($credit['exp'])) {
                     continue;
                 }
 
