@@ -404,10 +404,12 @@ class IndexController extends PwBaseController
                 }
             }
 
+            $tAlive = (time() - strtotime($torrent['created_time'])) / 86400;
             $timeUsed = time() - strtotime($self['started']);
             $timeLa = time() - strtotime($self['last_action']);
 
             $m = Wekit::load('EXT:torrent.service.srv.helper.PwEvalmath');
+            $m->e('alive            = ' . intval($tAlive));
             $m->e('seeders          = ' . intval($torrent['seeders']));
             $m->e('leechers         = ' . intval($torrent['leechers']));
             $m->e('size             = ' . intval($torrent['size']));
