@@ -36,7 +36,7 @@ class IndexController extends PwBaseController
             }
 
             // Check if user was banned
-            $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($this->loginUser->uid);
+            $userBan = $this->__getUserBanDS()->getBanInfo($this->loginUser->uid);
             if ($userBan) {
                 $this->showError('用户处于封禁期！');
             }
@@ -272,7 +272,7 @@ class IndexController extends PwBaseController
         }
 
         // Check if user was banned
-        $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($user['uid']);
+        $userBan = $this->__getUserBanDS()->getBanInfo($user['uid']);
         if ($userBan) {
             PwAnnounce::showError('User was banned!');
         }
@@ -284,7 +284,7 @@ class IndexController extends PwBaseController
         }
 
         // Check if torrent was removed
-        $topic = Wekit::load('forum.PwThread')->getThread($torrent['tid']);
+        $topic = $this->__getThreadDS()->getThread($torrent['tid']);
         if ($topic['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
             PwAnnounce::showError('Torrent removed!');
         }
@@ -375,7 +375,6 @@ class IndexController extends PwBaseController
         if (Wekit::C('site', 'app.torrent.creditifopen') == 1) {
             $changed = 0;
             $WindApi = WindidApi::api('user');
-            $pwUser = Wekit::load('user.PwUser');
             $crdtits = $WindApi->getUserCredit($user['uid']);
             $user_torrents = count($this->_getTorrentDS()->fetchTorrentByUid($user['uid']));
             $histories = $this->_getTorrentHistoryDs()->fetchTorrentHistoryByUid($user['uid']);
@@ -463,7 +462,7 @@ class IndexController extends PwBaseController
             $passkey = PwPasskey::getPassKey($uid);
         }
 
-        $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($uid);
+        $userBan = $this->__getUserBanDS()->getBanInfo($uid);
         if ($userBan) {
             $this->showError('用户处于封禁期！');
         }
@@ -476,7 +475,7 @@ class IndexController extends PwBaseController
         $torrent = $this->_getTorrentDS()->getTorrent($id);
 
         // Check if torrent was removed
-        $topic = Wekit::load('forum.PwThread')->getThread($torrent['tid']);
+        $topic = $this->__getThreadDS()->getThread($torrent['tid']);
         if ($topic['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
             $this->showError('种子已被删除！');
         }
@@ -512,12 +511,12 @@ class IndexController extends PwBaseController
             $this->showError('必须登录才能进行本操作！');
         }
 
-        $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($this->loginUser->uid);
+        $userBan = $this->__getUserBanDS()->getBanInfo($this->loginUser->uid);
         if ($userBan) {
             $this->showError('用户处于封禁期！');
         }
 
-        $torrent = Wekit::load('EXT:torrent.service.PwTorrent')->getTorrent($id);
+        $torrent = $this->_getTorrentDS()->getTorrent($id);
         if (empty($torrent)) {
             $this->showError('种子文件不存在！');
         }
@@ -585,7 +584,7 @@ class IndexController extends PwBaseController
             $this->showError('Passkey 错误！');
         }
 
-        $userBan = Wekit::load('SRV:user.PwUserBan')->getBanInfo($user['uid']);
+        $userBan = $this->__getUserBanDS()->getBanInfo($user['uid']);
         if ($userBan) {
             $this->showError('用户处于封禁期！');
         }
@@ -627,6 +626,16 @@ class IndexController extends PwBaseController
         echo '</rss>';
 
         exit();
+    }
+
+    private function __getUserBanDS()
+    {
+        return Wekit::load('SRV:user.PwUserBan');
+    }
+
+    private function __getThreadDS()
+    {
+        return Wekit::load('forum.PwThread');
     }
 
     private function _getTorrentDS()
