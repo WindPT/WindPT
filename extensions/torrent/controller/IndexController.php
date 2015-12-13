@@ -409,21 +409,21 @@ class IndexController extends PwBaseController
             $timeLa = time() - strtotime($self['last_action']);
 
             $m = Wekit::load('EXT:torrent.service.srv.helper.PwEvalmath');
-            $m->e('alive            = ' . intval($tAlive));
-            $m->e('seeders          = ' . intval($torrent['seeders']));
-            $m->e('leechers         = ' . intval($torrent['leechers']));
-            $m->e('size             = ' . intval($torrent['size']));
-            $m->e('seeding          = ' . intval($seeding));
-            $m->e('leeching         = ' . intval($leeching));
-            $m->e('downloaded_add   = ' . intval($downloaded_add));
-            $m->e('downloaded_total = ' . intval($downloaded_total));
-            $m->e('uploaded_add     = ' . intval($uploaded_add));
-            $m->e('uploaded_total   = ' . intval($uploaded_total));
-            $m->e('rotio            = ' . intval($rotio));
-            $m->e('rotio_total      = ' . intval($rotio_total));
-            $m->e('time             = ' . intval($timeUsed));
-            $m->e('time_la          = ' . intval($timeLa));
-            $m->e('torrents         = ' . intval($user_torrents));
+            $m->e('alive            = ' . round($tAlive));
+            $m->e('seeders          = ' . round($torrent['seeders']));
+            $m->e('leechers         = ' . round($torrent['leechers']));
+            $m->e('size             = ' . round($torrent['size']));
+            $m->e('seeding          = ' . round($seeding));
+            $m->e('leeching         = ' . round($leeching));
+            $m->e('downloaded_add   = ' . round($downloaded_add));
+            $m->e('downloaded_total = ' . round($downloaded_total));
+            $m->e('uploaded_add     = ' . round($uploaded_add));
+            $m->e('uploaded_total   = ' . round($uploaded_total));
+            $m->e('rotio            = ' . round($rotio));
+            $m->e('rotio_total      = ' . round($rotio_total));
+            $m->e('time             = ' . round($timeUsed));
+            $m->e('time_la          = ' . round($timeLa));
+            $m->e('torrents         = ' . round($user_torrents));
 
             $_credits = Wekit::C('site', 'app.torrent.credits');
 
@@ -433,9 +433,9 @@ class IndexController extends PwBaseController
                         continue;
                     }
 
-                    $m->e('credit = ' . intval($crdtits['credit' . $key]));
+                    $m->e('credit = ' . round($crdtits['credit' . $key]));
 
-                    $c = intval($m->e($value['exp']));
+                    $c = round($m->e($value['exp']));
 
                     if ($c >= 1) {
                         $changes[$key] = $c;
