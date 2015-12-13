@@ -503,7 +503,7 @@ class IndexController extends PwBaseController
         // Check if torrent was removed
         $topic = $this->__getThreadDS()->getThread($torrent['tid']);
         if ($topic['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
-            $this->showError('种子已被删除！');
+            $this->showError('种子已被删除或得审核！');
         }
 
         // Change announce to user's private announce
