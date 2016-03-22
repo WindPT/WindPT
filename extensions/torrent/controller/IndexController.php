@@ -6,6 +6,11 @@ class IndexController extends PwBaseController
 {
     private $passkey;
 
+    public function beforeAction($handlerAdapter)
+    {
+        parent::beforeAction($handlerAdapter);
+    }
+
     public function run()
     {
         header('Location: ' . WindUrlHelper::createUrl('/'));

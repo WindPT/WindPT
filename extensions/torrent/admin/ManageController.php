@@ -1,11 +1,16 @@
 <?php
 
-defined('WEKIT_VERSION') or exit(403);
+defined('WEKIT_VERSION') || exit('Forbidden');
 
 Wind::import('ADMIN:library.AdminBaseController');
 
 class ManageController extends AdminBaseController
 {
+    public function beforeAction($handlerAdapter)
+    {
+        parent::beforeAction($handlerAdapter);
+    }
+
     public function run()
     {
         $service                   = $this->_loadConfigService();
