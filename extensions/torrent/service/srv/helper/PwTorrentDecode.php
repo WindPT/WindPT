@@ -97,7 +97,7 @@ class PwTorrentDecode
             }
 
             $ret[$i] = $value[0];
-            $offset = $value[1];
+            $offset  = $value[1];
         }
         // The empty list is an empty array. Seems fine.
         return array(0 => $ret, 1 => ++$offset);
@@ -135,7 +135,7 @@ class PwTorrentDecode
                 }
 
                 $ret[addslashes($left[0])] = $value[0];
-                $offset = $value[1];
+                $offset                    = $value[1];
                 continue;
             }
             if ($wholefile[$offset] == 'l') {
@@ -145,7 +145,7 @@ class PwTorrentDecode
                 }
 
                 $ret[addslashes($left[0])] = $value[0];
-                $offset = $value[1];
+                $offset                    = $value[1];
                 continue;
             }
             $value = $this->decodeEntry($wholefile, $offset);
@@ -154,7 +154,7 @@ class PwTorrentDecode
             }
 
             $ret[addslashes($left[0])] = $value[0];
-            $offset = $value[1];
+            $offset                    = $value[1];
         }
         return array(0 => (empty($ret) ? true : $ret), 1 => $offset);
     }

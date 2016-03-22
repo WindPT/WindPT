@@ -8,10 +8,10 @@ class ManageController extends AdminBaseController
 {
     public function run()
     {
-        $service = $this->_loadConfigService();
-        $config = $service->getValues('site');
-        $cronDs = Wekit::load('SRV:cron.PwCron');
-        $cronList['ClearPeers'] = $cronDs->getCronByFile('PwCronDoClearPeers');
+        $service                   = $this->_loadConfigService();
+        $config                    = $service->getValues('site');
+        $cronDs                    = Wekit::load('SRV:cron.PwCron');
+        $cronList['ClearPeers']    = $cronDs->getCronByFile('PwCronDoClearPeers');
         $cronList['ClearTorrents'] = $cronDs->getCronByFile('PwCronDoClearTorrents');
         $this->setOutput($config, 'config');
         $this->setOutput($cronList, 'cronList');
@@ -20,7 +20,7 @@ class ManageController extends AdminBaseController
     public function creditAction()
     {
         $service = $this->_loadConfigService();
-        $config = $service->getValues('site');
+        $config  = $service->getValues('site');
         Wind::import('SRV:credit.bo.PwCreditBo');
         $creditType = PwCreditBo::getInstance()->cType;
         $this->setOutput($config, 'config');
@@ -29,8 +29,8 @@ class ManageController extends AdminBaseController
 
     public function agentAction()
     {
-        $service = $this->_loadConfigService();
-        $config = $service->getValues('site');
+        $service        = $this->_loadConfigService();
+        $config         = $service->getValues('site');
         $allowedClients = Wekit::load('EXT:torrent.service.PwTorrentAgent')->fetchTorrentAgent();
         $this->setOutput($config, 'config');
         $this->setOutput($allowedClients, 'allowedClients');

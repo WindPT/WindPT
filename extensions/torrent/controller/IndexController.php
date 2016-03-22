@@ -16,20 +16,20 @@ class IndexController extends PwBaseController
     public function updateInfoAction()
     {
         if (Wekit::C('site', 'app.torrent.titlegen.ifopen') > 0) {
-            $t_type = $this->getInput('t_type', 'post');
-            $w_type = $this->getInput('w_type', 'post');
-            $wikilink = $this->getInput('wikilink', 'post');
-            $paras_se = $this->getInput('se', 'post');
-            $paras_rip = $this->getInput('rip', 'post');
+            $t_type           = $this->getInput('t_type', 'post');
+            $w_type           = $this->getInput('w_type', 'post');
+            $wikilink         = $this->getInput('wikilink', 'post');
+            $paras_se         = $this->getInput('se', 'post');
+            $paras_rip        = $this->getInput('rip', 'post');
             $paras_resolution = $this->getInput('resolution', 'post');
-            $paras_sub = $this->getInput('sub', 'post');
-            $paras_format = $this->getInput('format', 'post');
-            $paras_status = $this->getInput('status', 'post');
-            $paras_bps = $this->getInput('bps', 'post');
-            $paras_platform = $this->getInput('platform', 'post');
-            $paras_name = $this->getInput('name', 'post');
-            $paras_oname = $this->getInput('oname', 'post');
-            $paras_lang = $this->getInput('lang', 'post');
+            $paras_sub        = $this->getInput('sub', 'post');
+            $paras_format     = $this->getInput('format', 'post');
+            $paras_status     = $this->getInput('status', 'post');
+            $paras_bps        = $this->getInput('bps', 'post');
+            $paras_platform   = $this->getInput('platform', 'post');
+            $paras_name       = $this->getInput('name', 'post');
+            $paras_oname      = $this->getInput('oname', 'post');
+            $paras_lang       = $this->getInput('lang', 'post');
 
             if (!$this->loginUser->uid) {
                 $this->showError('必须登录才能进行本操作！');
@@ -52,7 +52,7 @@ class IndexController extends PwBaseController
                     }
 
                     $result = json_decode(PwUtils::curl($url));
-                    $title = '[' . $result->pubdate . ']';     // 年份
+                    $title  = '[' . $result->pubdate . ']';     // 年份
                     $title .= '[' . $result->title . ']';     // 标题
 
                     // 子标题
@@ -75,7 +75,7 @@ class IndexController extends PwBaseController
                     }
 
                     $wikilink = $result->alt;
-                    $content = '[img]' . $result->image . '[/img]<br />' . $result->summary;
+                    $content  = '[img]' . $result->image . '[/img]<br />' . $result->summary;
                     break;
 
                 case '2':
@@ -135,12 +135,12 @@ class IndexController extends PwBaseController
                         }
 
                         $wikilink = $result->alt;
-                        $content = '[img]' . $result->images->large . '[/img]<br />' . $result->summary;
+                        $content  = '[img]' . $result->images->large . '[/img]<br />' . $result->summary;
                     } elseif ($w_type == 2) {
                         // IMDB
-                        $url = 'http://omdbapi.com/?i=' . $wikilink;
+                        $url    = 'http://omdbapi.com/?i=' . $wikilink;
                         $result = json_decode(PwUtils::curl($url));
-                        $title = '[' . $result->Country . ']';     // 国别
+                        $title  = '[' . $result->Country . ']';     // 国别
                         $title .= '[' . $result->Year . ']';     // 年份
                         $title .= '[' . $result->Title . ']';     // 影片名
 
@@ -163,7 +163,7 @@ class IndexController extends PwBaseController
                         }
 
                         $wikilink = 'http://www.imdb.com/title/' . $wikilink;
-                        $content = '[img]' . $result->Poster . '[/img]<br />' . $result->Plot;
+                        $content  = '[img]' . $result->Poster . '[/img]<br />' . $result->Plot;
                     }
 
                     break;
@@ -176,14 +176,14 @@ class IndexController extends PwBaseController
                     }
 
                     $result = json_decode(PwUtils::curl($url));
-                    $title = '[' . $result->attrs->pubdate . ']';     // 年份
+                    $title  = '[' . $result->attrs->pubdate . ']';     // 年份
                     $title .= '[' . $result->attrs->title . ']';     // 标题
                     $title .= '[' . $result->attrs->singer . ']';     // 艺人
                     $title .= '[' . $paras_format . ']';     // 格式
                     $title .= '[' . $paras_bps . ']';     // 码率
 
                     $wikilink = $result->alt;
-                    $content = '[img]' . $result->image . '[/img]<br />' . $result->summary;
+                    $content  = '[img]' . $result->image . '[/img]<br />' . $result->summary;
                     break;
 
                 case '4':
@@ -220,20 +220,20 @@ class IndexController extends PwBaseController
 
     public function announceAction()
     {
-        $passkey = $this->getInput('passkey');
-        $infoHash = $this->getInput('info_hash');
-        $peerId = $this->getInput('peer_id');
-        $event = $this->getInput('event');
-        $port = $this->getInput('port');
+        $passkey    = $this->getInput('passkey');
+        $infoHash   = $this->getInput('info_hash');
+        $peerId     = $this->getInput('peer_id');
+        $event      = $this->getInput('event');
+        $port       = $this->getInput('port');
         $downloaded = $this->getInput('downloaded');
-        $uploaded = $this->getInput('uploaded');
-        $left = $this->getInput('left');
-        $compact = $this->getInput('compact');
+        $uploaded   = $this->getInput('uploaded');
+        $left       = $this->getInput('left');
+        $compact    = $this->getInput('compact');
         $no_peer_id = $this->getInput('no_peer_id');
-        $agent = $_SERVER['HTTP_USER_AGENT'];
-        $ip = Wind::getComponent('request')->getClientIp();
-        $status = ($left > 0) ? 'do' : 'done';
-        $seeder = ($left > 0) ? 'no' : 'yes';
+        $agent      = $_SERVER['HTTP_USER_AGENT'];
+        $ip         = Wind::getComponent('request')->getClientIp();
+        $status     = ($left > 0) ? 'do' : 'done';
+        $seeder     = ($left > 0) ? 'no' : 'yes';
 
         Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
 
@@ -352,10 +352,10 @@ class IndexController extends PwBaseController
                 $rotio = 1;
             }
         } else {
-            $uploaded_add = max(0, $uploaded - $history['uploaded_last']);
+            $uploaded_add   = max(0, $uploaded - $history['uploaded_last']);
             $downloaded_add = max(0, $downloaded - $history['downloaded_last']);
 
-            $uploaded_total = $history['uploaded'] + $uploaded_add;
+            $uploaded_total   = $history['uploaded'] + $uploaded_add;
             $downloaded_total = $history['downloaded'] + $downloaded_add;
 
             if ($downloaded_total != 0) {
@@ -374,11 +374,11 @@ class IndexController extends PwBaseController
 
         // Update user's credits
         if ($seeder == "yes" && Wekit::C('site', 'app.torrent.creditifopen') == 1) {
-            $changed = 0;
-            $WindApi = WindidApi::api('user');
-            $crdtits = $WindApi->getUserCredit($user['uid']);
+            $changed       = 0;
+            $WindApi       = WindidApi::api('user');
+            $crdtits       = $WindApi->getUserCredit($user['uid']);
             $user_torrents = count($this->_getTorrentDS()->fetchTorrentByUid($user['uid']));
-            $histories = $this->_getTorrentHistoryDs()->fetchTorrentHistoryByUid($user['uid']);
+            $histories     = $this->_getTorrentHistoryDs()->fetchTorrentHistoryByUid($user['uid']);
 
             if (is_array($histories)) {
                 foreach ($histories as $history) {
@@ -404,9 +404,9 @@ class IndexController extends PwBaseController
                 }
             }
 
-            $tAlive = (time() - strtotime($torrent['created_time'])) / 86400;
+            $tAlive   = (time() - strtotime($torrent['created_time'])) / 86400;
             $timeUsed = time() - strtotime($self['started']);
-            $timeLa = time() - strtotime($self['last_action']);
+            $timeLa   = time() - strtotime($self['last_action']);
 
             $m = Wekit::load('EXT:torrent.service.srv.helper.PwEvalmath');
             $m->e('alive            = ' . round($tAlive));
@@ -469,7 +469,7 @@ class IndexController extends PwBaseController
 
     public function downloadAction()
     {
-        $id = $this->getInput('id');
+        $id      = $this->getInput('id');
         $passkey = $this->getInput('passkey');
 
         if (!$this->loginUser->uid && empty($passkey)) {
@@ -484,7 +484,7 @@ class IndexController extends PwBaseController
         } else {
             Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
 
-            $uid = $this->loginUser->uid;
+            $uid     = $this->loginUser->uid;
             $passkey = PwPasskey::getPassKey($uid);
         }
 
@@ -507,8 +507,8 @@ class IndexController extends PwBaseController
         }
 
         // Change announce to user's private announce
-        $bencode = Wekit::load('EXT:torrent.service.srv.helper.PwBencode');
-        $dictionary = $bencode->doDecodeFile($file);
+        $bencode                         = Wekit::load('EXT:torrent.service.srv.helper.PwBencode');
+        $dictionary                      = $bencode->doDecodeFile($file);
         $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('/app/torrent/index/announce?passkey=' . $passkey)));
 
         // Generate file name
@@ -530,7 +530,7 @@ class IndexController extends PwBaseController
 
     public function subscribeAction()
     {
-        $id = $this->getInput('id');
+        $id    = $this->getInput('id');
         $unsub = $this->getInput('unsub');
 
         if (!$this->loginUser->uid) {
@@ -592,7 +592,7 @@ class IndexController extends PwBaseController
         // seo设置
         Wind::import('SRV:seo.bo.PwSeoBo');
         $seoBo = PwSeoBo::getInstance();
-        $lang = Wind::getComponent('i18n');
+        $lang  = Wind::getComponent('i18n');
         $seoBo->setCustomSeo(
             $lang->getMessage('SEO:space.profile.run.title',
                 array($space->spaceUser['username'], $space->space['space_name'])), '',

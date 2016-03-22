@@ -7,7 +7,8 @@ Wind::import('EXT:torrent.service.srv.helper.PwUtils');
 
 class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
 {
-    public function __construct() {}
+    public function __construct()
+    {}
 
     public function createHtmlAfterUserInfo($user, $read)
     {
@@ -17,8 +18,8 @@ class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
             return;
         }
 
-        $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->fetchTorrentPeerByUid($user['uid']);
-        $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($user['uid']);
+        $peers     = Wekit::load('EXT:torrent.service.PwTorrentPeer')->fetchTorrentPeerByUid($user['uid']);
+        $torrents  = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($user['uid']);
         $histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($user['uid']);
 
         $seeding = $leeching = 0;

@@ -47,7 +47,6 @@ class PwTorrent
         return $this->_getDao($fetchmode)->fetchTorrent();
     }
 
-
     public function addTorrent(PwTorrentDm $dm)
     {
         if (($result = $dm->beforeAdd()) !== true) {

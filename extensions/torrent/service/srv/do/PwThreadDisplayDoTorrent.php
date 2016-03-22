@@ -12,7 +12,7 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
 
     public function __construct($tid, PwUserBo $user)
     {
-        $this->tid = $tid;
+        $this->tid  = $tid;
         $this->user = $user;
         $this->getData();
     }
@@ -23,10 +23,10 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
 
         Wind::import('EXT:torrent.service.srv.helper.PwUtils');
 
-        $torrent['seeders'] = $torrent['seeders'] + 1;
-        $torrent['size'] = PwUtils::readableDataTransfer($torrent['size']);
+        $torrent['seeders']   = $torrent['seeders'] + 1;
+        $torrent['size']      = PwUtils::readableDataTransfer($torrent['size']);
         $torrent['info_hash'] = PwUtils::readableHash($torrent['info_hash']);
-        $torrent['list'] = $this->_getTorrentFileService()->getTorrentFileByTorrent($torrent['id']);
+        $torrent['list']      = $this->_getTorrentFileService()->getTorrentFileByTorrent($torrent['id']);
 
         if (is_array($torrent['list'])) {
             foreach ($torrent['list'] as $key => $value) {
@@ -56,7 +56,7 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
             }
         }
 
-        $torrent['seeder'] = ($seeder == 0) ? '断种' : $seeder;
+        $torrent['seeder']  = ($seeder == 0) ? '断种' : $seeder;
         $torrent['leecher'] = $leecher;
 
         $this->torrent = $torrent;

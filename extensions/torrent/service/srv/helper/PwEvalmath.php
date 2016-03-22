@@ -79,10 +79,10 @@ LICENSE
 class PwEvalMath
 {
     public $suppress_errors = false;
-    public $last_error = null;
+    public $last_error      = null;
 
-    public $v = array('e' => 2.71, 'pi' => 3.14); // variables (and constants)
-    public $f = array(); // user-defined functions
+    public $v  = array('e' => 2.71, 'pi' => 3.14); // variables (and constants)
+    public $f  = array(); // user-defined functions
     public $vb = array('e', 'pi'); // constants
     public $fb = array( // built-in functions
         'sin', 'sinh', 'arcsin', 'asin', 'arcsinh', 'asinh',
@@ -94,7 +94,7 @@ class PwEvalMath
     {
         // make the variables a little more accurate
         $this->v['pi'] = pi();
-        $this->v['e'] = exp(1);
+        $this->v['e']  = exp(1);
     }
 
     public function e($expr)
@@ -105,7 +105,7 @@ class PwEvalMath
     public function evaluate($expr)
     {
         $this->last_error = null;
-        $expr = trim($expr);
+        $expr             = trim($expr);
         if (substr($expr, -1, 1) == ';') {
             $expr = substr($expr, 0, strlen($expr) - 1);
         }
@@ -177,12 +177,12 @@ class PwEvalMath
     public function nfx($expr)
     {
 
-        $index = 0;
-        $stack = new EvalMathStack;
+        $index  = 0;
+        $stack  = new EvalMathStack;
         $output = array(); // postfix form of expression, to be passed to pfx()
-        $expr = trim(strtolower($expr));
+        $expr   = trim(strtolower($expr));
 
-        $ops = array('+', '-', '*', '/', '^', '_');
+        $ops   = array('+', '-', '*', '/', '^', '_');
         $ops_r = array('+' => 0, '-' => 0, '*' => 0, '/' => 0, '^' => 1); // right-associative operator?
         $ops_p = array('+' => 0, '-' => 0, '*' => 1, '/' => 1, '_' => 1, '^' => 2); // operator precedence
 
@@ -209,7 +209,8 @@ class PwEvalMath
                 //===============
             } elseif ((in_array($op, $ops) or $ex) and $expecting_op) {
                 // are we putting an operator on the stack?
-                if ($ex) { // are we expecting an operator but have a number/variable/function/opening parethesis?
+                if ($ex) {
+                    // are we expecting an operator but have a number/variable/function/opening parethesis?
                     $op = '*';
                     $index--; // it's an implicit multiplication
                 }
@@ -224,7 +225,8 @@ class PwEvalMath
                 //===============
             } elseif ($op == ')' and $expecting_op) {
                 // ready to close a parenthesis?
-                while (($o2 = $stack->pop()) != '(') { // pop off the stack back to the last (
+                while (($o2 = $stack->pop()) != '(') {
+                    // pop off the stack back to the last (
                     if (is_null($o2)) {
                         return $this->trigger("unexpected ')'");
                     } else {
@@ -234,10 +236,11 @@ class PwEvalMath
                 }
                 if (preg_match("/^([a-z]\w*)\($/", $stack->last(2), $matches)) {
                     // did we just close a function?
-                    $fnn = $matches[1]; // get the function name
+                    $fnn       = $matches[1]; // get the function name
                     $arg_count = $stack->pop(); // see how many arguments there were (cleverly stored on the stack, thank you)
-                    $output[] = $stack->pop(); // pop the function and push onto the output
-                    if (in_array($fnn, $this->fb)) { // check the argument count
+                    $output[]  = $stack->pop(); // pop the function and push onto the output
+                    if (in_array($fnn, $this->fb)) {
+                        // check the argument count
                         if ($arg_count > 1) {
                             return $this->trigger("too many arguments ($arg_count given, 1 expected)");
                         }
@@ -284,17 +287,18 @@ class PwEvalMath
             } elseif ($ex and !$expecting_op) {
                 // do we now have a function/variable/number?
                 $expecting_op = true;
-                $val = $match[1];
+                $val          = $match[1];
                 if (preg_match("/^([a-z]\w*)\($/", $val, $matches)) {
                     // may be func, or variable w/ implicit multiplication against parentheses...
-                    if (in_array($matches[1], $this->fb) or array_key_exists($matches[1], $this->f)) { // it's a func
+                    if (in_array($matches[1], $this->fb) or array_key_exists($matches[1], $this->f)) {
+                        // it's a func
                         $stack->push($val);
                         $stack->push(1);
                         $stack->push('(');
                         $expecting_op = false;
                     } else {
                         // it's a var w/ implicit multiplication
-                        $val = $matches[1];
+                        $val      = $matches[1];
                         $output[] = $val;
                     }
                 } else {

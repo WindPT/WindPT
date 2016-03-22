@@ -10,9 +10,9 @@ class PwCronDoClearTorrents extends AbstractCronBase
 {
     private function deleteThread($topic)
     {
-        $tid = $topic['tid'];
-        $fid = $topic['fid'];
-        $subject = $topic['subject'];
+        $tid            = $topic['tid'];
+        $fid            = $topic['fid'];
+        $subject        = $topic['subject'];
         $created_userid = $topic['created_userid'];
 
         $dm = new PwTopicRecycleDm();

@@ -23,13 +23,13 @@ class PwPostDoTorrent extends PwPostDoBase
 
     public function __construct(PwPost $pwpost, $tid = null, $wikilink = '')
     {
-        $this->user = $pwpost->user;
-        $this->special = $pwpost->special;
-        $this->tid = $tid ? intval($tid) : null;
-        $this->fid = intval($pwpost->forum->fid);
+        $this->user     = $pwpost->user;
+        $this->special  = $pwpost->special;
+        $this->tid      = $tid ? intval($tid) : null;
+        $this->fid      = intval($pwpost->forum->fid);
         $this->wikilink = $wikilink;
-        $this->action = $this->tid ? 'modify' : 'add';
-        $this->passkey = PwPasskey::getPassKey($this->user->uid);
+        $this->action   = $this->tid ? 'modify' : 'add';
+        $this->passkey  = PwPasskey::getPassKey($this->user->uid);
     }
 
     public function createHtmlBeforeContent()
@@ -63,21 +63,21 @@ class PwPostDoTorrent extends PwPostDoBase
             if ($_FILES['torrent']['size'] < 1) {
                 return new PwError('上传文件大小有问题，为空！');
             }
-            $filename = $_FILES['torrent']['name'];
+            $filename   = $_FILES['torrent']['name'];
             $dictionary = $bencode->doDecodeFile($_FILES['torrent']['tmp_name']);
             if (!isset($dictionary)) {
                 return new PwError('种子读取错误，请检查种子是否正确！');
             }
-            list($announce, $info) = $bencode->doDictionaryCheck($dictionary, 'announce(string):info');
+            list($announce, $info)                       = $bencode->doDictionaryCheck($dictionary, 'announce(string):info');
             list($dictionaryName, $pieceLength, $pieces) = $bencode->doDictionaryCheck($info, 'name(string):piece length(integer):pieces(string)');
             if (strlen($pieces) % 20 != 0) {
                 return new PwError('无效的文件块，请检查种子是否正确！');
             }
-            $fileList = array();
+            $fileList    = array();
             $totalLength = $bencode->doDictionaryGet($info, 'length', 'integer');
             if (isset($totalLength)) {
                 $fileList[] = array($dictionaryName, $totalLength);
-                $type = 'single';
+                $type       = 'single';
             } else {
                 $flist = $bencode->doDictionaryGet($info, 'files', 'list');
                 if (!isset($flist)) {
@@ -110,7 +110,7 @@ class PwPostDoTorrent extends PwPostDoBase
                             return new PwError('种子存在文件名错误，请检查种子是否正确！');
                         }
 
-                        $ffe = implode('/', $ffa);
+                        $ffe        = implode('/', $ffa);
                         $fileList[] = array($ffe, $ll);
                     }
                 }
@@ -138,7 +138,7 @@ class PwPostDoTorrent extends PwPostDoBase
                 }
             }
 
-            $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.url') . '/announce.php'));
+            $dictionary['value']['announce']                 = $bencode->doDecode($bencode->doEncodeString(Wekit::C('site', 'info.url') . '/announce.php'));
             $dictionary['value']['info']['value']['private'] = $bencode->doDecode('i1e');
 
             unset($dictionary['value']['announce-list']);
@@ -156,13 +156,13 @@ class PwPostDoTorrent extends PwPostDoBase
                 return new PwError('不能发布重复种子资源');
             }
 
-            $this->dictionary = $dictionary;
-            $this->infohash = $infohash;
-            $this->filename = $filename;
+            $this->dictionary   = $dictionary;
+            $this->infohash     = $infohash;
+            $this->filename     = $filename;
             $this->filesavename = $dictionaryName;
-            $this->filelist = $fileList;
-            $this->totalength = $totalLength;
-            $this->type = $type;
+            $this->filelist     = $fileList;
+            $this->totalength   = $totalLength;
+            $this->type         = $type;
 
             return true;
         } else {

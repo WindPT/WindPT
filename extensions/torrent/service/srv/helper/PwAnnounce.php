@@ -16,21 +16,19 @@ class PwAnnounce
     public static function getPeersByTorrentId($torrent_id = 0, $peer_id = '')
     {
         $peer_list = self::_getTorrentPeerDS()->getTorrentPeerByTorrent($torrent_id);
-        /*
         if (is_array($peer_list)) {
-        foreach ($peer_list as $key => $peer) {
-        if ($peer_id == $peer['peer_id']) {
-        unset($peer_list[$key]);
+            foreach ($peer_list as $key => $peer) {
+                if ($peer_id == $peer['peer_id']) {
+                    unset($peer_list[$key]);
+                }
+            }
         }
-        }
-        }
-         */
         return $peer_list;
     }
 
     public static function updatePeerCount($torrent, $peer_list)
     {
-        $torrent['seeders'] = 0;
+        $torrent['seeders']  = 0;
         $torrent['leechers'] = 0;
 
         if (is_array($torrent) && is_array($peer_list)) {
@@ -50,7 +48,7 @@ class PwAnnounce
     {
         $bencode = new PwBencode();
 
-        $string  = 'd' . $bencode->doEncodeString('interval') . 'i840e' . $bencode->doEncodeString('min interval') . 'i30e' . $bencode->doEncodeString('complete') . 'i' . $torrent['seeders'] . 'e' . $bencode->doEncodeString('incomplete') . 'i' . $torrent['leechers'] . 'e' . $bencode->doEncodeString('peers');
+        $string = 'd' . $bencode->doEncodeString('interval') . 'i840e' . $bencode->doEncodeString('min interval') . 'i30e' . $bencode->doEncodeString('complete') . 'i' . $torrent['seeders'] . 'e' . $bencode->doEncodeString('incomplete') . 'i' . $torrent['leechers'] . 'e' . $bencode->doEncodeString('peers');
 
         $peer_string = '';
 

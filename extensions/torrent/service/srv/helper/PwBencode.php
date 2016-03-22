@@ -47,7 +47,7 @@ class PwBencode
 
     public function doEncodeDictionary($d)
     {
-        $s = "d";
+        $s    = "d";
         $keys = array_keys($d);
         sort($keys);
         foreach ($keys as $k) {
@@ -74,9 +74,9 @@ class PwBencode
     public function doDecode($s)
     {
         if (preg_match('/^(\d+):/', $s, $m)) {
-            $l = $m[1];
+            $l  = $m[1];
             $pl = strlen($l) + 1;
-            $v = substr($s, $pl, $l);
+            $v  = substr($s, $pl, $l);
             $ss = substr($s, 0, $pl + $l);
             if (strlen($v) != $l) {
                 return;
@@ -85,7 +85,7 @@ class PwBencode
             return array('type' => "string", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
         }
         if (preg_match('/^i(-{0,1}\d+)e/', $s, $m)) {
-            $v = $m[1];
+            $v  = $m[1];
             $ss = "i" . $v . "e";
             if ($v === "-0") {
                 return;
@@ -114,8 +114,8 @@ class PwBencode
         }
 
         $sl = strlen($s);
-        $i = 1;
-        $v = array();
+        $i  = 1;
+        $v  = array();
         $ss = "l";
         for (;;) {
             if ($i >= $sl) {
@@ -146,8 +146,8 @@ class PwBencode
         }
 
         $sl = strlen($s);
-        $i = 1;
-        $v = array();
+        $i  = 1;
+        $v  = array();
         $ss = "d";
         for (;;) {
             if ($i >= $sl) {
@@ -189,8 +189,8 @@ class PwBencode
             return;
         }
 
-        $a = explode(":", $s);
-        $dd = $d["value"];
+        $a   = explode(":", $s);
+        $dd  = $d["value"];
         $ret = array();
         foreach ($a as $k) {
             unset($t);

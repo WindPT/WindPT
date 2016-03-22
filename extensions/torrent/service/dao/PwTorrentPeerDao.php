@@ -4,8 +4,8 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 
 class PwTorrentPeerDao extends PwBaseDao
 {
-    protected $_table = 'app_torrent_peer';
-    protected $_pk = 'id';
+    protected $_table      = 'app_torrent_peer';
+    protected $_pk         = 'id';
     protected $_dataStruct = array('id', 'torrent', 'peer_id', 'ip', 'port', 'uploaded', 'downloaded', 'to_go', 'seeder', 'started', 'last_action', 'prev_action', 'connectable', 'userid', 'agent', 'finishedat', 'passkey');
 
     public function getTorrentPeer($id)

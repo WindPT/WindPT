@@ -4,8 +4,8 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 
 class PwTorrentSubscribeDao extends PwBaseDao
 {
-    protected $_table = 'app_torrent_subscription';
-    protected $_pk = 'id';
+    protected $_table      = 'app_torrent_subscription';
+    protected $_pk         = 'id';
     protected $_dataStruct = array('id', 'uid', 'torrent');
 
     public function getTorrentSubscribe($id)
