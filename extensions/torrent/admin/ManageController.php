@@ -6,38 +6,44 @@ Wind::import('ADMIN:library.AdminBaseController');
 
 class ManageController extends AdminBaseController
 {
+    private $config;
+
     public function beforeAction($handlerAdapter)
     {
         parent::beforeAction($handlerAdapter);
+
+        $service      = $this->_loadConfigService();
+        $this->config = $service->getValues('site');
+
+        foreach ($this->config as &$conf) {
+            if ($conf == null) {
+                $conf = array();
+            }
+        }
     }
 
     public function run()
     {
-        $service                   = $this->_loadConfigService();
-        $config                    = $service->getValues('site');
         $cronDs                    = Wekit::load('SRV:cron.PwCron');
         $cronList['ClearPeers']    = $cronDs->getCronByFile('PwCronDoClearPeers');
         $cronList['ClearTorrents'] = $cronDs->getCronByFile('PwCronDoClearTorrents');
-        $this->setOutput($config, 'config');
+
+        $this->setOutput($this->config, 'config');
         $this->setOutput($cronList, 'cronList');
     }
 
     public function creditAction()
     {
-        $service = $this->_loadConfigService();
-        $config  = $service->getValues('site');
         Wind::import('SRV:credit.bo.PwCreditBo');
         $creditType = PwCreditBo::getInstance()->cType;
-        $this->setOutput($config, 'config');
+        $this->setOutput($this->config, 'config');
         $this->setOutput($creditType, 'creditType');
     }
 
     public function agentAction()
     {
-        $service        = $this->_loadConfigService();
-        $config         = $service->getValues('site');
         $allowedClients = Wekit::load('EXT:torrent.service.PwTorrentAgent')->fetchTorrentAgent();
-        $this->setOutput($config, 'config');
+        $this->setOutput($this->config, 'config');
         $this->setOutput($allowedClients, 'allowedClients');
     }
 
@@ -63,20 +69,20 @@ class ManageController extends AdminBaseController
             $peertimeout = 15;
         }
 
-        $config = new PwConfigSet('site');
-        $config->set('app.torrent.showuserinfo', $showuserinfo)->set('app.torrent.titlegen.ifopen', $titlegenifopen)->set('app.torrent.titlegen.douban', $titlegendouban)->set('app.torrent.check', $check)->set('app.torrent.torrentnameprefix', $torrentnameprefix)->set('app.torrent.cron.peertimeout', intval($peertimeout))->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
+        $this->config = new PwConfigSet('site');
+        $this->config->set('app.torrent.showuserinfo', $showuserinfo)->set('app.torrent.titlegen.ifopen', $titlegenifopen)->set('app.torrent.titlegen.douban', $titlegendouban)->set('app.torrent.check', $check)->set('app.torrent.torrentnameprefix', $torrentnameprefix)->set('app.torrent.cron.peertimeout', intval($peertimeout))->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
 
         if (!empty($deniedfts)) {
-            $config->set('app.torrent.deniedfts', $_deniedfts);
+            $this->config->set('app.torrent.deniedfts', $_deniedfts);
         }
 
         $sconfig = $this->_loadConfigService()->getValues('site');
         if ($sconfig['theme.site.default'] == 'pt') {
             $showpeers = $this->getInput('showpeers', 'post');
-            $config->set('app.torrent.theme.showpeers', $showpeers);
+            $this->config->set('app.torrent.theme.showpeers', $showpeers);
         }
 
-        $config->flush();
+        $this->config->flush();
 
         $this->showMessage('ADMIN:success');
     }
@@ -97,8 +103,8 @@ class ManageController extends AdminBaseController
             }
         }
 
-        $config = new PwConfigSet('site');
-        $config->set('app.torrent.creditifopen', intval($creditifopen))->set('app.torrent.credits', $_credits)->flush();
+        $this->config = new PwConfigSet('site');
+        $this->config->set('app.torrent.creditifopen', intval($creditifopen))->set('app.torrent.credits', $_credits)->flush();
 
         $this->showMessage('ADMIN:success');
     }
