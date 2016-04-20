@@ -9,8 +9,7 @@ class PwAnnounce
     public static function showError($message = '')
     {
         $bencode = new PwBencode();
-        echo 'd' . $bencode->doEncodeString('failure reason:') . $bencode->doEncodeString($message) . 'e';
-        exit(0);
+        exit('d' . $bencode->doEncodeString('failure reason:') . $bencode->doEncodeString($message) . 'e');
     }
 
     public static function getPeersByTorrentId($torrent_id = 0, $peer_id = '')
