@@ -57,8 +57,8 @@ class IndexController extends PwBaseController
                     }
 
                     $result = json_decode(PwUtils::curl($url));
-                    $title  = '[' . $result->pubdate . ']';     // 年份
-                    $title .= '[' . $result->title . ']';     // 标题
+                    $title  = '[' . $result->pubdate . ']'; // 年份
+                    $title .= '[' . $result->title . ']'; // 标题
 
                     // 子标题
                     if ($result->subtitle) {
@@ -96,9 +96,9 @@ class IndexController extends PwBaseController
 
                         $result = json_decode(PwUtils::curl($url));
 
-                        $title = '[' . $result->countries[0] . ']';     // 国别
-                        $title .= '[' . $result->year . ']';     // 年份
-                        $title .= '[' . $result->title . ']';     // 影片中文名
+                        $title = '[' . $result->countries[0] . ']'; // 国别
+                        $title .= '[' . $result->year . ']'; // 年份
+                        $title .= '[' . $result->title . ']'; // 影片中文名
 
                         // 又名
                         $title .= '[';
@@ -129,10 +129,10 @@ class IndexController extends PwBaseController
                         $title = substr($title, 0, strlen($title) - 3);
                         $title .= ']';
 
-                        $title .= '[' . $paras_rip . ']';     // 压制
-                        $title .= '[' . $paras_resolution . ']';     // 分辨率
-                        $title .= '[' . $paras_sub . ']';     // 字幕
-                        $title .= '[' . $paras_format . ']';     // 格式
+                        $title .= '[' . $paras_rip . ']'; // 压制
+                        $title .= '[' . $paras_resolution . ']'; // 分辨率
+                        $title .= '[' . $paras_sub . ']'; // 字幕
+                        $title .= '[' . $paras_format . ']'; // 格式
 
                         // 状态
                         if ($paras_status) {
@@ -145,9 +145,9 @@ class IndexController extends PwBaseController
                         // IMDB
                         $url    = 'http://omdbapi.com/?i=' . $wikilink;
                         $result = json_decode(PwUtils::curl($url));
-                        $title  = '[' . $result->Country . ']';     // 国别
-                        $title .= '[' . $result->Year . ']';     // 年份
-                        $title .= '[' . $result->Title . ']';     // 影片名
+                        $title  = '[' . $result->Country . ']'; // 国别
+                        $title .= '[' . $result->Year . ']'; // 年份
+                        $title .= '[' . $result->Title . ']'; // 影片名
 
                         // 季度、集数
                         if ($paras_se) {
@@ -157,10 +157,10 @@ class IndexController extends PwBaseController
                         // 类型
                         $title .= '[' . str_replace(', ', ' ', $result->Genre) . ']';
 
-                        $title .= '[' . $paras_rip . ']';     // 压制
-                        $title .= '[' . $paras_resolution . ']';     // 分辨率
-                        $title .= '[' . $paras_sub . ']';     // 字幕
-                        $title .= '[' . $paras_format . ']';     // 格式
+                        $title .= '[' . $paras_rip . ']'; // 压制
+                        $title .= '[' . $paras_resolution . ']'; // 分辨率
+                        $title .= '[' . $paras_sub . ']'; // 字幕
+                        $title .= '[' . $paras_format . ']'; // 格式
 
                         // 状态
                         if ($paras_status) {
@@ -181,11 +181,11 @@ class IndexController extends PwBaseController
                     }
 
                     $result = json_decode(PwUtils::curl($url));
-                    $title  = '[' . $result->attrs->pubdate . ']';     // 年份
-                    $title .= '[' . $result->attrs->title . ']';     // 标题
-                    $title .= '[' . $result->attrs->singer . ']';     // 艺人
-                    $title .= '[' . $paras_format . ']';     // 格式
-                    $title .= '[' . $paras_bps . ']';     // 码率
+                    $title  = '[' . $result->attrs->pubdate . ']'; // 年份
+                    $title .= '[' . $result->attrs->title . ']'; // 标题
+                    $title .= '[' . $result->attrs->singer . ']'; // 艺人
+                    $title .= '[' . $paras_format . ']'; // 格式
+                    $title .= '[' . $paras_bps . ']'; // 码率
 
                     $wikilink = $result->alt;
                     $content  = '[img]' . $result->image . '[/img]<br />' . $result->summary;
@@ -193,27 +193,27 @@ class IndexController extends PwBaseController
 
                 case '4':
                     // 软件
-                    $title = '[' . $paras_platform . ']';     // 平台
-                    $title .= '[' . $paras_name . ']';     // 中文名
+                    $title = '[' . $paras_platform . ']'; // 平台
+                    $title .= '[' . $paras_name . ']'; // 中文名
 
                     // 原名
                     if ($paras_oname) {
                         $title .= '[' . $paras_oname . ']';
                     }
-                    $title .= '[' . $paras_lang . ']';     // 语言
-                    $title .= '[' . $paras_format . ']';     // 格式
+                    $title .= '[' . $paras_lang . ']'; // 语言
+                    $title .= '[' . $paras_format . ']'; // 格式
                     break;
 
                 case '5':
                     // 其他
-                    $title .= '[' . $paras_name . ']';     // 中文名
+                    $title .= '[' . $paras_name . ']'; // 中文名
 
                     // 原名
                     if ($paras_oname) {
                         $title .= '[' . $paras_oname . ']';
                     }
-                    $title .= '[' . $paras_lang . ']';     // 语言
-                    $title .= '[' . $paras_format . ']';     // 格式
+                    $title .= '[' . $paras_lang . ']'; // 语言
+                    $title .= '[' . $paras_format . ']'; // 格式
                     break;
             }
 
