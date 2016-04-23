@@ -150,7 +150,7 @@ class PwPostDoTorrent extends PwPostDoBase
 
             $infohash = pack('H*', sha1($info['string']));
 
-            $check = $this->_getTorrentDS()->getTorrentByInfoHash($infohash);
+            $check = $this->_getTorrentService()->getTorrentByInfoHash($infohash);
 
             if ($check) {
                 return new PwError('不能发布重复种子资源');
@@ -175,7 +175,7 @@ class PwPostDoTorrent extends PwPostDoBase
         $dm = Wekit::load('EXT:torrent.service.dm.PwTorrentDm');
         $dm->setTid($tid)->setInfoHash($this->infohash)->setOwner($this->user->uid)->setVisible('yes')->setAnonymous('yes')->setSize($this->totalength)->setNumfiles(count($this->filelist))->setType($this->type)->setWikilink($this->wikilink)->setFileName($this->filename)->setSaveAs($this->filesavename)->setSpState(1)->setAdded(date('Y-m-d H:i:s'))->setLastAction(date('Y-m-d H:i:s'));
 
-        $result = $this->_getTorrentDS()->addTorrent($dm);
+        $result = $this->_getTorrentService()->addTorrent($dm);
 
         if ($result instanceof PwError) {
             return $result;
@@ -188,7 +188,7 @@ class PwPostDoTorrent extends PwPostDoBase
                 $filedm->setTorrent($result);
                 $filedm->setFileName($file[0]);
                 $filedm->setSize($file[1]);
-                $this->_getTorrentFileDS()->addTorrentFile($filedm);
+                $this->_getTorrentFileService()->addTorrentFile($filedm);
             }
         }
 
@@ -207,12 +207,12 @@ class PwPostDoTorrent extends PwPostDoBase
         return true;
     }
 
-    private function _getTorrentDS()
+    private function _getTorrentService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrent');
     }
 
-    private function _getTorrentFileDS()
+    private function _getTorrentFileService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentFile');
     }

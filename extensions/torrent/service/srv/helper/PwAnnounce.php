@@ -14,7 +14,7 @@ class PwAnnounce
 
     public static function getPeersByTorrentId($torrent_id = 0, $peer_id = '')
     {
-        $peer_list = self::_getTorrentPeerDS()->getTorrentPeerByTorrent($torrent_id);
+        $peer_list = self::_getTorrentPeerService()->getTorrentPeerByTorrent($torrent_id);
         if (is_array($peer_list)) {
             foreach ($peer_list as $key => $peer) {
                 if ($peer_id == $peer['peer_id']) {
@@ -75,7 +75,7 @@ class PwAnnounce
         return $string . 'e';
     }
 
-    private static function _getTorrentPeerDS()
+    private static function _getTorrentPeerService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentPeer');
     }

@@ -41,7 +41,7 @@ class IndexController extends PwBaseController
             }
 
             // Check if user was banned
-            $userBan = $this->__getUserBanDS()->getBanInfo($this->loginUser->uid);
+            $userBan = $this->_getUserBanService()->getBanInfo($this->loginUser->uid);
             if ($userBan) {
                 $this->showError('用户处于封禁期！');
             }
@@ -250,7 +250,7 @@ class IndexController extends PwBaseController
         // Check if a BitTorrent client
         $allowed = false;
 
-        $allowedClients = $this->_getTorrentAgentDS()->fetchTorrentAgent();
+        $allowedClients = $this->_getTorrentAgentService()->fetchTorrentAgent();
 
         if (is_array($allowedClients)) {
             foreach ($allowedClients as $allowedClient) {
@@ -276,25 +276,25 @@ class IndexController extends PwBaseController
         header('Pragma: no-cache');
 
         // Verify passkey
-        $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passkey);
+        $user = $this->_getTorrentUserService()->getTorrentUserByPasskey($passkey);
         if (!$user) {
             PwAnnounce::showError('Invalid passkey! Re-download the torrent file!');
         }
 
         // Check if user was banned
-        $userBan = $this->__getUserBanDS()->getBanInfo($user['uid']);
+        $userBan = $this->_getUserBanService()->getBanInfo($user['uid']);
         if ($userBan) {
             PwAnnounce::showError('User was banned!');
         }
 
         // Get torrent information by infoHash
-        $torrent = $this->_getTorrentDS()->getTorrentByInfoHash($infoHash);
+        $torrent = $this->_getTorrentService()->getTorrentByInfoHash($infoHash);
         if (!$torrent) {
             PwAnnounce::showError('Torrent not registered with this tracker!');
         }
 
         // Check if torrent was removed
-        $topic = $this->__getThreadDS()->getThread($torrent['tid']);
+        $topic = $this->_getThreadService()->getThread($torrent['tid']);
         if ($topic['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
             PwAnnounce::showError('Torrent removed!');
         }
@@ -303,7 +303,7 @@ class IndexController extends PwBaseController
         $peers = PwAnnounce::getPeersByTorrentId($torrent['id'], $self['peer_id']);
 
         // Get this peer
-        $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
+        $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
 
         Wind::import('EXT:torrent.service.dm.PwTorrentPeerDm');
 
@@ -318,15 +318,15 @@ class IndexController extends PwBaseController
                 case '':
                 case 'started':
                     $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
-                    $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
+                    $this->_getTorrentPeerService()->updateTorrentPeer($dm);
                     break;
                 case 'stopped':
-                    $this->_getTorrentPeerDS()->deleteTorrentPeer($self['id']);
+                    $this->_getTorrentPeerService()->deleteTorrentPeer($self['id']);
                     $status = 'stop';
                     break;
                 case 'completed':
                     $dm->setFinishedAt(Pw::getTime())->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
-                    $this->_getTorrentPeerDS()->updateTorrentPeer($dm);
+                    $this->_getTorrentPeerService()->updateTorrentPeer($dm);
                     $status = 'done';
                     break;
                 default:
@@ -343,19 +343,19 @@ class IndexController extends PwBaseController
 
             $dm = new PwTorrentPeerDm();
             $dm->setTorrent($torrent['id'])->setUserid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
-            $this->_getTorrentPeerDS()->addTorrentPeer($dm);
-            $self = $this->_getTorrentPeerDS()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
+            $this->_getTorrentPeerService()->addTorrentPeer($dm);
+            $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
         }
 
         // Update user's history about this torrent
-        $history = $this->_getTorrentHistoryDs()->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
+        $history = $this->_getTorrentHistoryService()->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
 
         Wind::import('EXT:torrent.service.dm.PwTorrentHistoryDm');
 
         if (!$history) {
             $dm = new PwTorrentHistoryDm();
             $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
-            $this->_getTorrentHistoryDs()->addTorrentHistory($dm);
+            $this->_getTorrentHistoryService()->addTorrentHistory($dm);
             if ($downloaded != 0) {
                 $rotio = round($uploaded / $downloaded, 2);
             } else {
@@ -376,7 +376,7 @@ class IndexController extends PwBaseController
 
             $dm = new PwTorrentHistoryDm($history['id']);
             $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded)->setStatus($status);
-            $this->_getTorrentHistoryDs()->updateTorrentHistory($dm);
+            $this->_getTorrentHistoryService()->updateTorrentHistory($dm);
         }
 
         // Count Peers
@@ -387,8 +387,8 @@ class IndexController extends PwBaseController
             $changed       = 0;
             $WindApi       = WindidApi::api('user');
             $crdtits       = $WindApi->getUserCredit($user['uid']);
-            $user_torrents = count($this->_getTorrentDS()->fetchTorrentByUid($user['uid']));
-            $histories     = $this->_getTorrentHistoryDs()->fetchTorrentHistoryByUid($user['uid']);
+            $user_torrents = count($this->_getTorrentService()->fetchTorrentByUid($user['uid']));
+            $histories     = $this->_getTorrentHistoryService()->fetchTorrentHistoryByUid($user['uid']);
 
             if (is_array($histories)) {
                 foreach ($histories as $history) {
@@ -403,7 +403,7 @@ class IndexController extends PwBaseController
                 $rotio_total = 1;
             }
 
-            $userpeers = $this->_getTorrentPeerDS()->fetchTorrentPeerByUid($user['uid']);
+            $userpeers = $this->_getTorrentPeerService()->fetchTorrentPeerByUid($user['uid']);
             if (is_array($userpeers)) {
                 foreach ($userpeers as $p) {
                     if ($p['seeder'] == 'yes') {
@@ -469,7 +469,7 @@ class IndexController extends PwBaseController
         Wind::import('EXT:torrent.service.dm.PwTorrentDm');
         $dm = new PwTorrentDm($torrent['id']);
         $dm->setSeeders($torrent['seeders'])->setLeechers($torrent['leechers'])->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'));
-        $this->_getTorrentDS()->updateTorrent($dm);
+        $this->_getTorrentService()->updateTorrent($dm);
 
         // Output peers list to client
         $peer_string = PwAnnounce::buildPeerList($torrent, $peers, $compact, $no_peer_id);
@@ -485,7 +485,7 @@ class IndexController extends PwBaseController
         if (!$this->loginUser->uid && empty($passkey)) {
             $this->showError('必须登录才能进行本操作！');
         } elseif (is_string($passkey)) {
-            $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passkey);
+            $user = $this->_getTorrentUserService()->getTorrentUserByPasskey($passkey);
             if (empty($user)) {
                 $this->showError('Passkey 错误！');
             } else {
@@ -498,7 +498,7 @@ class IndexController extends PwBaseController
             $passkey = PwPasskey::getPassKey($uid);
         }
 
-        $userBan = $this->__getUserBanDS()->getBanInfo($uid);
+        $userBan = $this->_getUserBanService()->getBanInfo($uid);
         if ($userBan) {
             $this->showError('用户处于封禁期！');
         }
@@ -508,10 +508,10 @@ class IndexController extends PwBaseController
             $this->showError('种子文件不存在！');
         }
 
-        $torrent = $this->_getTorrentDS()->getTorrent($id);
+        $torrent = $this->_getTorrentService()->getTorrent($id);
 
         // Check if torrent was removed
-        $topic = $this->__getThreadDS()->getThread($torrent['tid']);
+        $topic = $this->_getThreadService()->getThread($torrent['tid']);
         if ($topic['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
             $this->showError('种子已被删除或正在审核！');
         }
@@ -547,20 +547,20 @@ class IndexController extends PwBaseController
             $this->showError('必须登录才能进行本操作！');
         }
 
-        $userBan = $this->__getUserBanDS()->getBanInfo($this->loginUser->uid);
+        $userBan = $this->_getUserBanService()->getBanInfo($this->loginUser->uid);
         if ($userBan) {
             $this->showError('用户处于封禁期！');
         }
 
-        $torrent = $this->_getTorrentDS()->getTorrent($id);
+        $torrent = $this->_getTorrentService()->getTorrent($id);
         if (empty($torrent)) {
             $this->showError('种子文件不存在！');
         }
 
-        $torrent = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUidAndTorrent($this->loginUser->uid, $id);
+        $torrent = $this->_getTorrentSubscribeService()->getTorrentSubscribeByUidAndTorrent($this->loginUser->uid, $id);
         if (!empty($torrent)) {
             if ($unsub == 'true') {
-                $this->_getTorrentSubscribeDs()->deleteTorrentSubscribe($torrent['id']);
+                $this->_getTorrentSubscribeService()->deleteTorrentSubscribe($torrent['id']);
                 $this->showMessage('取消订阅种子成功！');
             } else {
                 $this->showError('已订阅该种子！');
@@ -571,7 +571,7 @@ class IndexController extends PwBaseController
 
         $dm = new PwTorrentSubscribeDm();
         $dm->setUid($this->loginUser->uid)->setTorrent($id);
-        $this->_getTorrentSubscribeDs()->addTorrentSubscribe($dm);
+        $this->_getTorrentSubscribeService()->addTorrentSubscribe($dm);
 
         $this->showMessage('订阅种子成功！');
     }
@@ -591,7 +591,7 @@ class IndexController extends PwBaseController
         $space->setTome($spaceUid, $this->loginUser->uid);
         $space->setVisitUid($this->loginUser->uid);
 
-        $torrents = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUid($this->loginUser->uid);
+        $torrents = $this->_getTorrentSubscribeService()->getTorrentSubscribeByUid($this->loginUser->uid);
 
         $this->setTheme('space', $space->space['space_style']);
 
@@ -615,12 +615,12 @@ class IndexController extends PwBaseController
     {
         $passkey = $this->getInput('passkey');
 
-        $user = $this->_getTorrentUserDS()->getTorrentUserByPasskey($passkey);
+        $user = $this->_getTorrentUserService()->getTorrentUserByPasskey($passkey);
         if (empty($user)) {
             $this->showError('Passkey 错误！');
         }
 
-        $userBan = $this->__getUserBanDS()->getBanInfo($user['uid']);
+        $userBan = $this->_getUserBanService()->getBanInfo($user['uid']);
         if ($userBan) {
             $this->showError('用户处于封禁期！');
         }
@@ -638,7 +638,7 @@ class IndexController extends PwBaseController
         echo '<generator>WindPT RSS Generator</generator>';
         echo '<ttl>60</ttl>';
 
-        $torrents = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUid($this->loginUser->uid);
+        $torrents = $this->_getTorrentSubscribeService()->getTorrentSubscribeByUid($this->loginUser->uid);
 
         if (is_array($torrents)) {
             foreach ($torrents as $torrent) {
@@ -664,42 +664,42 @@ class IndexController extends PwBaseController
         exit();
     }
 
-    private function __getUserBanDS()
+    private function _getUserBanService()
     {
-        return Wekit::load('SRV:user.PwUserBan');
+        return Wekit::load('user.PwUserBan');
     }
 
-    private function __getThreadDS()
+    private function _getThreadService()
     {
         return Wekit::load('forum.PwThread');
     }
 
-    private function _getTorrentDS()
+    private function _getTorrentService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrent');
     }
 
-    private function _getTorrentPeerDS()
+    private function _getTorrentPeerService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentPeer');
     }
 
-    private function _getTorrentUserDS()
+    private function _getTorrentUserService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentUser');
     }
 
-    private function _getTorrentAgentDS()
+    private function _getTorrentAgentService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentAgent');
     }
 
-    private function _getTorrentHistoryDs()
+    private function _getTorrentHistoryService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentHistory');
     }
 
-    private function _getTorrentSubscribeDs()
+    private function _getTorrentSubscribeService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentSubscribe');
     }

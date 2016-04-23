@@ -17,9 +17,8 @@ class ManageController extends AdminBaseController
 
     public function run()
     {
-        $cronDs                    = Wekit::load('SRV:cron.PwCron');
-        $cronList['ClearPeers']    = $cronDs->getCronByFile('PwCronDoClearPeers');
-        $cronList['ClearTorrents'] = $cronDs->getCronByFile('PwCronDoClearTorrents');
+        $cronList['ClearPeers']    = $this->_loadCronService()->getCronByFile('PwCronDoClearPeers');
+        $cronList['ClearTorrents'] = $this->_loadCronService()->getCronByFile('PwCronDoClearTorrents');
 
         $this->setOutput($this->config, 'config');
         $this->setOutput($cronList, 'cronList');
@@ -143,5 +142,10 @@ class ManageController extends AdminBaseController
     private function _loadConfigService()
     {
         return Wekit::load('config.PwConfig');
+    }
+
+    private function _loadCronService()
+    {
+        return Wekit::load('cron.PwCron');
     }
 }
