@@ -167,8 +167,13 @@ class IndexController extends PwBaseController
                             $title .= '[' . $paras_status . ']';
                         }
 
+                        if (!empty(Wekit::C('site', 'app.torrent.titlegen.omdb'))) {
+                            $content = '[img]' . 'http://img.omdbapi.com/?i=' . $wikilink . '&apikey=' . Wekit::C('site', 'app.torrent.titlegen.omdb') . '&h=640[/img]<br />' . $result->Plot;
+                        } else {
+                            $content = $result->Plot;
+                        }
+
                         $wikilink = 'http://www.imdb.com/title/' . $wikilink;
-                        $content  = '[img]' . $result->Poster . '[/img]<br />' . $result->Plot;
                     }
 
                     break;

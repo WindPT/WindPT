@@ -102,12 +102,21 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>豆瓣 apikey</th>
+                        <th>豆瓣 API Key</th>
                         <td>
                             <input name="titlegendouban" type="text" class="input length_5" value="{$config['app.torrent.titlegen.douban']}">
                         </td>
                         <td>
                             <div class="fun_tips">豆瓣 API 请求频率限制为150次/分钟，设置 apikey 可以提高限制到 500次/分钟</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>OMDB Poster API Key</th>
+                        <td>
+                            <input name="titlegenomdb" type="text" class="input length_5" value="{$config['app.torrent.titlegen.omdb']}">
+                        </td>
+                        <td>
+                            <div class="fun_tips">只有设置 OMDB Poster API Key 才能获取 OMDB(IMDB) 海报图片</div>
                         </td>
                     </tr>
                     <tr>
