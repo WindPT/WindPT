@@ -300,11 +300,11 @@
                 $('input[name="atc_title"]').val(data.title);
                 $('input[name="wikilink"]').val(data.wikilink);
                 $('iframe.wind_editor_iframe').contents().find('body.editor_content').text(data.content);
-                Wind.Util.ajaxBtnEnable($(this));
+                Wind.Util.ajaxBtnEnable($('#UpdateInfo'));
             }, 'json');
 
             setTimeout(function(){
-                Wind.Util.ajaxBtnEnable($(this));
+                Wind.Util.ajaxBtnEnable($('#UpdateInfo'));
             }, 3000);
         });
     });
