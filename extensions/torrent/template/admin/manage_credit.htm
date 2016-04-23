@@ -27,11 +27,13 @@
                             <ul class="switch_list cc">
                                 <li>
                                     <label>
-                                        <input type="radio" name="creditifopen" value="1" {@pw::ifcheck($config[ 'app.torrent.creditifopen']==1 )}><span>开启</span></label>
+                                        <input type="radio" name="creditifopen" value="1" {@pw::ifcheck($config[ 'app.torrent.creditifopen']==1 )}><span>开启</span>
+                                    </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="radio" name="creditifopen" value="0" {@Pw::ifcheck($config[ 'app.torrent.creditifopen']==0 )}><span>关闭</span></label>
+                                        <input type="radio" name="creditifopen" value="0" {@Pw::ifcheck($config[ 'app.torrent.creditifopen']==0 )}><span>关闭</span>
+                                    </label>
                                 </li>
                             </ul>
                         </td>
@@ -54,7 +56,8 @@
                         <th>{$type}</th>
                         <td>
                             <label>
-                                <input type="checkbox" name="credits[{$key}][enabled]" value="1" {@Pw::ifcheck($config[ 'app.torrent.credits'][$key][ 'enabled']==1 )}><span>启用</span></label>
+                                <input type="checkbox" name="credits[{$key}][enabled]" value="1" {@Pw::ifcheck($config[ 'app.torrent.credits'][$key][ 'enabled']==1 )}><span>启用</span>
+                            </label>
                         </td>
                         <td>
                             <input type="text" name="credits[{$key}][exp]" class="input" value="{$config['app.torrent.credits'][$key]['exp']}" style="width: 100%;">

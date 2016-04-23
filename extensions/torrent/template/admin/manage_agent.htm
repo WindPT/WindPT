@@ -44,9 +44,11 @@
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="radio" name="allowedClients[{$key}][allowhttps]" value="yes" {@pw::ifcheck($allowedClient[ 'allowhttps']=='yes' )}><span>允许</span></label>
+                                        <input type="radio" name="allowedClients[{$key}][allowhttps]" value="yes" {@pw::ifcheck($allowedClient[ 'allowhttps']=='yes' )}><span>允许</span>
+                                    </label>
                                     <label>
-                                        <input type="radio" name="allowedClients[{$key}][allowhttps]" value="no" {@Pw::ifcheck($allowedClient[ 'allowhttps']=='no' )}><span>禁止</span></label>
+                                        <input type="radio" name="allowedClients[{$key}][allowhttps]" value="no" {@Pw::ifcheck($allowedClient[ 'allowhttps']=='no' )}><span>禁止</span>
+                                    </label>
                                 </td>
                                 <td>
                                     <input type="text" class="input length_3" name="allowedClients[{$key}][agent_pattern]" value="{$allowedClient['agent_pattern']}">
