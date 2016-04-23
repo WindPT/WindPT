@@ -18,6 +18,11 @@ class IndexController extends PwBaseController
         exit();
     }
 
+    public function getBindAction()
+    {
+        exit(json_encode(Wekit::C('site', 'app.torrent.typebind')));
+    }
+
     public function updateInfoAction()
     {
         if (Wekit::C('site', 'app.torrent.titlegen.ifopen') > 0) {

@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+
+<head>
+    <template source='TPL:admin.common.head' />
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="nav">
+            <ul class="cc">
+                <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/run')}">基本设置</a></li>
+                <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/agent')}">客户端设置</a></li>
+                <li><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/credit')}">积分设置</a></li>
+                <li class="current"><a href="{@WindUrlHelper::createUrl('/app/torrent/manage/type')}">资源类型绑定</a></li>
+            </ul>
+        </div>
+        <form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/app/torrent/manage/dotype')}">
+            <!--# if (is_array($forums)) { #-->
+            <!--# foreach ($forums as $forum) { #-->
+            <div class="h_a">{$forum['name']}</div>
+            <div class="table_full">
+                <table width="100%">
+                    <col class="th" />
+                    <col />
+                    <!--# foreach ($forum['topic_types'] as $type) { #-->
+                    <tr>
+                        <th>{$type['name']}</th>
+                        <td>
+                            <ul class="switch_list cc">
+                                <li>
+                                    <label>
+                                        <input name="bind[{$type['id']}][]" type="checkbox" value="1" {@pw::ifcheck(is_array($config[ 'app.torrent.typebind']) && is_array($config[ 'app.torrent.typebind'][$type['id']]) && in_array( '1' ,$config[ 'app.torrent.typebind'][$type['id']]))}><span>书籍</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input name="bind[{$type['id']}][]" type="checkbox" value="2" {@pw::ifcheck(is_array($config[ 'app.torrent.typebind']) && is_array($config[ 'app.torrent.typebind'][$type['id']]) && in_array( '2' ,$config[ 'app.torrent.typebind'][$type['id']]))}><span>影视</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input name="bind[{$type['id']}][]" type="checkbox" value="21" {@pw::ifcheck(is_array($config[ 'app.torrent.typebind']) && is_array($config[ 'app.torrent.typebind'][$type['id']]) && in_array( '21' ,$config[ 'app.torrent.typebind'][$type['id']]))}><span>剧集</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input name="bind[{$type['id']}][]" type="checkbox" value="3" {@pw::ifcheck(is_array($config[ 'app.torrent.typebind']) && is_array($config[ 'app.torrent.typebind'][$type['id']]) && in_array( '3' ,$config[ 'app.torrent.typebind'][$type['id']]))}><span>音乐</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input name="bind[{$type['id']}][]" type="checkbox" value="4" {@pw::ifcheck(is_array($config[ 'app.torrent.typebind']) && is_array($config[ 'app.torrent.typebind'][$type['id']]) && in_array( '4' ,$config[ 'app.torrent.typebind'][$type['id']]))}><span>软件</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input name="bind[{$type['id']}][]" type="checkbox" value="5" {@pw::ifcheck(is_array($config[ 'app.torrent.typebind']) && is_array($config[ 'app.torrent.typebind'][$type['id']]) && in_array( '5' ,$config[ 'app.torrent.typebind'][$type['id']]))}><span>其他</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <!--# } #-->
+                </table>
+            </div>
+            <!--# } #-->
+            <!--# } #-->
+            <div class="btn_wrap">
+                <div class="btn_wrap_pd">
+                    <button class="btn btn_submit mr10 J_ajax_submit_btn" type="submit">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <template source='TPL:admin.common.footer' />
+    <script>
+    var _li_html = '<li><span class="span_3"><input type="text" value="" class="input length_2" name="deniedfts[]"></span><span class="span_4"><a class="J_ul_list_remove" href="#">[删除]</a></span></li>';
+    </script>
+</body>
+
+</html>

@@ -202,6 +202,25 @@
         $('#J_atc_title').attr('readonly', 'readonly').attr('placeholder', '请使用标题生成器');
         <!--# } #-->
 
+        var typebind;
+
+        $.get("{@WindUrlHelper::createUrl('/app/torrent/index/getBind')}", function(data) {
+            typebind = data;
+        }, 'json');
+
+        setTimeout(function(){
+            Wind.Util.ajaxBtnEnable($('#UpdateInfo'));
+        }, 3000);
+
+        $('[name="topictype"]').change(function() {
+            $('[name="t_type"] option').removeAttr('disabled');
+            $('[name="t_type"] option').each(function(option) {
+                if ($.inArray($(this).val(), typebind[$('[name="topictype"]').val()]) == -1) {
+                    $(this).attr('disabled', 'disabled');
+                }
+            });
+        });
+
         $('[name="t_type"]').change(function() {
             $('.t_attr, .t_attr_t').hide();
             $('select[name="quote"] option').hide();

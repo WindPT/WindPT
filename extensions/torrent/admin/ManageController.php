@@ -31,6 +31,24 @@ class ManageController extends AdminBaseController
         $this->setOutput($allowedClients, 'allowedClients');
     }
 
+    public function typeAction()
+    {
+        $forums = $this->_loadForumService()->getCommonForumList();
+        foreach ($forums as $key => $forum) {
+            if ($forum['type'] == 'forum') {
+                $forums[$key]['topic_types'] = $this->_loadTopicTypeService()->getTypesByFid($forum['fid']);
+                if (empty($forums[$key]['topic_types'])) {
+                    unset($forums[$key]);
+                }
+            } else {
+                unset($forums[$key]);
+            }
+        }
+        reset($forums);
+        $this->setOutput($this->config, 'config');
+        $this->setOutput($forums, 'forums');
+    }
+
     public function creditAction()
     {
         Wind::import('SRV:credit.bo.PwCreditBo');
@@ -133,6 +151,16 @@ class ManageController extends AdminBaseController
         $this->showMessage('ADMIN:success');
     }
 
+    public function dotypeAction()
+    {
+        $bind = $this->getInput('bind', 'post');
+
+        $config = new PwConfigSet('site');
+        $config->set('app.torrent.typebind', $bind)->flush();
+
+        $this->showMessage('ADMIN:success');
+    }
+
     private function _loadConfigService()
     {
         return Wekit::load('config.PwConfig');
@@ -141,5 +169,15 @@ class ManageController extends AdminBaseController
     private function _loadCronService()
     {
         return Wekit::load('cron.PwCron');
+    }
+
+    private function _loadForumService()
+    {
+        return Wekit::load('forum.PwForum');
+    }
+
+    private function _loadTopicTypeService()
+    {
+        return Wekit::load('forum.PwTopicType');
     }
 }
