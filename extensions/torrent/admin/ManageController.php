@@ -12,14 +12,7 @@ class ManageController extends AdminBaseController
     {
         parent::beforeAction($handlerAdapter);
 
-        $service      = $this->_loadConfigService();
-        $this->config = $service->getValues('site');
-
-        foreach ($this->config as &$conf) {
-            if ($conf == null) {
-                $conf = array();
-            }
-        }
+        $this->config = $this->_loadConfigService()->getValues('site');
     }
 
     public function run()
