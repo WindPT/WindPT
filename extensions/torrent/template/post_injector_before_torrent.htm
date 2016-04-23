@@ -202,6 +202,7 @@
         $('#J_atc_title').attr('readonly', 'readonly').attr('placeholder', '请使用标题生成器');
         <!--# } #-->
 
+        <!--# if (Wekit::C('site','app.torrent.titlegen.ifopen') > 0) { #-->
         var typebind;
 
         $.get("{@WindUrlHelper::createUrl('/app/torrent/index/getBind')}", function(data) {
@@ -267,16 +268,6 @@
             }
         });
 
-        $('select[name="quote"]').change(function() {
-            switch ($(this).val()) {
-                case '12':
-                    $('input[name="wikilink"]').attr('placeholder', '10741834');
-                    break;
-                case '2':
-                    $('input[name="wikilink"]').attr('placeholder', 'tt0111161');
-            }
-        });
-
         $('#UpdateInfo').click(function() {
             Wind.Util.ajaxBtnDisable($(this));
 
@@ -329,6 +320,17 @@
             setTimeout(function(){
                 Wind.Util.ajaxBtnEnable($('#UpdateInfo'));
             }, 3000);
+        });
+        <!--# } #-->
+
+        $('select[name="quote"]').change(function() {
+            switch ($(this).val()) {
+                case '12':
+                    $('input[name="wikilink"]').attr('placeholder', '10741834');
+                    break;
+                case '2':
+                    $('input[name="wikilink"]').attr('placeholder', 'tt0111161');
+            }
         });
     });
     </script>
