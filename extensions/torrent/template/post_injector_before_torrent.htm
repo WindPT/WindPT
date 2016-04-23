@@ -134,6 +134,7 @@
             <option value="磁盘镜像">磁盘镜像</option>
             <option value="其他格式">其他</option>
         </select>
+        <input type="text" class="input" name="t_n_p" placeholder="出版/发行">&nbsp;&nbsp;
         <input type="text" class="input" name="t_n_c" placeholder="中文名">
         &nbsp;&nbsp;<input type="text" class="input" name="t_n_o" placeholder="外文原名（若有）">
         </span>
@@ -287,6 +288,7 @@
                         platform: $('[name="t_s_p"]').val(),
                         lang: $('[name="t_s_l"]').val(),
                         format: $('[name="t_s_f"]').val(),
+                        publisher: $('[name="t_n_p"]').val(),
                         name: $('[name="t_n_c"]').val(),
                         oname: $('[name="t_n_o"]').val(),
                     };

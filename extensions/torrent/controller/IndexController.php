@@ -35,6 +35,7 @@ class IndexController extends PwBaseController
             $paras_name       = $this->getInput('name', 'post');
             $paras_oname      = $this->getInput('oname', 'post');
             $paras_lang       = $this->getInput('lang', 'post');
+            $paras_publisher  = $this->getInput('publisher', 'post');
 
             if (!$this->loginUser->uid) {
                 $this->showError('必须登录才能进行本操作！');
@@ -198,7 +199,8 @@ class IndexController extends PwBaseController
 
                 case '4':
                     // 软件
-                    $title = '[' . $paras_platform . ']'; // 平台
+                    $title = $paras_publisher ? '[' . $paras_publisher . ']' : '';
+                    $title .= '[' . $paras_platform . ']'; // 平台
                     $title .= '[' . $paras_name . ']'; // 中文名
 
                     // 原名
@@ -211,6 +213,7 @@ class IndexController extends PwBaseController
 
                 case '5':
                     // 其他
+                    $title = $paras_publisher ? '[' . $paras_publisher . ']' : '';
                     $title .= '[' . $paras_name . ']'; // 中文名
 
                     // 原名
