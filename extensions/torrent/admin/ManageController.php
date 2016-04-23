@@ -32,19 +32,19 @@ class ManageController extends AdminBaseController
         $this->setOutput($cronList, 'cronList');
     }
 
+    public function agentAction()
+    {
+        $allowedClients = Wekit::load('EXT:torrent.service.PwTorrentAgent')->fetchTorrentAgent();
+        $this->setOutput($this->config, 'config');
+        $this->setOutput($allowedClients, 'allowedClients');
+    }
+
     public function creditAction()
     {
         Wind::import('SRV:credit.bo.PwCreditBo');
         $creditType = PwCreditBo::getInstance()->cType;
         $this->setOutput($this->config, 'config');
         $this->setOutput($creditType, 'creditType');
-    }
-
-    public function agentAction()
-    {
-        $allowedClients = Wekit::load('EXT:torrent.service.PwTorrentAgent')->fetchTorrentAgent();
-        $this->setOutput($this->config, 'config');
-        $this->setOutput($allowedClients, 'allowedClients');
     }
 
     public function dorunAction()
@@ -87,28 +87,6 @@ class ManageController extends AdminBaseController
         $this->showMessage('ADMIN:success');
     }
 
-    public function docreditAction()
-    {
-        list($creditifopen, $credits) = $this->getInput(array('creditifopen', 'credits'), 'post');
-
-        $_credits = array();
-
-        if (is_array($credits)) {
-            foreach ($credits as $key => $credit) {
-                if (!$credit['enabled'] || empty($credit['exp'])) {
-                    continue;
-                }
-
-                $_credits[$key] = $credit;
-            }
-        }
-
-        $this->config = new PwConfigSet('site');
-        $this->config->set('app.torrent.creditifopen', intval($creditifopen))->set('app.torrent.credits', $_credits)->flush();
-
-        $this->showMessage('ADMIN:success');
-    }
-
     public function doagentAction()
     {
         $PwTorrentAgentDs = Wekit::load('EXT:torrent.service.PwTorrentAgent');
@@ -143,6 +121,28 @@ class ManageController extends AdminBaseController
                 }
             }
         }
+
+        $this->showMessage('ADMIN:success');
+    }
+
+    public function docreditAction()
+    {
+        list($creditifopen, $credits) = $this->getInput(array('creditifopen', 'credits'), 'post');
+
+        $_credits = array();
+
+        if (is_array($credits)) {
+            foreach ($credits as $key => $credit) {
+                if (!$credit['enabled'] || empty($credit['exp'])) {
+                    continue;
+                }
+
+                $_credits[$key] = $credit;
+            }
+        }
+
+        $this->config = new PwConfigSet('site');
+        $this->config->set('app.torrent.creditifopen', intval($creditifopen))->set('app.torrent.credits', $_credits)->flush();
 
         $this->showMessage('ADMIN:success');
     }
