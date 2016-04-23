@@ -28,12 +28,12 @@
                             <ul class="switch_list cc">
                                 <li>
                                     <label>
-                                        <input type="radio" name="creditifopen" value="1" {@pw::ifcheck($config[ 'app.torrent.creditifopen']==1 )}><span>开启</span>
+                                        <input type="radio" name="creditenabled" value="1" {@pw::ifcheck($config[ 'app.torrent.credit.enabled']==1 )}><span>开启</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="radio" name="creditifopen" value="0" {@Pw::ifcheck($config[ 'app.torrent.creditifopen']==0 )}><span>关闭</span>
+                                        <input type="radio" name="creditenabled" value="0" {@Pw::ifcheck($config[ 'app.torrent.credit.enabled']==0 )}><span>关闭</span>
                                     </label>
                                 </li>
                             </ul>
@@ -44,7 +44,7 @@
                     </tr>
                 </table>
             </div>
-            <!--# if ($config['app.torrent.creditifopen']) { #-->
+            <!--# if ($config['app.torrent.credit.enabled']) { #-->
             <div class="h_a">自定义积分设置</div>
             <div class="table_full">
                 <table width="100%" id="J_group_table">

@@ -25,7 +25,7 @@ class IndexController extends PwBaseController
 
     public function updateInfoAction()
     {
-        if (Wekit::C('site', 'app.torrent.titlegen.ifopen') > 0) {
+        if (Wekit::C('site', 'app.torrent.titlegen.enabled') > 0) {
             $t_type           = $this->getInput('t_type', 'post');
             $w_type           = $this->getInput('w_type', 'post');
             $wikilink         = $this->getInput('wikilink', 'post');
@@ -391,7 +391,7 @@ class IndexController extends PwBaseController
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
 
         // Update user's credits
-        if ($seeder == "yes" && Wekit::C('site', 'app.torrent.creditifopen') == 1) {
+        if ($seeder == "yes" && Wekit::C('site', 'app.torrent.credit.enabled') == 1) {
             $changed       = 0;
             $WindApi       = WindidApi::api('user');
             $crdtits       = $WindApi->getUserCredit($user['uid']);

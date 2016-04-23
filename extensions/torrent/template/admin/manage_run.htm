@@ -93,17 +93,17 @@
                             <ul class="switch_list cc">
                                 <li>
                                     <label>
-                                        <input type="radio" name="titlegenifopen" value="2" {@pw::ifcheck($config[ 'app.torrent.titlegen.ifopen']==2 )}><span>强制</span>
+                                        <input type="radio" name="titlegenenabled" value="2" {@pw::ifcheck($config[ 'app.torrent.titlegen.enabled']==2 )}><span>强制</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="radio" name="titlegenifopen" value="1" {@pw::ifcheck($config[ 'app.torrent.titlegen.ifopen']==1 )}><span>开启</span>
+                                        <input type="radio" name="titlegenenabled" value="1" {@pw::ifcheck($config[ 'app.torrent.titlegen.enabled']==1 )}><span>开启</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="radio" name="titlegenifopen" value="0" {@Pw::ifcheck($config[ 'app.torrent.titlegen.ifopen']==0 )}><span>关闭</span>
+                                        <input type="radio" name="titlegenenabled" value="0" {@Pw::ifcheck($config[ 'app.torrent.titlegen.enabled']==0 )}><span>关闭</span>
                                     </label>
                                 </li>
                             </ul>

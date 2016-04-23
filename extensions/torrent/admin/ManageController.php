@@ -59,7 +59,7 @@ class ManageController extends AdminBaseController
 
     public function dorunAction()
     {
-        list($showuserinfo, $showpeers, $titlegenifopen, $titlegendouban, $titlegenomdb, $check, $deniedfts, $torrentnameprefix, $peertimeout, $torrentimeout) = $this->getInput(array('showuserinfo', 'showpeers', 'titlegenifopen', 'titlegendouban', 'titlegenomdb', 'check', 'deniedfts', 'torrentnameprefix', 'peertimeout', 'torrentimeout'), 'post');
+        list($showuserinfo, $showpeers, $titlegenenabled, $titlegendouban, $titlegenomdb, $check, $deniedfts, $torrentnameprefix, $peertimeout, $torrentimeout) = $this->getInput(array('showuserinfo', 'showpeers', 'titlegenenabled', 'titlegendouban', 'titlegenomdb', 'check', 'deniedfts', 'torrentnameprefix', 'peertimeout', 'torrentimeout'), 'post');
 
         if (is_array($deniedfts)) {
             foreach ($deniedfts as $key => $value) {
@@ -80,7 +80,7 @@ class ManageController extends AdminBaseController
         }
 
         $config = new PwConfigSet('site');
-        $config->set('app.torrent.showuserinfo', $showuserinfo)->set('app.torrent.showpeers', $showpeers)->set('app.torrent.titlegen.ifopen', $titlegenifopen)->set('app.torrent.titlegen.douban', $titlegendouban)->set('app.torrent.titlegen.omdb', $titlegenomdb)->set('app.torrent.check', $check)->set('app.torrent.torrentnameprefix', $torrentnameprefix)->set('app.torrent.cron.peertimeout', intval($peertimeout))->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
+        $config->set('app.torrent.showuserinfo', $showuserinfo)->set('app.torrent.showpeers', $showpeers)->set('app.torrent.titlegen.enabled', $titlegenenabled)->set('app.torrent.titlegen.douban', $titlegendouban)->set('app.torrent.titlegen.omdb', $titlegenomdb)->set('app.torrent.check', $check)->set('app.torrent.torrentnameprefix', $torrentnameprefix)->set('app.torrent.cron.peertimeout', intval($peertimeout))->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
 
         if (!empty($deniedfts)) {
             $config->set('app.torrent.deniedfts', $_deniedfts);
@@ -131,7 +131,7 @@ class ManageController extends AdminBaseController
 
     public function docreditAction()
     {
-        list($creditifopen, $credits) = $this->getInput(array('creditifopen', 'credits'), 'post');
+        list($creditenabled, $credits) = $this->getInput(array('creditenabled', 'credits'), 'post');
 
         $_credits = array();
 
@@ -146,7 +146,7 @@ class ManageController extends AdminBaseController
         }
 
         $config = new PwConfigSet('site');
-        $config->set('app.torrent.creditifopen', intval($creditifopen))->set('app.torrent.credits', $_credits)->flush();
+        $config->set('app.torrent.credit.enabled', intval($creditenabled))->set('app.torrent.credits', $_credits)->flush();
 
         $this->showMessage('ADMIN:success');
     }

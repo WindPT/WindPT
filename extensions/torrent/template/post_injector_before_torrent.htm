@@ -41,7 +41,7 @@
             display: none;
         }
     </style>
-    <!--# if (Wekit::C('site','app.torrent.titlegen.ifopen') > 0) { #-->
+    <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 0) { #-->
     <div class="cc post_extend" id="titleMaker">
         <select class="mr10" name="t_type">
             <option value="5">-- 资源种类 --</option>
@@ -153,7 +153,7 @@
                         <span>外部参考：</span>
                         <select class="length_2" name="quote">
                             <option value="0">Wiki 链接</option>
-                            <!--# if (Wekit::C('site','app.torrent.titlegen.ifopen') > 0) { #-->
+                            <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 0) { #-->
                             <option value="11">豆瓣读书 ID</option>
                             <option value="12">豆瓣电影 ID</option>
                             <option value="13">豆瓣音乐 ID</option>
@@ -198,11 +198,11 @@
     });
 
     Wind.ready(function() {
-        <!--# if (Wekit::C('site','app.torrent.titlegen.ifopen') > 1) { #-->
+        <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 1) { #-->
         $('#J_atc_title').attr('readonly', 'readonly').attr('placeholder', '请使用标题生成器');
         <!--# } #-->
 
-        <!--# if (Wekit::C('site','app.torrent.titlegen.ifopen') > 0) { #-->
+        <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 0) { #-->
         var typebind;
 
         $.get("{@WindUrlHelper::createUrl('/app/torrent/index/getBind')}", function(data) {
@@ -321,7 +321,6 @@
                 Wind.Util.ajaxBtnEnable($('#UpdateInfo'));
             }, 3000);
         });
-        <!--# } #-->
 
         $('select[name="quote"]').change(function() {
             switch ($(this).val()) {
@@ -332,6 +331,7 @@
                     $('input[name="wikilink"]').attr('placeholder', 'tt0111161');
             }
         });
+        <!--# } #-->
     });
     </script>
 </hook>
