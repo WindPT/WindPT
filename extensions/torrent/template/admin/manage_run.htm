@@ -28,17 +28,17 @@
                             <ul class="one_list cc">
                                 <li>
                                     <label>
-                                        <input name="showuserinfo[]" type="checkbox" value="headerinfo" {@pw::ifcheck(is_array($config[ 'app.torrent.showuserinfo']) && in_array( 'headerinfo' ,$config[ 'app.torrent.showuserinfo']))}><span>顶部个人信息</span>
+                                        <input name="showuserinfo[]" type="checkbox" value="headerinfo" {@pw::ifcheck(is_array($config['app.torrent.showuserinfo']) && in_array('headerinfo' ,$config['app.torrent.showuserinfo']))}><span>顶部个人信息</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input name="showuserinfo[]" type="checkbox" value="threadside" {@pw::ifcheck(is_array($config[ 'app.torrent.showuserinfo']) && in_array( 'threadside' ,$config[ 'app.torrent.showuserinfo']))}><span>帖子页边栏</span>
+                                        <input name="showuserinfo[]" type="checkbox" value="threadside" {@pw::ifcheck(is_array($config['app.torrent.showuserinfo']) && in_array('threadside' ,$config['app.torrent.showuserinfo']))}><span>帖子页边栏</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input name="showuserinfo[]" type="checkbox" value="profile" {@pw::ifcheck(is_array($config[ 'app.torrent.showuserinfo']) && in_array( 'profile' ,$config[ 'app.torrent.showuserinfo']))}><span>个人资料页</span>
+                                        <input name="showuserinfo[]" type="checkbox" value="profile" {@pw::ifcheck(is_array($config['app.torrent.showuserinfo']) && in_array('profile' ,$config['app.torrent.showuserinfo']))}><span>个人资料页</span>
                                     </label>
                                 </li>
                             </ul>
@@ -54,22 +54,22 @@
                             <ul class="one_list cc">
                                 <li>
                                     <label>
-                                        <input name="showpeers[]" type="checkbox" value="index" {@pw::ifcheck(is_array($config[ 'app.torrent.showpeers']) && in_array( 'index' ,$config[ 'app.torrent.theme.showpeers']))}><span>站点默认首页</span>
+                                        <input name="showpeers[]" type="checkbox" value="index" {@pw::ifcheck(is_array($config['app.torrent.showpeers']) && in_array('index' ,$config['app.torrent.showpeers']))}><span>站点默认首页</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input name="showpeers[]" type="checkbox" value="forum_my" {@pw::ifcheck(is_array($config[ 'app.torrent.showpeers']) && in_array( 'forum_my' ,$config[ 'app.torrent.theme.showpeers']))}><span>我的版块帖子列表</span>
+                                        <input name="showpeers[]" type="checkbox" value="forum_my" {@pw::ifcheck(is_array($config['app.torrent.showpeers']) && in_array('forum_my' ,$config['app.torrent.showpeers']))}><span>我的版块帖子列表</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input name="showpeers[]" type="checkbox" value="cate" {@pw::ifcheck(is_array($config[ 'app.torrent.showpeers']) && in_array( 'cate' ,$config[ 'app.torrent.theme.showpeers']))}><span>一级板块帖子列表</span>
+                                        <input name="showpeers[]" type="checkbox" value="cate" {@pw::ifcheck(is_array($config['app.torrent.showpeers']) && in_array('cate' ,$config['app.torrent.showpeers']))}><span>一级板块帖子列表</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input name="showpeers[]" type="checkbox" value="widget" {@pw::ifcheck(is_array($config[ 'app.torrent.showpeers']) && in_array( 'widget' ,$config[ 'app.torrent.theme.showpeers']))}><span>二级板块帖子列表</span>
+                                        <input name="showpeers[]" type="checkbox" value="widget" {@pw::ifcheck(is_array($config['app.torrent.showpeers']) && in_array('widget' ,$config['app.torrent.showpeers']))}><span>二级板块帖子列表</span>
                                     </label>
                                 </li>
                             </ul>
@@ -93,17 +93,17 @@
                             <ul class="switch_list cc">
                                 <li>
                                     <label>
-                                        <input type="radio" name="titlegenenabled" value="2" {@pw::ifcheck($config[ 'app.torrent.titlegen.enabled']==2 )}><span>强制</span>
+                                        <input type="radio" name="titlegenenabled" value="2" {@pw::ifcheck($config['app.torrent.titlegen.enabled']==2 )}><span>强制</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="radio" name="titlegenenabled" value="1" {@pw::ifcheck($config[ 'app.torrent.titlegen.enabled']==1 )}><span>开启</span>
+                                        <input type="radio" name="titlegenenabled" value="1" {@pw::ifcheck($config['app.torrent.titlegen.enabled']==1 )}><span>开启</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input type="radio" name="titlegenenabled" value="0" {@Pw::ifcheck($config[ 'app.torrent.titlegen.enabled']==0 )}><span>关闭</span>
+                                        <input type="radio" name="titlegenenabled" value="0" {@Pw::ifcheck($config['app.torrent.titlegen.enabled']==0 )}><span>关闭</span>
                                     </label>
                                 </li>
                             </ul>
@@ -136,12 +136,12 @@
                             <ul class="one_list cc">
                                 <li>
                                     <label>
-                                        <input name="check[]" type="checkbox" value="deniedfts" {@pw::ifcheck(is_array($config[ 'app.torrent.check']) && in_array( 'deniedfts' ,$config[ 'app.torrent.check']))}><span>检查禁止的文件类型</span>
+                                        <input name="check[]" type="checkbox" value="deniedfts" {@pw::ifcheck(is_array($config['app.torrent.check']) && in_array('deniedfts' ,$config['app.torrent.check']))}><span>检查禁止的文件类型</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label>
-                                        <input name="check[]" type="checkbox" value="source" {@pw::ifcheck(is_array($config[ 'app.torrent.check']) && in_array( 'source' ,$config[ 'app.torrent.check']))}><span>添加网站信息（用户需要重新下载种子）</span>
+                                        <input name="check[]" type="checkbox" value="source" {@pw::ifcheck(is_array($config['app.torrent.check']) && in_array('source' ,$config['app.torrent.check']))}><span>添加网站信息（用户需要重新下载种子）</span>
                                     </label>
                                 </li>
                             </ul>
@@ -150,7 +150,7 @@
                             <div class="fun_tips">选择发布帖子前对种子文件进行哪些附加处理</div>
                         </td>
                     </tr>
-                    <!--# if (is_array($config[ 'app.torrent.check']) && in_array('deniedfts', $config['app.torrent.check'])) { #-->
+                    <!--# if (is_array($config['app.torrent.check']) && in_array('deniedfts', $config['app.torrent.check'])) { #-->
                     <tr>
                         <th>禁止的文件类型</th>
                         <td>
