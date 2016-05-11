@@ -33,6 +33,24 @@ This extension is designed to work with PHPWind 9.x, and `local search` plugin (
 =  =
 ```
 
+### Protection
+
+To protect your site, you can use `Site Preference` at `/admin.php?m=config&c=config` to choose which user group can access your site.
+
+You should modify `src/applications/bbs/controller/filter/PwGlobalFilter.php` to allow tracker pass-by the global filter.
+
+Find:
+
+```php
+if ($config['visit.state'] > 0)
+```
+
+Replace with
+
+```php
+if ($request['mca'] != 'app/index/announce' && $config['visit.state'] > 0)
+```
+
 ## Donate us
 
 [Donate us](https://7in0.me/#donate)
