@@ -525,9 +525,10 @@ class IndexController extends PwBaseController
         }
 
         // Change announce to user's private announce
-        $bencode                         = Wekit::load('EXT:torrent.service.srv.helper.PwBencode');
-        $dictionary                      = $bencode->doDecodeFile($file);
-        $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(WindUrlHelper::createUrl('/app/torrent/index/announce?passkey=' . $passkey)));
+        $bencode    = Wekit::load('EXT:torrent.service.srv.helper.PwBencode');
+        $dictionary = $bencode->doDecodeFile($file);
+
+        $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(PwAnnounce::getTrackerUrl($passkey)));
 
         // Generate file name
         $torrentnameprefix = Wekit::C('site', 'app.torrent.torrentnameprefix');

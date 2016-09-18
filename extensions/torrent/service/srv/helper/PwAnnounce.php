@@ -12,6 +12,15 @@ class PwAnnounce
         exit('d' . $bencode->doEncodeString('failure reason:') . $bencode->doEncodeString($message) . 'e');
     }
 
+    public static function getTrackerUrl($passkey)
+    {
+        if (Wekit::C('site', 'app.torrent.trackerserver') == '') {
+            return WindUrlHelper::createUrl('/app/torrent/index/announce?passkey=' . $passkey);
+        } else {
+            return sprintf(Wekit::C('site', 'app.torrent.trackerserver'), $passkey);
+        }
+    }
+
     public static function getPeersByTorrentId($torrent_id = 0, $peer_id = '')
     {
         $peer_list = self::_getTorrentPeerService()->getTorrentPeerByTorrent($torrent_id);

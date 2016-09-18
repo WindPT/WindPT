@@ -181,7 +181,7 @@
     </div>
     <div class="cc post_extend" style="color:#FF0000">
         Private Tracker 地址（点击文本框复制到剪贴板，请不要泄露给其他人）：
-        <input id="tracker" type="text" class="input" name="tracker" value="{@WindUrlHelper::createUrl('/app/torrent/index/announce?passkey='.$pargs->passkey)}" style="width:640px;">
+        <input id="tracker" type="text" class="input" name="tracker" value="{@PwAnnounce::getTrackerUrl($pargs->passkey)}" style="width:640px;">
         <button class="btn copy" data-clipboard-target="#tracker">复制</button>
     </div>
     <script>

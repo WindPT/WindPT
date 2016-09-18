@@ -185,6 +185,15 @@
                     <col width="400" />
                     <col />
                     <tr>
+                        <th>Tracker服务器</th>
+                        <td>
+                            <input name="trackerserver" type="text" class="input length_5" placeholder="https://tracker.example.com/%s" value="{$config['app.torrent.trackerserver']}">
+                        </td>
+                        <td>
+                            <div class="fun_tips">以 http(s) 开头，以 %s 代表 passkey，如 https://tracker.example.com/%s，留空使用内置 Tracker</div>
+                        </td>
+                    </tr>
+                    <tr>
                         <th>种子文件前缀</th>
                         <td>
                             <input name="torrentnameprefix" type="text" class="input length_5" value="{$config['app.torrent.torrentnameprefix']}">
