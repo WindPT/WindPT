@@ -25,6 +25,12 @@ class PwTorrentPeerDm extends PwBaseDm
         return $this;
     }
 
+    public function setUid($uid)
+    {
+        $this->_data['uid'] = $uid;
+        return $this;
+    }
+
     public function setIp($ip)
     {
         $this->_data['ip'] = $ip;
@@ -73,21 +79,9 @@ class PwTorrentPeerDm extends PwBaseDm
         return $this;
     }
 
-    public function setPrevAction($prev_action)
-    {
-        $this->_data['prev_action'] = $prev_action;
-        return $this;
-    }
-
     public function setConnectable($connectable)
     {
         $this->_data['connectable'] = $connectable;
-        return $this;
-    }
-
-    public function setUserid($userid)
-    {
-        $this->_data['userid'] = $userid;
         return $this;
     }
 
@@ -99,7 +93,7 @@ class PwTorrentPeerDm extends PwBaseDm
 
     public function setFinishedAt($finishedat)
     {
-        $this->_data['finishedat'] = $finishedat;
+        $this->_data['finished_at'] = $finishedat;
         return $this;
     }
 

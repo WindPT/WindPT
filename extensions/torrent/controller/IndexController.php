@@ -350,7 +350,7 @@ class IndexController extends PwBaseController
             @fclose($sockres);
 
             $dm = new PwTorrentPeerDm();
-            $dm->setTorrent($torrent['id'])->setUserid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
+            $dm->setTorrent($torrent['id'])->setUid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
             $this->_getTorrentPeerService()->addTorrentPeer($dm);
             $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
         }
@@ -422,7 +422,7 @@ class IndexController extends PwBaseController
                 }
             }
 
-            $tAlive   = (time() - strtotime($torrent['created_time'])) / 86400;
+            $tAlive   = (time() - strtotime($torrent['added'])) / 86400;
             $timeUsed = time() - strtotime($self['started']);
             $timeLa   = time() - strtotime($self['last_action']);
 

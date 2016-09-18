@@ -6,7 +6,7 @@ class PwTorrentPeerDao extends PwBaseDao
 {
     protected $_table      = 'app_torrent_peer';
     protected $_pk         = 'id';
-    protected $_dataStruct = array('id', 'torrent', 'peer_id', 'ip', 'port', 'uploaded', 'downloaded', 'to_go', 'seeder', 'started', 'last_action', 'prev_action', 'connectable', 'userid', 'agent', 'finishedat', 'passkey');
+    protected $_dataStruct = array('id', 'torrent', 'peer_id', 'uid', 'ip', 'port', 'uploaded', 'downloaded', 'to_go', 'seeder', 'started', 'last_action', 'connectable', 'agent', 'finished_at', 'passkey');
 
     public function getTorrentPeer($id)
     {
@@ -36,14 +36,14 @@ class PwTorrentPeerDao extends PwBaseDao
 
     public function getTorrentPeerByTorrentAndUid($tid, $uid)
     {
-        $sql = $this->_bindSql('SELECT * FROM %s WHERE torrent = ? AND userid = ?', $this->getTable());
+        $sql = $this->_bindSql('SELECT * FROM %s WHERE torrent = ? AND uid = ?', $this->getTable());
         $smt = $this->getConnection()->createStatement($sql);
         return $smt->getOne(array($tid, $uid), 'id');
     }
 
     public function fetchTorrentPeerByUid($uid)
     {
-        $sql = $this->_bindTable('SELECT * FROM %s WHERE userid = ?');
+        $sql = $this->_bindTable('SELECT * FROM %s WHERE uid = ?');
         $smt = $this->getConnection()->createStatement($sql);
         return $smt->queryAll(array($uid));
     }

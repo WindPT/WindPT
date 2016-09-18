@@ -37,12 +37,6 @@ class PwTorrentDm extends PwBaseDm
         return $this;
     }
 
-    public function setProcessing($processing)
-    {
-        $this->_data['processing'] = $processing;
-        return $this;
-    }
-
     public function setSize($size)
     {
         $this->_data['size'] = $size;
@@ -91,18 +85,6 @@ class PwTorrentDm extends PwBaseDm
         return $this;
     }
 
-    public function setVisible($visible)
-    {
-        $this->_data['visible'] = $visible;
-        return $this;
-    }
-
-    public function setBanned($banned)
-    {
-        $this->_data['banned'] = $banned;
-        return $this;
-    }
-
     public function setOwner($owner)
     {
         $this->_data['owner'] = $owner;
@@ -115,24 +97,6 @@ class PwTorrentDm extends PwBaseDm
         return $this;
     }
 
-    public function setSpState($sp_state)
-    {
-        $this->_data['sp_state'] = $sp_state;
-        return $this;
-    }
-
-    public function setPromotionTimeType($promotion_time_type)
-    {
-        $this->_data['promotion_time_type'] = $promotion_time_type;
-        return $this;
-    }
-
-    public function setPromotionUntil($promotion_until)
-    {
-        $this->_data['promotion_until'] = $promotion_until;
-        return $this;
-    }
-
     public function setAnonymous($anonymous)
     {
         $this->_data['anonymous'] = $anonymous;
@@ -142,48 +106,6 @@ class PwTorrentDm extends PwBaseDm
     public function setWikilink($wikilink)
     {
         $this->_data['wikilink'] = $wikilink;
-        return $this;
-    }
-
-    public function setPosState($pos_state)
-    {
-        $this->_data['pos_state'] = $pos_state;
-        return $this;
-    }
-
-    public function setCacheStamp($cache_stamp)
-    {
-        $this->_data['cache_stamp'] = $cache_stamp;
-        return $this;
-    }
-
-    public function setPickType($picktype)
-    {
-        $this->_data['picktype'] = $picktype;
-        return $this;
-    }
-
-    public function setPickTime($picktime)
-    {
-        $this->_data['picktime'] = $picktime;
-        return $this;
-    }
-
-    public function setLastReseed($last_reseed)
-    {
-        $this->_data['last_reseed'] = $last_reseed;
-        return $this;
-    }
-
-    public function setEndFree($endfree)
-    {
-        $this->_data['endfree'] = $endfree;
-        return $this;
-    }
-
-    public function setEndSticky($endsticky)
-    {
-        $this->_data['endsticky'] = $endsticky;
         return $this;
     }
 
