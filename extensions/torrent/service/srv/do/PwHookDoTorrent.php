@@ -126,7 +126,7 @@ class PwHookDoTorrent
 
         $peers           = Wekit::load('EXT:torrent.service.PwTorrentPeer')->fetchTorrentPeerByUid($space->spaceUid);
         $this->histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($space->spaceUid);
-        $this->torrents  = $this->_getThreadService()->getThreadByUid($space->spaceUid);
+        $this->torrents  = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($space->spaceUid);
 
         $this->passkey = $user['passkey'];
 
@@ -143,7 +143,7 @@ class PwHookDoTorrent
 
         if (is_array($this->histories)) {
             $PwTorrent = Wekit::load('EXT:torrent.service.PwTorrent');
-            foreach ($this->histories as $key => $history) {
+            foreach ($this->histories as &$history) {
                 $downloaded_total += $history['downloaded'];
                 $uploaded_total += $history['uploaded'];
 
@@ -151,10 +151,23 @@ class PwHookDoTorrent
                 $thread  = $this->_getThreadService()->getThread($torrent['tid']);
 
                 if ($thread) {
-                    $this->histories[$key]['tid']     = $torrent['tid'];
-                    $this->histories[$key]['subject'] = $thread['subject'];
+                    $history['tid']     = $torrent['tid'];
+                    $history['subject'] = $thread['subject'];
                 } else {
-                    unset($this->histories[$key]);
+                    unset($history);
+                }
+            }
+        }
+
+        if (is_array($this->torrents)) {
+            foreach ($this->torrents as &$torrent) {
+                $thread = $this->_getThreadService()->getThread($torrent['tid']);
+
+                if ($thread) {
+                    $torrent['tid']     = $torrent['tid'];
+                    $torrent['subject'] = $thread['subject'];
+                } else {
+                    unset($torrent);
                 }
             }
         }
