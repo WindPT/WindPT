@@ -7,7 +7,7 @@
  * @@10.19
  *  @修改了帖子列表布局
  *  @去掉了边侧栏
- *  @author young 
+ *  @author young
 */
 #-->
 <!doctype html>
@@ -49,7 +49,7 @@
                         <div class="thread_posts_list">
                             <table width="100%" id="J_posts_list" summary="帖子列表">
                                 <!--# foreach ($threaddb as $key => $value) { #-->
-                                <tr>                                    
+                                <tr>
                                     <td class="subject">
                                         <p class="title">
                                             <!--# if ($operateThread) { #-->
@@ -64,7 +64,7 @@
                                         </p>
                                     </td>
                                     <td class="subject tb-info">
-                                        
+
                                     </td>
                                     <td class="subject tb-info">
                                         <p class="info">
@@ -75,7 +75,7 @@
                                         </p>
                                     </td>
                                     <td class="num">
-                                    <!--# if ($value['special']=='torrent' && in_array('index', Wekit::C('site','app.torrent.theme.showpeers'))) { #-->
+                                    <!--# if ($value['special']=='torrent' && is_array(Wekit::C('site','app.torrent.theme.showpeers')) && in_array('index', Wekit::C('site','app.torrent.theme.showpeers'))) { #-->
                                         <span>下载<em>{$value['leecher']}</em></span>
                                         <span <!--# if($value['seeder']==0) echo 'style="background: red; color:white;"' #-->>做种<em>{$value['seeder']}</em></span>
                                     <!--# } #-->
@@ -146,7 +146,7 @@
         </div>
         <div id="cloudwind_forum_bottom"></div>
     </div>
-    
+
 <template source='TPL:common.footer' load='true' />
 </div>
 

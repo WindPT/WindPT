@@ -7,7 +7,7 @@
  * @@10.19
  *  @修改了帖子列表布局
  *  @加宽普通主题行
- *  @author young 
+ *  @author young
 */
 #-->
 <!--# if ($tpc_topped && !isset($value['issort'])) { #-->
@@ -34,22 +34,22 @@
         </p>
     </td>
     <td class="subject tb-info">
-    
+
     </td>
     <td class="subject tb-info">
     <p class="info">
             <a class="J_user_card_show" data-uid="{$value['created_userid']}" href="{@url:space/index/run?uid=$value['created_userid']}">{$value['created_username']}</a>
     </p>
     <p class="info">
-            {@Pw::time2str($value['created_time'], 'Y-m-d')}    
+            {@Pw::time2str($value['created_time'], 'Y-m-d')}
     </p>
     </td>
     <td class="num">
-    <!--# if ($value['special']=='torrent' && in_array('widget', Wekit::C('site','app.torrent.theme.showpeers'))) { #-->
+    <!--# if ($value['special']=='torrent' && is_array(Wekit::C('site','app.torrent.theme.showpeers')) && in_array('widget', Wekit::C('site','app.torrent.theme.showpeers'))) { #-->
         <span>下载<em>{$value['leecher']}</em></span>
         <span <!--# if($value['seeder']==0) echo 'style="background: red; color:white;"' #-->>做种<em>{$value['seeder']}</em></span>
     <!--# } #-->
-    </td>   
+    </td>
     <td class="num">
         <span>回复<em>{$value['replies']}</em></span>
         <span>浏览<em>{$value['hits']}</em></span>

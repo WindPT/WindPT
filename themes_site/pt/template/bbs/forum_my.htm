@@ -7,7 +7,7 @@
  * @@10.19
  *  @修改了帖子列表布局
  *  @去掉了边侧栏
- *  @author young 
+ *  @author young
 */
 #-->
 <!doctype html>
@@ -55,10 +55,10 @@
                                             <a href="{@url:bbs/read/run?tid=$value['tid']&fid=$value['fid']}" class="st" style="{$value['highlight_style']}" title="{$value['subject']}">{@Pw::substrs($value['subject'],60)}</a><!--# if ($value['ifupload']) { #--><span class="posts_icon"><i class="icon_{$uploadIcon[$value['ifupload']]}" title="{$icon[$uploadIcon[$value['ifupload']]]}"></i></span><!--# } #-->
                                         </p>
                                     </td>
-                                    
+
 
                                     <td class="subject tb-info">
-                                        
+
                                     </td>
                                     <td class="subject tb-info">
                                         <p class="info">
@@ -69,7 +69,7 @@
                                         </p>
                                     </td>
                                     <td class="num">
-                                    <!--# if ($value['special']=='torrent' && in_array('fourm_my', Wekit::C('site','app.torrent.theme.showpeers'))) { #-->
+                                    <!--# if ($value['special']=='torrent' && is_array(Wekit::C('site','app.torrent.theme.showpeers')) && in_array('fourm_my', Wekit::C('site','app.torrent.theme.showpeers'))) { #-->
                                         <span>下载<em>{$value['leecher']}</em></span>
                                         <span <!--# if($value['seeder']==0) echo 'style="background: red; color:white;"' #-->>做种<em>{$value['seeder']}</em></span>
                                     <!--# } #-->
