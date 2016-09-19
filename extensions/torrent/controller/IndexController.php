@@ -528,6 +528,7 @@ class IndexController extends PwBaseController
         $bencode    = Wekit::load('EXT:torrent.service.srv.helper.PwBencode');
         $dictionary = $bencode->doDecodeFile($file);
 
+        Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
         $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(PwAnnounce::getTrackerUrl($passkey)));
 
         // Generate file name
