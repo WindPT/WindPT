@@ -307,11 +307,11 @@ class IndexController extends PwBaseController
             PwAnnounce::showError('Torrent removed!');
         }
 
-        // Get peers list
-        $peers = PwAnnounce::getPeersByTorrentId($torrent['id'], $self['peer_id']);
-
         // Get this peer
         $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
+
+        // Get peers list
+        $peers = PwAnnounce::getPeersByTorrentId($torrent['id'], $self['peer_id']);
 
         Wind::import('EXT:torrent.service.dm.PwTorrentPeerDm');
 
@@ -325,7 +325,7 @@ class IndexController extends PwBaseController
             switch ($event) {
                 case '':
                 case 'started':
-                    $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
+                    $dm->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerService()->updateTorrentPeer($dm);
                     break;
                 case 'stopped':
@@ -333,7 +333,7 @@ class IndexController extends PwBaseController
                     $status = 'stop';
                     break;
                 case 'completed':
-                    $dm->setFinishedAt(Pw::getTime())->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setPrevAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
+                    $dm->setFinishedAt(Pw::getTime())->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerService()->updateTorrentPeer($dm);
                     $status = 'done';
                     break;
@@ -350,7 +350,7 @@ class IndexController extends PwBaseController
             @fclose($sockres);
 
             $dm = new PwTorrentPeerDm();
-            $dm->setTorrent($torrent['id'])->setUid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setToGo($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
+            $dm->setTorrent($torrent['id'])->setUid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
             $this->_getTorrentPeerService()->addTorrentPeer($dm);
             $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
         }

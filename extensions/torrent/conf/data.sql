@@ -89,14 +89,14 @@ CREATE TABLE `pw_app_torrent_peer` (
   `port` smallint(5) unsigned NOT NULL DEFAULT '0',
   `uploaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `to_go` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `left` bigint(20) unsigned NOT NULL DEFAULT '0',
   `seeder` enum('yes','no') NOT NULL DEFAULT 'no',
   `started` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_action` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `connectable` enum('yes','no') NOT NULL DEFAULT 'yes',
   `agent` varchar(60) NOT NULL DEFAULT '',
   `finished_at` int(10) unsigned NOT NULL DEFAULT '0',
-  `passkey` char(40) NOT NULL DEFAULT '',
+  `passkey` varchar(40) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 

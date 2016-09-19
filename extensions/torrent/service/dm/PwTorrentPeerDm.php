@@ -55,9 +55,9 @@ class PwTorrentPeerDm extends PwBaseDm
         return $this;
     }
 
-    public function setToGo($to_go)
+    public function setLeft($left)
     {
-        $this->_data['to_go'] = $to_go;
+        $this->_data['left'] = $left;
         return $this;
     }
 

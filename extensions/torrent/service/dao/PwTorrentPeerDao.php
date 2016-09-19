@@ -6,7 +6,7 @@ class PwTorrentPeerDao extends PwBaseDao
 {
     protected $_table      = 'app_torrent_peer';
     protected $_pk         = 'id';
-    protected $_dataStruct = array('id', 'torrent', 'peer_id', 'uid', 'ip', 'port', 'uploaded', 'downloaded', 'to_go', 'seeder', 'started', 'last_action', 'connectable', 'agent', 'finished_at', 'passkey');
+    protected $_dataStruct = array('id', 'torrent', 'peer_id', 'uid', 'ip', 'port', 'uploaded', 'downloaded', 'left', 'seeder', 'started', 'last_action', 'connectable', 'agent', 'finished_at', 'passkey');
 
     public function getTorrentPeer($id)
     {
