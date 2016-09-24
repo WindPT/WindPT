@@ -11,7 +11,7 @@ class PwThreadListDoTorrent extends PwThreadListDoBase
 
     public function bulidThread($thread)
     {
-        if (isset($thread['special']) && $thread['special'] == 'torrent' && Wekit::C('site', 'theme.site.default') == 'pt' && !empty(Wekit::C('site', 'app.torrent.theme.showpeers'))) {
+        if (isset($thread['special']) && $thread['special'] == 'torrent' && Wekit::C('site', 'theme.site.default') == 'pt' && !empty(Wekit::C('site', 'app.torrent.showpeers'))) {
             $torrent = Wekit::load('EXT:torrent.service.PwTorrent')->getTorrentByTid($thread['tid']);
 
             $seeder = $leecher = 0;

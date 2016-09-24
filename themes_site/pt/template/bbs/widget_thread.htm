@@ -45,7 +45,7 @@
     </p>
     </td>
     <td class="num">
-    <!--# if ($value['special']=='torrent' && is_array(Wekit::C('site','app.torrent.theme.showpeers')) && in_array('widget', Wekit::C('site','app.torrent.theme.showpeers'))) { #-->
+    <!--# if ($value['special']=='torrent' && is_array(Wekit::C('site','app.torrent.showpeers')) && in_array('widget', Wekit::C('site','app.torrent.showpeers'))) { #-->
         <span>下载<em>{$value['leecher']}</em></span>
         <span <!--# if($value['seeder']==0) echo 'style="background: red; color:white;"' #-->>做种<em>{$value['seeder']}</em></span>
     <!--# } #-->
