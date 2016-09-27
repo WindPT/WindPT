@@ -43,27 +43,9 @@ class PwTorrentDm extends PwBaseDm
         return $this;
     }
 
-    public function setAdded($added)
-    {
-        $this->_data['added'] = $added;
-        return $this;
-    }
-
     public function setType($type)
     {
         $this->_data['type'] = $type;
-        return $this;
-    }
-
-    public function setNumfiles($numfiles)
-    {
-        $this->_data['numfiles'] = $numfiles;
-        return $this;
-    }
-
-    public function setTimesCompleted($times_completed)
-    {
-        $this->_data['times_completed'] = $times_completed;
         return $this;
     }
 
@@ -76,12 +58,6 @@ class PwTorrentDm extends PwBaseDm
     public function setSeeders($seeders)
     {
         $this->_data['seeders'] = $seeders;
-        return $this;
-    }
-
-    public function setLastAction($last_action)
-    {
-        $this->_data['last_action'] = $last_action;
         return $this;
     }
 
@@ -106,6 +82,18 @@ class PwTorrentDm extends PwBaseDm
     public function setWikilink($wikilink)
     {
         $this->_data['wikilink'] = $wikilink;
+        return $this;
+    }
+
+    public function setCreatedAt($created_at)
+    {
+        $this->_data['created_at'] = $created_at;
+        return $this;
+    }
+
+    public function setUpdatedAt($updated_at)
+    {
+        $this->_data['updated_at'] = $updated_at;
         return $this;
     }
 

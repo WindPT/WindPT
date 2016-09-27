@@ -12,17 +12,15 @@ CREATE TABLE `pw_app_torrent` (
   `filename` varchar(255) NOT NULL DEFAULT '',
   `save_as` varchar(255) NOT NULL DEFAULT '',
   `size` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `type` enum('single','multi') NOT NULL DEFAULT 'single',
-  `numfiles` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `times_completed` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `leechers` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `seeders` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `last_action` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `owner` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `nfo` blob,
   `anonymous` enum('yes','no') NOT NULL DEFAULT 'no',
   `wikilink` varchar(256) DEFAULT '',
+  `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `info_hash` (`info_hash`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -36,7 +34,7 @@ CREATE TABLE `pw_app_torrent_agent_allowed_family` (
   `family` varchar(50) NOT NULL DEFAULT '',
   `peer_id_pattern` varchar(200) NOT NULL,
   `agent_pattern` varchar(200) NOT NULL,
-  `allowhttps` enum('yes','no') NOT NULL DEFAULT 'no',
+  `https` enum('yes','no') NOT NULL DEFAULT 'no',
   `hits` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -91,7 +89,7 @@ CREATE TABLE `pw_app_torrent_peer` (
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `left` bigint(20) unsigned NOT NULL DEFAULT '0',
   `seeder` enum('yes','no') NOT NULL DEFAULT 'no',
-  `started` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `started_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_action` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `connectable` enum('yes','no') NOT NULL DEFAULT 'yes',
   `agent` varchar(60) NOT NULL DEFAULT '',

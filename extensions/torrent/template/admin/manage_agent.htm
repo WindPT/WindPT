@@ -45,10 +45,10 @@
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="radio" name="allowedClients[{$key}][allowhttps]" value="yes" {@pw::ifcheck($allowedClient[ 'allowhttps']=='yes' )}><span>允许</span>
+                                        <input type="radio" name="allowedClients[{$key}][https]" value="yes" {@pw::ifcheck($allowedClient['https']=='yes')}><span>允许</span>
                                     </label>
                                     <label>
-                                        <input type="radio" name="allowedClients[{$key}][allowhttps]" value="no" {@Pw::ifcheck($allowedClient[ 'allowhttps']=='no' )}><span>禁止</span>
+                                        <input type="radio" name="allowedClients[{$key}][https]" value="no" {@Pw::ifcheck($allowedClient['https']=='no')}><span>禁止</span>
                                     </label>
                                 </td>
                                 <td>
@@ -99,7 +99,7 @@
             new_group_html = '<tr class="ct">\
                 <td></td>\
                 <td><input type="text" class="input length_3" name="newAllowedClients[new_' + ct + '][family]" value="' + new_group_name.val() + '"></td>\
-                <td><label><input type="radio" name="newAllowedClients[new_' + ct + '][allowhttps]" value="yes"><span>允许</span></label><label><input type="radio" name="newAllowedClients[new_' + ct + '][allowhttps]" value="no" checked><span>禁止</span></label></td>\
+                <td><label><input type="radio" name="newAllowedClients[new_' + ct + '][https]" value="yes"><span>允许</span></label><label><input type="radio" name="newAllowedClients[new_' + ct + '][https]" value="no" checked><span>禁止</span></label></td>\
                 <td><input type="text" class="input length_3" name="newAllowedClients[new_' + ct + '][agent_pattern]"></td>\
                 <td><input type="text" class="input length_3" name="newAllowedClients[new_' + ct + '][peer_id_pattern]"></td>\
                 <td><a class="mr10 J_new_group_del" href="">[删除]</a>\</td>\

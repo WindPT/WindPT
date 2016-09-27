@@ -31,9 +31,9 @@ class PwTorrentAgentDm extends PwBaseDm
         return $this;
     }
 
-    public function setAllowHttps($allowhttps)
+    public function setHttps($https)
     {
-        $this->_data['allowhttps'] = $allowhttps;
+        $this->_data['https'] = $https;
         return $this;
     }
 

@@ -108,7 +108,7 @@ class ManageController extends AdminBaseController
                     }
 
                     $dm = new PwTorrentAgentDm($key);
-                    $dm->setFamily($allowedClient['family'])->setPeeridPattern($allowedClient['peer_id_pattern'])->setAgentPattern($allowedClient['agent_pattern'])->setAllowHttps($allowedClient['allowhttps']);
+                    $dm->setFamily($allowedClient['family'])->setPeeridPattern($allowedClient['peer_id_pattern'])->setAgentPattern($allowedClient['agent_pattern'])->setHttps($allowedClient['https']);
                     $PwTorrentAgentDs->updateTorrentAgent($dm);
                 }
             }
@@ -120,7 +120,7 @@ class ManageController extends AdminBaseController
                     }
 
                     $dm = new PwTorrentAgentDm();
-                    $dm->setFamily($allowedClient['family'])->setPeeridPattern($allowedClient['peer_id_pattern'])->setAgentPattern($allowedClient['agent_pattern'])->setAllowHttps($allowedClient['allowhttps']);
+                    $dm->setFamily($allowedClient['family'])->setPeeridPattern($allowedClient['peer_id_pattern'])->setAgentPattern($allowedClient['agent_pattern'])->setHttps($allowedClient['https']);
                     $PwTorrentAgentDs->addTorrentAgent($dm);
                 }
             }

@@ -67,9 +67,9 @@ class PwTorrentPeerDm extends PwBaseDm
         return $this;
     }
 
-    public function setStarted($started)
+    public function setStartedAt($started_at)
     {
-        $this->_data['started'] = $started;
+        $this->_data['started_at'] = $started_at;
         return $this;
     }
 

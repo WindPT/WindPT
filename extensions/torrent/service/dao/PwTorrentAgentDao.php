@@ -6,7 +6,7 @@ class PwTorrentAgentDao extends PwBaseDao
 {
     protected $_table      = 'app_torrent_agent_allowed_family';
     protected $_pk         = 'id';
-    protected $_dataStruct = array('id', 'family', 'peer_id_pattern', 'agent_pattern', 'allowhttps', 'hits');
+    protected $_dataStruct = array('id', 'family', 'peer_id_pattern', 'agent_pattern', 'https', 'hits');
     public function getTorrentAgent($id)
     {
         return $this->_get($id);

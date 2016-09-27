@@ -48,7 +48,7 @@ class PwCronDoClearTorrents extends AbstractCronBase
                 continue;
             }
 
-            if (strtotime($torrent['last_action']) < strtotime('-' . $torrentimeout . ' day')) {
+            if (strtotime($torrent['updated_at']) < strtotime('-' . $torrentimeout . ' day')) {
                 $this->deleteThread($topic);
             }
         }

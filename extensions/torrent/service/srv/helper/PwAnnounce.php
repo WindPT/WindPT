@@ -61,9 +61,6 @@ class PwAnnounce
         $peer_string = '';
 
         if (is_array($peer_list)) {
-
-            $count = count($peer_list);
-
             foreach ($peer_list as $peer) {
                 if ($compact) {
                     $peer_string .= str_pad(pack('Nn', ip2long($peer['ip']), $peer['port']), 6);

@@ -262,11 +262,11 @@ class IndexController extends PwBaseController
 
         if (is_array($allowedClients)) {
             foreach ($allowedClients as $allowedClient) {
-                if (!preg_match($allowedClient['agent_pattern'], $agent)) {
+                if (!preg_match('/' . $allowedClient['agent_pattern'] . '/', $agent)) {
                     continue;
                 }
 
-                if ($allowedClient['peer_id_pattern'] == '' || preg_match($allowedClient['peer_id_pattern'], $peerId)) {
+                if ($allowedClient['peer_id_pattern'] == '' || preg_match('/' . $allowedClient['peer_id_pattern'] . '/', $peerId)) {
                     $allowed = true;
                 }
 
@@ -276,7 +276,6 @@ class IndexController extends PwBaseController
 
         if (!$allowed) {
             header('Location: ' . WindUrlHelper::createUrl('/'));
-
             PwAnnounce::showError('This a a bittorrent application and can\'t be loaded into a browser!');
         }
 
@@ -350,7 +349,7 @@ class IndexController extends PwBaseController
             @fclose($sockres);
 
             $dm = new PwTorrentPeerDm();
-            $dm->setTorrent($torrent['id'])->setUid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setStarted(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
+            $dm->setTorrent($torrent['id'])->setUid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setStartedAt(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
             $this->_getTorrentPeerService()->addTorrentPeer($dm);
             $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
         }
@@ -422,8 +421,8 @@ class IndexController extends PwBaseController
                 }
             }
 
-            $tAlive   = (time() - strtotime($torrent['added'])) / 86400;
-            $timeUsed = time() - strtotime($self['started']);
+            $tAlive   = (time() - strtotime($torrent['created_at'])) / 86400;
+            $timeUsed = time() - strtotime($self['started_at']);
             $timeLa   = time() - strtotime($self['last_action']);
 
             $m = Wekit::load('EXT:torrent.service.srv.helper.PwEvalmath');
@@ -476,7 +475,7 @@ class IndexController extends PwBaseController
         // Update peer
         Wind::import('EXT:torrent.service.dm.PwTorrentDm');
         $dm = new PwTorrentDm($torrent['id']);
-        $dm->setSeeders($torrent['seeders'])->setLeechers($torrent['leechers'])->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'));
+        $dm->setSeeders($torrent['seeders'])->setLeechers($torrent['leechers'])->setUpdatedAt(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'));
         $this->_getTorrentService()->updateTorrent($dm);
 
         // Output peers list to client

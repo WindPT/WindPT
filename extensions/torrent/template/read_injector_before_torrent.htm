@@ -54,7 +54,7 @@
             <li style="color: #F00; padding-left: 3em;">请妥善保管您的种子文件和订阅链接，种子文件和订阅链接中包含您的个人信息，泄露可能导致盗号</li>
             <li>
                 <strong>添加时间：</strong>
-                <span>{$torrent['added']}</span>
+                <span>{$torrent['created_at']}</span>
                 <strong>做种：</strong>
                 <span style="width: 50px;<!--# if($torrent['seeder']=='断种') echo 'color:red;'; #-->">{$torrent['seeder']}</span>
                 <strong>下载：</strong>
@@ -64,7 +64,7 @@
             <li><strong>Wiki链接：</strong><a href="{$torrent['wikilink']}" target="_blank">{$torrent['wikilink']}</a></li>
             <!--# } #-->
             <li><strong>Hash码：</strong>{$torrent['info_hash']}</li>
-            <li><strong>文件数量：</strong><span>共有{$torrent['numfiles']}个文件</span><strong>文件大小：</strong><span>{$torrent['size']}</span></li>
+            <li><strong>文件数量：</strong><span>共有{@count($torrent['list'])}个文件</span><strong>文件大小：</strong><span>{$torrent['size']}</span></li>
         </ul>
         <ul class="file">
             <!--# if(is_array($torrent['list'])) { #-->
