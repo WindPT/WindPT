@@ -15,9 +15,9 @@ class PwTorrentFile
         return $this->_getDao($fetchmode)->getTorrentFile($id);
     }
 
-    public function getTorrentFileByTorrent($id, $fetchmode = self::FETCH_MAIN)
+    public function getTorrentFileByTorrentId($id, $fetchmode = self::FETCH_MAIN)
     {
-        return $this->_getDao($fetchmode)->getTorrentFileByTorrent($id);
+        return $this->_getDao($fetchmode)->getTorrentFileByTorrentId($id);
     }
 
     public function addTorrentFile(PwTorrentFileDm $dm)

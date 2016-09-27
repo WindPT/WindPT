@@ -15,14 +15,14 @@ class PwTorrentHistory
         return $this->_getDao($fetchmode)->getTorrentHistory($id);
     }
 
-    public function getTorrentHistoryByTorrentAndUid($torrent, $uid, $fetchmode = self::FETCH_MAIN)
+    public function getTorrentHistoryByTorrentIdAndUid($torrent, $uid, $fetchmode = self::FETCH_MAIN)
     {
-        return $this->_getDao($fetchmode)->getTorrentHistoryByTorrentAndUid($torrent, $uid);
+        return $this->_getDao($fetchmode)->getTorrentHistoryByTorrentIdAndUid($torrent, $uid);
     }
 
-    public function fetchTorrentHistoryByTorrent($torrent, $fetchmode = self::FETCH_MAIN)
+    public function fetchTorrentHistoryByTorrentId($torrent, $fetchmode = self::FETCH_MAIN)
     {
-        return $this->_getDao($fetchmode)->fetchTorrentHistoryByTorrent($torrent);
+        return $this->_getDao($fetchmode)->fetchTorrentHistoryByTorrentId($torrent);
     }
 
     public function fetchTorrentHistoryByUid($uid, $fetchmode = self::FETCH_MAIN)

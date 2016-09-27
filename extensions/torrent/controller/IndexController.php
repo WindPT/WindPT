@@ -307,7 +307,7 @@ class IndexController extends PwBaseController
         }
 
         // Get this peer
-        $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
+        $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentIdAndUid($torrent['id'], $user['uid']);
 
         // Get peers list
         $peers = PwAnnounce::getPeersByTorrentId($torrent['id'], $self['peer_id']);
@@ -332,7 +332,7 @@ class IndexController extends PwBaseController
                     $status = 'stop';
                     break;
                 case 'completed':
-                    $dm->setFinishedAt(Pw::getTime())->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
+                    $dm->setFinishedAt(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerService()->updateTorrentPeer($dm);
                     $status = 'done';
                     break;
@@ -349,19 +349,19 @@ class IndexController extends PwBaseController
             @fclose($sockres);
 
             $dm = new PwTorrentPeerDm();
-            $dm->setTorrent($torrent['id'])->setUid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setStartedAt(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
+            $dm->setTorrentId($torrent['id'])->setUid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setStartedAt(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
             $this->_getTorrentPeerService()->addTorrentPeer($dm);
-            $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentAndUid($torrent['id'], $user['uid']);
+            $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentIdAndUid($torrent['id'], $user['uid']);
         }
 
         // Update user's history about this torrent
-        $history = $this->_getTorrentHistoryService()->getTorrentHistoryByTorrentAndUid($torrent['id'], $user['uid']);
+        $history = $this->_getTorrentHistoryService()->getTorrentHistoryByTorrentIdAndUid($torrent['id'], $user['uid']);
 
         Wind::import('EXT:torrent.service.dm.PwTorrentHistoryDm');
 
         if (!$history) {
             $dm = new PwTorrentHistoryDm();
-            $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
+            $dm->setUid($user['uid'])->setTorrentId($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
             $this->_getTorrentHistoryService()->addTorrentHistory($dm);
             if ($downloaded != 0) {
                 $rotio = round($uploaded / $downloaded, 2);
@@ -382,7 +382,7 @@ class IndexController extends PwBaseController
             }
 
             $dm = new PwTorrentHistoryDm($history['id']);
-            $dm->setUid($user['uid'])->setTorrent($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded)->setStatus($status);
+            $dm->setUid($user['uid'])->setTorrentId($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded)->setStatus($status);
             $this->_getTorrentHistoryService()->updateTorrentHistory($dm);
         }
 
@@ -579,7 +579,7 @@ class IndexController extends PwBaseController
         Wind::import('EXT:torrent.service.dm.PwTorrentSubscribeDm');
 
         $dm = new PwTorrentSubscribeDm();
-        $dm->setUid($this->loginUser->uid)->setTorrent($id);
+        $dm->setUid($this->loginUser->uid)->setTorrentId($id);
         $this->_getTorrentSubscribeService()->addTorrentSubscribe($dm);
 
         $this->showMessage('订阅种子成功！');
@@ -660,7 +660,7 @@ class IndexController extends PwBaseController
                 echo '<link><![CDATA[' . WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid']) . ']]></link>';
                 echo '<pubDate>' . date('D, d M Y H:i:s O', $torrent['created_time']) . '</pubDate>';
                 echo '<description><![CDATA[' . $torrent['subject'] . ']]></description>';
-                echo '<enclosure type="application/x-bittorrent" length="' . $torrent['size'] . '" url="' . str_replace('&', '&amp;', WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['torrent'] . '&passkey=' . $passkey)) . '" />';
+                echo '<enclosure type="application/x-bittorrent" length="' . $torrent['size'] . '" url="' . str_replace('&', '&amp;', WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['torrent_id'] . '&passkey=' . $passkey)) . '" />';
                 echo '<author><![CDATA[' . $torrent['created_username'] . ']]></author>';
                 echo '<category domain="' . WindUrlHelper::createUrl('/bbs/thread/run?fid=' . $torrent['fid']) . '"><![CDATA[' . $torrent['name'] . ']]></category>';
                 echo '</item>';

@@ -15,7 +15,7 @@ class PwCronDoClearPeers extends AbstractCronBase
         }
 
         foreach ($torrents as $torrent) {
-            $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->getTorrentPeerByTorrent($torrent['id']);
+            $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->getTorrentPeerByTorrentId($torrent['id']);
 
             if (!is_array($peers)) {
                 continue;

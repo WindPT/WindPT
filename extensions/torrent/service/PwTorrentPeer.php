@@ -24,18 +24,18 @@ class PwTorrentPeer
         return $this->_getDao($fetchmode)->getTorrentPeerByPeerIDAndTorrentID($peer_id, $torrent_id);
     }
 
-    public function getTorrentPeerByTorrent($tid, $fetchmode = self::FETCH_MAIN)
+    public function getTorrentPeerByTorrentId($tid, $fetchmode = self::FETCH_MAIN)
     {
-        return $this->_getDao($fetchmode)->getTorrentPeerByTorrent($tid);
+        return $this->_getDao($fetchmode)->getTorrentPeerByTorrentId($tid);
     }
 
-    public function getTorrentPeerByTorrentAndUid($tid, $uid, $fetchmode = self::FETCH_MAIN)
+    public function getTorrentPeerByTorrentIdAndUid($tid, $uid, $fetchmode = self::FETCH_MAIN)
     {
         if (empty($tid) || empty($uid)) {
             return false;
         }
 
-        return $this->_getDao($fetchmode)->getTorrentPeerByTorrentAndUid($tid, $uid);
+        return $this->_getDao($fetchmode)->getTorrentPeerByTorrentIdAndUid($tid, $uid);
     }
 
     public function fetchTorrentPeerByUid($uid, $fetchmode = self::FETCH_MAIN)

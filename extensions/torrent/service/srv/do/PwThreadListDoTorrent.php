@@ -16,7 +16,7 @@ class PwThreadListDoTorrent extends PwThreadListDoBase
 
             $seeder = $leecher = 0;
 
-            $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->getTorrentPeerByTorrent($torrent['id']);
+            $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->getTorrentPeerByTorrentId($torrent['id']);
 
             if (is_array($peers)) {
                 foreach ($peers as $peer) {

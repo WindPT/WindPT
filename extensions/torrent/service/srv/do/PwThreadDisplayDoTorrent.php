@@ -26,7 +26,7 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
         $torrent['seeders']   = $torrent['seeders'] + 1;
         $torrent['size']      = PwUtils::readableDataTransfer($torrent['size']);
         $torrent['info_hash'] = PwUtils::readableHash($torrent['info_hash']);
-        $torrent['list']      = $this->_getTorrentFileService()->getTorrentFileByTorrent($torrent['id']);
+        $torrent['list']      = $this->_getTorrentFileService()->getTorrentFileByTorrentId($torrent['id']);
 
         if (is_array($torrent['list'])) {
             foreach ($torrent['list'] as $key => $value) {
@@ -44,7 +44,7 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
 
         $seeder = $leecher = 0;
 
-        $peers = $this->_getTorrentPeerService()->getTorrentPeerByTorrent($torrent['id']);
+        $peers = $this->_getTorrentPeerService()->getTorrentPeerByTorrentId($torrent['id']);
 
         if (is_array($peers)) {
             foreach ($peers as $peer) {

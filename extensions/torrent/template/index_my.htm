@@ -37,7 +37,7 @@
                             <!--# foreach($torrents as $torrent) { #-->
                             <dl class="cc">
                                 <dd><a href="{@WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid'])}">{$torrent['subject']}</a></dd>
-                                <dt><a href="{@WindUrlHelper::createUrl('/app/torrent/index/subscribe?id=' . $torrent['torrent'] . '&unsub=true')}" class="unsub">取消订阅</a></dt>
+                                <dt><a href="{@WindUrlHelper::createUrl('/app/torrent/index/subscribe?id=' . $torrent['torrent_id'] . '&unsub=true')}" class="unsub">取消订阅</a></dt>
                             </dl>
                             <!--# } #-->
                             <!--# } #-->

@@ -52,7 +52,7 @@ COMMIT;
 DROP TABLE IF EXISTS `pw_app_torrent_file`;
 CREATE TABLE `pw_app_torrent_file` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `torrent` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `torrent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `filename` varchar(255) NOT NULL DEFAULT '',
   `size` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -65,7 +65,7 @@ DROP TABLE IF EXISTS `pw_app_torrent_history`;
 CREATE TABLE `pw_app_torrent_history` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(10) NOT NULL,
-  `torrent` mediumint(8) NOT NULL,
+  `torrent_id` mediumint(8) NOT NULL,
   `uploaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `uploaded_last` bigint(20) NOT NULL DEFAULT '0',
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -80,7 +80,7 @@ CREATE TABLE `pw_app_torrent_history` (
 DROP TABLE IF EXISTS `pw_app_torrent_peer`;
 CREATE TABLE `pw_app_torrent_peer` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `torrent` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `torrent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `peer_id` binary(20) NOT NULL,
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
   `ip` varbinary(64) NOT NULL DEFAULT '',
@@ -89,12 +89,12 @@ CREATE TABLE `pw_app_torrent_peer` (
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `left` bigint(20) unsigned NOT NULL DEFAULT '0',
   `seeder` enum('yes','no') NOT NULL DEFAULT 'no',
-  `started_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `last_action` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `connectable` enum('yes','no') NOT NULL DEFAULT 'yes',
   `agent` varchar(60) NOT NULL DEFAULT '',
-  `finished_at` int(10) unsigned NOT NULL DEFAULT '0',
   `passkey` varchar(40) NOT NULL DEFAULT '',
+  `started_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `finished_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_action` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -105,7 +105,7 @@ DROP TABLE IF EXISTS `pw_app_torrent_subscription`;
 CREATE TABLE `pw_app_torrent_subscription` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
-  `torrent` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `torrent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 

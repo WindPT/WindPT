@@ -186,7 +186,7 @@ class PwPostDoTorrent extends PwPostDoBase
             $filedm = Wekit::load('EXT:torrent.service.dm.PwTorrentFileDm');
 
             foreach ($this->filelist as $file) {
-                $filedm->setTorrent($result);
+                $filedm->setTorrentId($result);
                 $filedm->setFileName($file[0]);
                 $filedm->setSize($file[1]);
                 $this->_getTorrentFileService()->addTorrentFile($filedm);

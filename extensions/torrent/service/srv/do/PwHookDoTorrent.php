@@ -67,7 +67,7 @@ class PwHookDoTorrent
         if (is_array($ids)) {
             foreach ($ids as $id) {
                 $torrent = $torrentDs->getTorrentByTid($id);
-                $files   = $fileDs->getTorrentFileByTorrent($torrent['id']);
+                $files   = $fileDs->getTorrentFileByTorrentId($torrent['id']);
 
                 if (is_array($files)) {
                     foreach ($files as $file) {
@@ -88,7 +88,7 @@ class PwHookDoTorrent
         $fileDs    = Wekit::load('EXT:torrent.service.PwTorrentFile');
 
         $torrent = $torrentDs->getTorrentByTid($id);
-        $files   = $fileDs->getTorrentFileByTorrent($torrent['id']);
+        $files   = $fileDs->getTorrentFileByTorrentId($torrent['id']);
 
         if (is_array($files)) {
             foreach ($files as $file) {
@@ -147,7 +147,7 @@ class PwHookDoTorrent
                 $downloaded_total += $history['downloaded'];
                 $uploaded_total += $history['uploaded'];
 
-                $torrent = $PwTorrent->getTorrent($history['torrent']);
+                $torrent = $PwTorrent->getTorrent($history['torrent_id']);
                 $thread  = $this->_getThreadService()->getThread($torrent['tid']);
 
                 if ($thread) {

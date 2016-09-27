@@ -13,9 +13,9 @@ class PwTorrentPeerDm extends PwBaseDm
         $this->id = $id;
     }
 
-    public function setTorrent($torrent)
+    public function setTorrentId($torrent_id)
     {
-        $this->_data['torrent'] = $torrent;
+        $this->_data['torrent_id'] = $torrent_id;
         return $this;
     }
 

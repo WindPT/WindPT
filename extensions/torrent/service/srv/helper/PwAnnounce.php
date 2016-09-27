@@ -23,7 +23,7 @@ class PwAnnounce
 
     public static function getPeersByTorrentId($torrent_id = 0, $peer_id = '')
     {
-        $peer_list = self::_getTorrentPeerService()->getTorrentPeerByTorrent($torrent_id);
+        $peer_list = self::_getTorrentPeerService()->getTorrentPeerByTorrentId($torrent_id);
         if (is_array($peer_list)) {
             foreach ($peer_list as $key => $peer) {
                 if ($peer_id == $peer['peer_id']) {
