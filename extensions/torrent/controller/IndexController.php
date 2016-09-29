@@ -490,11 +490,11 @@ class IndexController extends PwBaseController
         $passkey = $this->getInput('passkey');
 
         if (!$this->loginUser->uid && empty($passkey)) {
-            $this->showError('必须登录才能进行本操作！');
+            $this->showError('download.fail.login.not');
         } elseif (is_string($passkey)) {
             $user = $this->_getTorrentUserService()->getTorrentUserByPasskey($passkey);
             if (empty($user)) {
-                $this->showError('Passkey 错误！');
+                $this->showError('download.fail.login.not');
             } else {
                 $uid = $user['uid'];
             }
@@ -507,12 +507,12 @@ class IndexController extends PwBaseController
 
         $userBan = $this->_getUserBanService()->getBanInfo($uid);
         if ($userBan) {
-            $this->showError('用户处于封禁期！');
+            $this->showError('ban');
         }
 
         $file = WEKIT_PATH . '../torrent/' . $id . '.torrent';
         if (!file_exists($file)) {
-            $this->showError('种子文件不存在！');
+            $this->showError('data.error');
         }
 
         $torrent = $this->_getTorrentService()->getTorrent($id);
@@ -520,7 +520,7 @@ class IndexController extends PwBaseController
         // Check if torrent was removed
         $topic = $this->_getThreadService()->getThread($torrent['tid']);
         if ($topic['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
-            $this->showError('种子已被删除或正在审核！');
+            $this->showError('BBS:forum.thread.disabled');
         }
 
         // Change announce to user's private announce
@@ -553,26 +553,26 @@ class IndexController extends PwBaseController
         $unsub = $this->getInput('unsub');
 
         if (!$this->loginUser->uid) {
-            $this->showError('必须登录才能进行本操作！');
+            $this->showError('login.not');
         }
 
         $userBan = $this->_getUserBanService()->getBanInfo($this->loginUser->uid);
         if ($userBan) {
-            $this->showError('用户处于封禁期！');
+            $this->showError('ban');
         }
 
         $torrent = $this->_getTorrentService()->getTorrent($id);
         if (empty($torrent)) {
-            $this->showError('种子文件不存在！');
+            $this->showError('data.error');
         }
 
         $torrent = $this->_getTorrentSubscribeService()->getTorrentSubscribeByUidAndTorrent($this->loginUser->uid, $id);
         if (!empty($torrent)) {
             if ($unsub == 'true') {
                 $this->_getTorrentSubscribeService()->deleteTorrentSubscribe($torrent['id']);
-                $this->showMessage('取消订阅种子成功！');
+                $this->showMessage('TAG:del.success');
             } else {
-                $this->showError('已订阅该种子！');
+                $this->showError('BBS:like.fail.already.liked');
             }
         }
 
@@ -582,7 +582,7 @@ class IndexController extends PwBaseController
         $dm->setUid($this->loginUser->uid)->setTorrentId($id);
         $this->_getTorrentSubscribeService()->addTorrentSubscribe($dm);
 
-        $this->showMessage('订阅种子成功！');
+        $this->showMessage('success');
     }
 
     public function myAction()
@@ -626,12 +626,12 @@ class IndexController extends PwBaseController
 
         $user = $this->_getTorrentUserService()->getTorrentUserByPasskey($passkey);
         if (empty($user)) {
-            $this->showError('Passkey 错误！');
+            $this->showError('login.not');
         }
 
         $userBan = $this->_getUserBanService()->getBanInfo($user['uid']);
         if ($userBan) {
-            $this->showError('用户处于封禁期！');
+            $this->showError('ban');
         }
 
         header('Content-Type: application/xml; charset=utf-8');
