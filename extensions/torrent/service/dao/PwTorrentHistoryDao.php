@@ -4,7 +4,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 
 class PwTorrentHistoryDao extends PwBaseDao
 {
-    protected $_table      = 'app_torrent_history';
+    protected $_table      = 'app_torrent_histories';
     protected $_pk         = 'id';
     protected $_dataStruct = array('id', 'uid', 'torrent_id', 'uploaded', 'uploaded_last', 'downloaded', 'downloaded_last', 'left', 'state');
 
