@@ -25,7 +25,7 @@ class PwThreadDisplayDoTorrentSide extends PwThreadDisplayDoBase
         $seeding = $leeching = 0;
         if (is_array($peers)) {
             foreach ($peers as $peer) {
-                if ($peer['seeder'] == 'yes') {
+                if ($peer['seeder'] == 1) {
                     $seeding++;
                 } else {
                     $leeching++;

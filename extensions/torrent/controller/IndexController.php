@@ -251,7 +251,7 @@ class IndexController extends PwBaseController
         $agent      = $_SERVER['HTTP_USER_AGENT'];
         $ip         = Wind::getComponent('request')->getClientIp();
         $status     = ($left > 0) ? 'do' : 'done';
-        $seeder     = ($left > 0) ? 'no' : 'yes';
+        $seeder     = ($left > 0) ? 0 : 1;
 
         Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
 
@@ -342,9 +342,9 @@ class IndexController extends PwBaseController
         } else {
             $sockres = @pfsockopen($ip, $port, $errno, $errstr, 5);
             if ($errno == '111') {
-                $connectable = 'no';
+                $connectable = 0;
             } else {
-                $connectable = 'yes';
+                $connectable = 1;
             }
             @fclose($sockres);
 
@@ -390,7 +390,7 @@ class IndexController extends PwBaseController
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
 
         // Update user's credits
-        if ($seeder == "yes" && Wekit::C('site', 'app.torrent.credit.enabled') == 1) {
+        if ($seeder == 1 && Wekit::C('site', 'app.torrent.credit.enabled') == 1) {
             $changed       = 0;
             $WindApi       = WindidApi::api('user');
             $crdtits       = $WindApi->getUserCredit($user['uid']);
@@ -413,7 +413,7 @@ class IndexController extends PwBaseController
             $userpeers = $this->_getTorrentPeerService()->fetchTorrentPeerByUid($user['uid']);
             if (is_array($userpeers)) {
                 foreach ($userpeers as $p) {
-                    if ($p['seeder'] == 'yes') {
+                    if ($p['seeder'] == 1) {
                         $seeding++;
                     } else {
                         $leeching++;

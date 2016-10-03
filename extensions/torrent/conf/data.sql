@@ -17,7 +17,7 @@ CREATE TABLE `pw_app_torrent` (
   `seeders` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `owner` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `nfo` blob,
-  `anonymous` enum('yes','no') NOT NULL DEFAULT 'no',
+  `anonymous` tinyint(1) NOT NULL DEFAULT '0',
   `wikilink` varchar(256) DEFAULT '',
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -34,7 +34,7 @@ CREATE TABLE `pw_app_torrent_agent_allowed_family` (
   `family` varchar(50) NOT NULL DEFAULT '',
   `peer_id_pattern` varchar(200) NOT NULL,
   `agent_pattern` varchar(200) NOT NULL,
-  `https` enum('yes','no') NOT NULL DEFAULT 'no',
+  `https` tinyint(1) NOT NULL DEFAULT '0',
   `hits` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -43,7 +43,7 @@ CREATE TABLE `pw_app_torrent_agent_allowed_family` (
 --  Records of `pw_app_torrent_agent_allowed_family`
 -- ----------------------------
 BEGIN;
-INSERT INTO `pw_app_torrent_agent_allowed_family` VALUES ('1', 'Azureus 2.5.0.4', '^-AZ2504-', '^Azureus 2.5.0.4', 'yes', '0'), ('2', 'Ktorrent 4.0.x', '^-KT4([0-9])([0-9])([0-9])-', '^KTorrent\\/4\\.([0-9])\\.([0-9])', 'yes', '0'), ('3', 'Bittorrent 6.x', '^M6-([0-9])-([0-9])--', '^BitTorrent\\/6([0-9])([0-9])([0-9])', 'yes', '0'), ('4', 'Deluge 0.x', '^-DE0([0-9])([0-9])([0-9])-', '^Deluge 0\\.([0-9])\\.([0-9])\\.([0-9])', 'yes', '0'), ('5', 'Transmission1.x', '^-TR1([0-9])([0-9])([0-9])-', '^Transmission\\/1\\.([0-9])([0-9])', 'yes', '0'), ('6', 'RTorrent 0.x(with libtorrent 0.x)', '^-lt([0-9A-E])([0-9A-E])([0-9A-E])([0-9A-E])-', '^rtorrent\\/0\\.([0-9])\\.([0-9])\\/0\\.([1-9][0-9]*)\\.(0|[1-9][0-9]*)', 'no', '0'), ('7', 'Rufus 0.x', '', '^Rufus\\/0\\.([0-9])\\.([0-9])', 'no', '0'), ('8', 'Azureus 3.x', '^-AZ3([0-9])([0-9])([0-9])-', '^Azureus 3\\.([0-9])\\.([0-9])\\.([0-9])', 'yes', '0'), ('9', 'uTorrent 1.7.x', '^-UT17([0-9])([0-9])-', '^uTorrent\\/17([0-9])([0-9])', 'yes', '0'), ('10', 'BitRocket 0.x', '^-BR0([0-9])([1-9][0-9]*)-', '^BitRocket\\/0\\.([0-9])\\.([0-9])\\(([1-9][0-9]*)\\) libtorrent\\/0\\.([1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)', 'yes', '0'), ('11', 'MLDonkey 2.9.x', '^-ML2\\.9\\.([0-9])-', '^MLDonkey\\/2\\.9\\.([0-9])', 'yes', '0'), ('12', 'uTorrent 1.8.x', '^-UT18([0-9])([0-9])-', '^uTorrent\\/18([0-9])([0-9])', 'yes', '0'), ('13', 'Azureus 4.x', '^-AZ4([0-9])([0-9])([0-9])-', '^Azureus 4\\.([0-9])\\.([0-9])\\.([0-9])', 'yes', '0'), ('14', 'SymTorrent', '', '^SymTorrent', 'no', '0'), ('15', 'Deluge 1.x', '^-DE1([0-9])([0-9A-Z])([0-9])-', '^Deluge 1\\.([0-9])\\.([0-9])', 'yes', '0'), ('16', 'uTorrent 1.8xB', '^-UT18([0-9])B-', '^uTorrent\\/18([0-9])B\\(([1-9][0-9]*)\\)', 'yes', '0'), ('17', 'uTorrent 2.x.x', '^-UT2([0-9])([0-9])([0-9])-', '^uTorrent\\/2([0-9])([0-9])([0-9])', 'yes', '0'), ('19', 'uTorrent 3.x', '^-UT3([0-9])([0-9])([0-9])-', '^uTorrent\\/3([0-9])([0-9])([0-9])', 'yes', '0'), ('18', 'uTorrent 3.x.xB', '^-UT3([0-9])([0-9])B-', '^uTorrent\\/3([0-9])([0-9])B', 'yes', '0'), ('20', 'uTorrentMac 1.x', '^-UM1([0-9])([0-9])([0-9])-', '^uTorrentMac\\/1([0-9])([0-9])([0-9])', 'yes', '0');
+INSERT INTO `pw_app_torrent_agent_allowed_family` VALUES ('1', 'Azureus 2.5.0.4', '^-AZ2504-', '^Azureus 2.5.0.4', '1', '0'), ('2', 'Ktorrent 4.0.x', '^-KT4([0-9])([0-9])([0-9])-', '^KTorrent\\/4\\.([0-9])\\.([0-9])', '1', '0'), ('3', 'Bittorrent 6.x', '^M6-([0-9])-([0-9])--', '^BitTorrent\\/6([0-9])([0-9])([0-9])', '1', '0'), ('4', 'Deluge 0.x', '^-DE0([0-9])([0-9])([0-9])-', '^Deluge 0\\.([0-9])\\.([0-9])\\.([0-9])', '1', '0'), ('5', 'Transmission1.x', '^-TR1([0-9])([0-9])([0-9])-', '^Transmission\\/1\\.([0-9])([0-9])', '1', '0'), ('6', 'RTorrent 0.x(with libtorrent 0.x)', '^-lt([0-9A-E])([0-9A-E])([0-9A-E])([0-9A-E])-', '^rtorrent\\/0\\.([0-9])\\.([0-9])\\/0\\.([1-9][0-9]*)\\.(0|[1-9][0-9]*)', '0', '0'), ('7', 'Rufus 0.x', '', '^Rufus\\/0\\.([0-9])\\.([0-9])', '0', '0'), ('8', 'Azureus 3.x', '^-AZ3([0-9])([0-9])([0-9])-', '^Azureus 3\\.([0-9])\\.([0-9])\\.([0-9])', '1', '0'), ('9', 'uTorrent 1.7.x', '^-UT17([0-9])([0-9])-', '^uTorrent\\/17([0-9])([0-9])', '1', '0'), ('10', 'BitRocket 0.x', '^-BR0([0-9])([1-9][0-9]*)-', '^BitRocket\\/0\\.([0-9])\\.([0-9])\\(([1-9][0-9]*)\\) libtorrent\\/0\\.([1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)', '1', '0'), ('11', 'MLDonkey 2.9.x', '^-ML2\\.9\\.([0-9])-', '^MLDonkey\\/2\\.9\\.([0-9])', '1', '0'), ('12', 'uTorrent 1.8.x', '^-UT18([0-9])([0-9])-', '^uTorrent\\/18([0-9])([0-9])', '1', '0'), ('13', 'Azureus 4.x', '^-AZ4([0-9])([0-9])([0-9])-', '^Azureus 4\\.([0-9])\\.([0-9])\\.([0-9])', '1', '0'), ('14', 'SymTorrent', '', '^SymTorrent', '0', '0'), ('15', 'Deluge 1.x', '^-DE1([0-9])([0-9A-Z])([0-9])-', '^Deluge 1\\.([0-9])\\.([0-9])', '1', '0'), ('16', 'uTorrent 1.8xB', '^-UT18([0-9])B-', '^uTorrent\\/18([0-9])B\\(([1-9][0-9]*)\\)', '1', '0'), ('17', 'uTorrent 2.x.x', '^-UT2([0-9])([0-9])([0-9])-', '^uTorrent\\/2([0-9])([0-9])([0-9])', '1', '0'), ('18', 'uTorrent 3.x.xB', '^-UT3([0-9])([0-9])B-', '^uTorrent\\/3([0-9])([0-9])B', '1', '0'), ('19', 'uTorrent 3.x', '^-UT3([0-9])([0-9])([0-9])-', '^uTorrent\\/3([0-9])([0-9])([0-9])', '1', '0'), ('20', 'uTorrentMac 1.x', '^-UM1([0-9])([0-9])([0-9])-', '^uTorrentMac\\/1([0-9])([0-9])([0-9])', '1', '0');
 COMMIT;
 
 -- ----------------------------
@@ -88,8 +88,8 @@ CREATE TABLE `pw_app_torrent_peer` (
   `uploaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `left` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `seeder` enum('yes','no') NOT NULL DEFAULT 'no',
-  `connectable` enum('yes','no') NOT NULL DEFAULT 'yes',
+  `seeder` tinyint(1) NOT NULL DEFAULT '0',
+  `connectable` tinyint(1) NOT NULL DEFAULT '0',
   `agent` varchar(60) NOT NULL DEFAULT '',
   `passkey` varchar(40) NOT NULL DEFAULT '',
   `started_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

@@ -174,7 +174,7 @@ class PwPostDoTorrent extends PwPostDoBase
     public function addTorrentt($tid)
     {
         $dm = Wekit::load('EXT:torrent.service.dm.PwTorrentDm');
-        $dm->setTid($tid)->setInfoHash($this->infohash)->setOwner($this->user->uid)->setAnonymous('yes')->setSize($this->totalength)->setType($this->type)->setWikilink($this->wikilink)->setFileName($this->filename)->setSaveAs($this->filesavename)->setCreatedAt(date('Y-m-d H:i:s'))->setUpdatedAt(date('Y-m-d H:i:s'));
+        $dm->setTid($tid)->setInfoHash($this->infohash)->setOwner($this->user->uid)->setAnonymous(0)->setSize($this->totalength)->setType($this->type)->setWikilink($this->wikilink)->setFileName($this->filename)->setSaveAs($this->filesavename)->setCreatedAt(date('Y-m-d H:i:s'))->setUpdatedAt(date('Y-m-d H:i:s'));
 
         $result = $this->_getTorrentService()->addTorrent($dm);
 

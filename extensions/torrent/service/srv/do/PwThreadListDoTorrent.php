@@ -20,7 +20,7 @@ class PwThreadListDoTorrent extends PwThreadListDoBase
 
             if (is_array($peers)) {
                 foreach ($peers as $peer) {
-                    if ($peer['seeder'] == 'yes') {
+                    if ($peer['seeder'] == 1) {
                         $seeder++;
                     } else {
                         $leecher++;

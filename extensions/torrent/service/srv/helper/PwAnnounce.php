@@ -41,7 +41,7 @@ class PwAnnounce
 
         if (is_array($torrent) && is_array($peer_list)) {
             foreach ($peer_list as $peer) {
-                if ($peer['seeder'] == 'yes') {
+                if ($peer['seeder'] == 1) {
                     $torrent['seeders']++;
                 } else {
                     $torrent['leechers']++;

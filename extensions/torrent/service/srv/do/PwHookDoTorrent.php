@@ -23,7 +23,7 @@ class PwHookDoTorrent
             $seeding = $leeching = 0;
             if (is_array($peers)) {
                 foreach ($peers as $peer) {
-                    if ($peer['seeder'] == 'yes') {
+                    if ($peer['seeder'] == 1) {
                         $seeding++;
                     } else {
                         $leeching++;
@@ -133,7 +133,7 @@ class PwHookDoTorrent
         $this->seeding = $this->leeching = 0;
         if (is_array($peers)) {
             foreach ($peers as $peer) {
-                if ($peer['seeder'] == 'yes') {
+                if ($peer['seeder'] == 1) {
                     $this->seeding++;
                 } else {
                     $this->leeching++;
