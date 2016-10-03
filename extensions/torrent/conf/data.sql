@@ -49,6 +49,21 @@ INSERT INTO `pw_app_torrent_agents` VALUES ('1', 'Azureus 2.5.0.4', '^-AZ2504-',
 COMMIT;
 
 -- ----------------------------
+--  Table structure for `pw_app_torrent_users`
+-- ----------------------------
+DROP TABLE IF EXISTS `pw_app_torrent_users`;
+CREATE TABLE `pw_app_torrent_users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned NOT NULL DEFAULT '0',
+  `passkey` varchar(40) NOT NULL DEFAULT '',
+  `uploaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `downloaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `passkey` (`passkey`) USING BTREE,
+  UNIQUE KEY `app_torrent_users_uid_foreign` (`uid`) USING BTREE
+) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `pw_app_torrent_files`
 -- ----------------------------
 DROP TABLE IF EXISTS `pw_app_torrent_files`;
@@ -125,20 +140,5 @@ CREATE TABLE `pw_app_torrent_subscriptions` (
   KEY `app_torrent_subscriptions_torrent_id_foreign` (`torrent_id`) USING BTREE,
   CONSTRAINT `app_torrent_subscriptions_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
---  Table structure for `pw_app_torrent_users`
--- ----------------------------
-DROP TABLE IF EXISTS `pw_app_torrent_users`;
-CREATE TABLE `pw_app_torrent_users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned NOT NULL DEFAULT '0',
-  `passkey` varchar(40) NOT NULL DEFAULT '',
-  `uploaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `downloaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `passkey` (`passkey`) USING BTREE,
-  UNIQUE KEY `app_torrent_users_uid_foreign` (`uid`) USING BTREE
-) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
