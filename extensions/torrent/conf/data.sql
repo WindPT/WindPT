@@ -7,7 +7,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `pw_app_torrent`;
 CREATE TABLE `pw_app_torrent` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `tid` int(10) NOT NULL,
+  `tid` int(10) unsigned NOT NULL,
   `info_hash` binary(20) NOT NULL,
   `filename` varchar(255) NOT NULL DEFAULT '',
   `save_as` varchar(255) NOT NULL DEFAULT '',
@@ -22,7 +22,9 @@ CREATE TABLE `pw_app_torrent` (
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `info_hash` (`info_hash`)
+  UNIQUE KEY `info_hash` (`info_hash`),
+  KEY `torrent_tid_foreign` (`tid`) USING BTREE,
+  KEY `torrent_owner_foreign` (`owner`) USING BTREE
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -37,7 +39,7 @@ CREATE TABLE `pw_app_torrent_agent_allowed_family` (
   `https` tinyint(1) NOT NULL DEFAULT '0',
   `hits` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `pw_app_torrent_agent_allowed_family`
@@ -55,7 +57,9 @@ CREATE TABLE `pw_app_torrent_file` (
   `torrent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `filename` varchar(255) NOT NULL DEFAULT '',
   `size` bigint(20) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `torrent_file_torrent_id_foreign` (`torrent_id`) USING BTREE,
+  CONSTRAINT `torrent_file_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrent` (`id`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -64,15 +68,18 @@ CREATE TABLE `pw_app_torrent_file` (
 DROP TABLE IF EXISTS `pw_app_torrent_history`;
 CREATE TABLE `pw_app_torrent_history` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) NOT NULL,
-  `torrent_id` mediumint(8) NOT NULL,
+  `uid` int(10) unsigned NOT NULL DEFAULT '0',
+  `torrent_id` mediumint(8) unsigned NOT NULL,
   `uploaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `uploaded_last` bigint(20) NOT NULL DEFAULT '0',
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded_last` bigint(20) NOT NULL DEFAULT '0',
   `left` bigint(20) unsigned NOT NULL DEFAULT '0',
   `state` enum('started','stopped') NOT NULL DEFAULT 'started',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `torrent_history_uid_foreign` (`uid`) USING BTREE,
+  KEY `torrent_history_torrent_id_foreign` (`torrent_id`) USING BTREE,
+  CONSTRAINT `torrent_history_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrent` (`id`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -82,21 +89,27 @@ DROP TABLE IF EXISTS `pw_app_torrent_peer`;
 CREATE TABLE `pw_app_torrent_peer` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `torrent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `peer_id` binary(20) NOT NULL,
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
   `ip` varbinary(64) NOT NULL DEFAULT '',
+  `peer_id` binary(20) NOT NULL,
   `port` smallint(5) unsigned NOT NULL DEFAULT '0',
   `uploaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `left` bigint(20) unsigned NOT NULL DEFAULT '0',
   `seeder` tinyint(1) NOT NULL DEFAULT '0',
-  `connectable` tinyint(1) NOT NULL DEFAULT '0',
+  `connectable` tinyint(1) NOT NULL DEFAULT '1',
   `agent` varchar(60) NOT NULL DEFAULT '',
-  `passkey` varchar(40) NOT NULL DEFAULT '',
+  `passkey` char(40) NOT NULL DEFAULT '',
   `started_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `finished_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_action` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `torrent_peer_peer_id_foreign` (`peer_id`) USING BTREE,
+  KEY `torrent_peer_torrent_id_foreign` (`torrent_id`) USING BTREE,
+  KEY `torrent_peer_uid_foreign` (`uid`) USING BTREE,
+  KEY `torrent_peer_passkey_foreign` (`passkey`) USING BTREE,
+  CONSTRAINT `torrent_peer_passkey_foreign` FOREIGN KEY (`passkey`) REFERENCES `pw_app_torrent_user` (`passkey`),
+  CONSTRAINT `torrent_peer_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrent` (`id`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -107,8 +120,11 @@ CREATE TABLE `pw_app_torrent_subscription` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
   `torrent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `torrent_subscription_uid_foreign` (`uid`) USING BTREE,
+  KEY `torrent_subscription_torrent_id_foreign` (`torrent_id`) USING BTREE,
+  CONSTRAINT `torrent_subscription_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrent` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- ----------------------------
 --  Table structure for `pw_app_torrent_user`
@@ -120,7 +136,9 @@ CREATE TABLE `pw_app_torrent_user` (
   `passkey` varchar(40) NOT NULL DEFAULT '',
   `uploaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `torrent_user_uid_foreign` (`uid`) USING BTREE,
+  UNIQUE KEY `torrent_user_passkey` (`passkey`) USING BTREE
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
