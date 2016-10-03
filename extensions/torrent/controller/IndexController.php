@@ -34,7 +34,7 @@ class IndexController extends PwBaseController
             $paras_resolution = $this->getInput('resolution', 'post');
             $paras_sub        = $this->getInput('sub', 'post');
             $paras_format     = $this->getInput('format', 'post');
-            $paras_status     = $this->getInput('status', 'post');
+            $paras_state      = $this->getInput('state', 'post');
             $paras_bps        = $this->getInput('bps', 'post');
             $paras_platform   = $this->getInput('platform', 'post');
             $paras_name       = $this->getInput('name', 'post');
@@ -141,8 +141,8 @@ class IndexController extends PwBaseController
                         $title .= '[' . $paras_format . ']'; // 格式
 
                         // 状态
-                        if ($paras_status) {
-                            $title .= '[' . $paras_status . ']';
+                        if ($paras_state) {
+                            $title .= '[' . $paras_state . ']';
                         }
 
                         $wikilink = $result->alt;
@@ -169,8 +169,8 @@ class IndexController extends PwBaseController
                         $title .= '[' . $paras_format . ']'; // 格式
 
                         // 状态
-                        if ($paras_status) {
-                            $title .= '[' . $paras_status . ']';
+                        if ($paras_state) {
+                            $title .= '[' . $paras_state . ']';
                         }
 
                         if (!empty(Wekit::C('site', 'app.torrent.titlegen.omdb'))) {
@@ -250,7 +250,6 @@ class IndexController extends PwBaseController
         $no_peer_id = $this->getInput('no_peer_id');
         $agent      = $_SERVER['HTTP_USER_AGENT'];
         $ip         = Wind::getComponent('request')->getClientIp();
-        $status     = ($left > 0) ? 'do' : 'done';
         $seeder     = ($left > 0) ? 0 : 1;
 
         Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
@@ -320,7 +319,8 @@ class IndexController extends PwBaseController
                 PwAnnounce::showError('You have already started downloading this torrent!');
             }
 
-            $dm = new PwTorrentPeerDm($self['id']);
+            $state = 'started';
+            $dm    = new PwTorrentPeerDm($self['id']);
             switch ($event) {
                 case '':
                 case 'started':
@@ -329,12 +329,11 @@ class IndexController extends PwBaseController
                     break;
                 case 'stopped':
                     $this->_getTorrentPeerService()->deleteTorrentPeer($self['id']);
-                    $status = 'stop';
+                    $state = 'stopped';
                     break;
                 case 'completed':
                     $dm->setFinishedAt(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setIp($ip)->setPort($port)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
                     $this->_getTorrentPeerService()->updateTorrentPeer($dm);
-                    $status = 'done';
                     break;
                 default:
                     PwAnnounce::showError('Invalid event from client!');
@@ -361,7 +360,7 @@ class IndexController extends PwBaseController
 
         if (!$history) {
             $dm = new PwTorrentHistoryDm();
-            $dm->setUid($user['uid'])->setTorrentId($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded);
+            $dm->setUid($user['uid'])->setTorrentId($torrent['id'])->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left);
             $this->_getTorrentHistoryService()->addTorrentHistory($dm);
             if ($downloaded != 0) {
                 $rotio = round($uploaded / $downloaded, 2);
@@ -382,7 +381,7 @@ class IndexController extends PwBaseController
             }
 
             $dm = new PwTorrentHistoryDm($history['id']);
-            $dm->setUid($user['uid'])->setTorrentId($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded)->setStatus($status);
+            $dm->setUid($user['uid'])->setTorrentId($torrent['id'])->setUploaded($uploaded_total)->setUploadedLast($uploaded)->setDownloaded($downloaded_total)->setDownloadedLast($downloaded)->setLeft($left)->setState($state);
             $this->_getTorrentHistoryService()->updateTorrentHistory($dm);
         }
 

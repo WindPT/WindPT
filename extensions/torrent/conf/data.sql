@@ -70,7 +70,8 @@ CREATE TABLE `pw_app_torrent_history` (
   `uploaded_last` bigint(20) NOT NULL DEFAULT '0',
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded_last` bigint(20) NOT NULL DEFAULT '0',
-  `status` enum('do','done','stop') NOT NULL DEFAULT 'do',
+  `left` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `state` enum('started','stopped') NOT NULL DEFAULT 'started',
   PRIMARY KEY (`id`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 

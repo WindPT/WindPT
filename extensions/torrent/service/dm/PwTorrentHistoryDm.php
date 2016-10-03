@@ -49,9 +49,15 @@ class PwTorrentHistoryDm extends PwBaseDm
         return $this;
     }
 
-    public function setStatus($status)
+    public function setLeft($left)
     {
-        $this->_data['status'] = $status;
+        $this->_data['left'] = $left;
+        return $this;
+    }
+
+    public function setState($state)
+    {
+        $this->_data['state'] = $state;
         return $this;
     }
 
