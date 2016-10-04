@@ -60,7 +60,8 @@ CREATE TABLE `pw_app_torrent_users` (
   `downloaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `passkey` (`passkey`) USING BTREE,
-  UNIQUE KEY `app_torrent_users_uid_foreign` (`uid`) USING BTREE
+  UNIQUE KEY `app_torrent_users_uid_foreign` (`uid`) USING BTREE,
+  CONSTRAINT `app_torrent_users_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -94,7 +95,8 @@ CREATE TABLE `pw_app_torrent_histories` (
   PRIMARY KEY (`id`),
   KEY `app_torrent_historys_uid_foreign` (`uid`) USING BTREE,
   KEY `app_torrent_historys_torrent_id_foreign` (`torrent_id`) USING BTREE,
-  CONSTRAINT `app_torrent_historys_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`)
+  CONSTRAINT `app_torrent_historys_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`),
+  CONSTRAINT `app_torrent_historys_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -124,7 +126,8 @@ CREATE TABLE `pw_app_torrent_peers` (
   KEY `app_torrent_peers_uid_foreign` (`uid`) USING BTREE,
   KEY `app_torrent_peers_passkey_foreign` (`passkey`) USING BTREE,
   CONSTRAINT `app_torrent_peers_passkey_foreign` FOREIGN KEY (`passkey`) REFERENCES `pw_app_torrent_users` (`passkey`),
-  CONSTRAINT `app_torrent_peers_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`)
+  CONSTRAINT `app_torrent_peers_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`),
+  CONSTRAINT `app_torrent_peers_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -138,7 +141,8 @@ CREATE TABLE `pw_app_torrent_subscriptions` (
   PRIMARY KEY (`id`),
   KEY `app_torrent_subscriptions_uid_foreign` (`uid`) USING BTREE,
   KEY `app_torrent_subscriptions_torrent_id_foreign` (`torrent_id`) USING BTREE,
-  CONSTRAINT `app_torrent_subscriptions_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`)
+  CONSTRAINT `app_torrent_subscriptions_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`),
+  CONSTRAINT `app_torrent_subscriptions_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 SET FOREIGN_KEY_CHECKS = 1;
