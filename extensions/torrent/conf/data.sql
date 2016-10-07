@@ -53,16 +53,14 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `pw_app_torrent_users`;
 CREATE TABLE `pw_app_torrent_users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
   `passkey` varchar(40) NOT NULL DEFAULT '',
   `uploaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
   UNIQUE KEY `passkey` (`passkey`) USING BTREE,
   UNIQUE KEY `app_torrent_users_uid_foreign` (`uid`) USING BTREE,
   CONSTRAINT `app_torrent_users_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
-) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `pw_app_torrent_files`
@@ -116,7 +114,6 @@ CREATE TABLE `pw_app_torrent_peers` (
   `seeder` tinyint(1) NOT NULL DEFAULT '0',
   `connectable` tinyint(1) NOT NULL DEFAULT '1',
   `agent` varchar(60) NOT NULL DEFAULT '',
-  `passkey` char(40) NOT NULL DEFAULT '',
   `started_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `finished_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_action` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -124,8 +121,6 @@ CREATE TABLE `pw_app_torrent_peers` (
   UNIQUE KEY `peer_id` (`peer_id`) USING BTREE,
   KEY `app_torrent_peers_torrent_id_foreign` (`torrent_id`) USING BTREE,
   KEY `app_torrent_peers_uid_foreign` (`uid`) USING BTREE,
-  KEY `app_torrent_peers_passkey_foreign` (`passkey`) USING BTREE,
-  CONSTRAINT `app_torrent_peers_passkey_foreign` FOREIGN KEY (`passkey`) REFERENCES `pw_app_torrent_users` (`passkey`),
   CONSTRAINT `app_torrent_peers_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`),
   CONSTRAINT `app_torrent_peers_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

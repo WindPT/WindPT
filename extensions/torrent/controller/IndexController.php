@@ -42,16 +42,6 @@ class IndexController extends PwBaseController
             $paras_lang       = $this->getInput('lang', 'post');
             $paras_publisher  = $this->getInput('publisher', 'post');
 
-            if (!$this->loginUser->uid) {
-                $this->showError('必须登录才能进行本操作！');
-            }
-
-            // Check if user was banned
-            $userBan = $this->_getUserBanService()->getBanInfo($this->loginUser->uid);
-            if ($userBan) {
-                $this->showError('用户处于封禁期！');
-            }
-
             Wind::import('EXT:torrent.service.srv.helper.PwUtils');
 
             switch ($t_type) {
@@ -348,7 +338,7 @@ class IndexController extends PwBaseController
             @fclose($sockres);
 
             $dm = new PwTorrentPeerDm();
-            $dm->setTorrentId($torrent['id'])->setUid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setStartedAt(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent)->setPasskey($passkey);
+            $dm->setTorrentId($torrent['id'])->setUid($user['uid'])->setPeerId($peerId)->setIp($ip)->setPort($port)->setConnectable($connectable)->setUploaded($uploaded)->setDownloaded($downloaded)->setLeft($left)->setStartedAt(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setLastAction(Pw::time2str(Pw::getTime(), 'Y-m-d H:i:s'))->setSeeder($seeder)->setAgent($agent);
             $this->_getTorrentPeerService()->addTorrentPeer($dm);
             $self = $this->_getTorrentPeerService()->getTorrentPeerByTorrentIdAndUid($torrent['id'], $user['uid']);
         }

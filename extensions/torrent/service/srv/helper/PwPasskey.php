@@ -17,13 +17,15 @@ class PwPasskey
 
         if (!$user->passkey) {
             $user->passkey = self::makePassKey($user);
-            $dm            = new PwTorrentUserDm();
-            $dm->setUid($uid)->setPassKey($user->passkey);
+
+            $dm = new PwTorrentUserDm($uid);
+            $dm->setPassKey($user->passkey);
             $torrentUserDs->addTorrentUser($dm);
         } elseif (strlen($user->passkey) != 40) {
             $user->passkey = self::makePassKey($user);
-            $dm            = new PwTorrentUserDm($uid);
-            $dm->setUid($uid)->setPassKey($user->passkey);
+
+            $dm = new PwTorrentUserDm($uid);
+            $dm->setPassKey($user->passkey);
             $torrentUserDs->updateTorrentUser($dm);
         }
 
