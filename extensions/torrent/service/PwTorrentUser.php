@@ -6,15 +6,6 @@ class PwTorrentUser
 {
     const FETCH_MAIN = 1;
 
-    public function getTorrentUser($id, $fetchmode = self::FETCH_MAIN)
-    {
-        if (empty($id)) {
-            return array();
-        }
-
-        return $this->_getDao($fetchmode)->getTorrentUser($id);
-    }
-
     public function getTorrentUserByUid($uid, $fetchmode = self::FETCH_MAIN)
     {
         return $this->_getDao($fetchmode)->getTorrentUserByUid($uid);
