@@ -5,11 +5,11 @@ WindPT
 
 **A plugin for PHPWind 9 to build a private BitTorrent tracker with Front-end.**
 
-[![Releases](https://img.shields.io/github/release/labs7in0/WindPT.svg)](https://github.com/labs7in0/WindPT/releases/latest)
+[![Releases](https://img.shields.io/github/release/kinosang/WindPT.svg)](https://github.com/kinosang/WindPT/releases/latest)
 
 Pull requests and issues are welcome.
 
-There's an implementation in Golang of the tracker (only the tracker, it depends on WindPT as Front-end) on [labs7in0/WindTurbine](https://github.com/labs7in0/WindTurbine)
+There's an implementation in Golang of the tracker (only the tracker, it depends on WindPT as Front-end) on [kinosang/WindTurbine](https://github.com/kinosang/WindTurbine)
 
 This extension is designed to work with PHPWind 9.x, and `local search` plugin (a 3rd extension) is required by the theme bundled with this extension.
 
