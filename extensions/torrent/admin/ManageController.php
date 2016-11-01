@@ -133,20 +133,14 @@ class ManageController extends AdminBaseController
     {
         $credits = $this->getInput('credits', 'post');
 
-        $_credits = array();
-
         if (is_array($credits)) {
-            foreach ($credits as $key => $credit) {
-                if (!$credit['enabled'] || empty($credit['exp'])) {
-                    continue;
-                }
+            $credits = array_filter($credits, function ($var) {
+                return is_array($var) && ($var['enabled'] == 1) && !empty($var['exp']);
+            });
 
-                $_credits[$key] = $credit;
-            }
+            $config = new PwConfigSet('site');
+            $config->set('app.torrent.credits', $credits)->flush();
         }
-
-        $config = new PwConfigSet('site');
-        $config->set('app.torrent.credits', $_credits)->flush();
 
         $this->showMessage('ADMIN:success');
     }
