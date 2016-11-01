@@ -131,7 +131,7 @@ class ManageController extends AdminBaseController
 
     public function docreditAction()
     {
-        list($creditenabled, $credits) = $this->getInput(array('creditenabled', 'credits'), 'post');
+        $credits = $this->getInput('credits', 'post');
 
         $_credits = array();
 
@@ -146,7 +146,7 @@ class ManageController extends AdminBaseController
         }
 
         $config = new PwConfigSet('site');
-        $config->set('app.torrent.credit.enabled', intval($creditenabled))->set('app.torrent.credits', $_credits)->flush();
+        $config->set('app.torrent.credits', $_credits)->flush();
 
         $this->showMessage('ADMIN:success');
     }

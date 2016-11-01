@@ -379,7 +379,7 @@ class IndexController extends PwBaseController
         $torrent = PwAnnounce::updatePeerCount($torrent, $peers);
 
         // Update user's credits
-        if ($seeder == 1 && Wekit::C('site', 'app.torrent.credit.enabled') == 1) {
+        if ($seeder == 1) {
             $changed       = 0;
             $WindApi       = WindidApi::api('user');
             $crdtits       = $WindApi->getUserCredit($user['uid']);

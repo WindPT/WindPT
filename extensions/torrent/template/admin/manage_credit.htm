@@ -16,35 +16,6 @@
             </ul>
         </div>
         <form method="post" class="J_ajaxForm" action="{@WindUrlHelper::createUrl('/app/torrent/manage/docredit')}">
-            <div class="h_a">自定义积分开关</div>
-            <div class="table_full">
-                <table width="100%">
-                    <col class="th" />
-                    <col width="400" />
-                    <col />
-                    <tr>
-                        <th>启用自定义积分</th>
-                        <td>
-                            <ul class="switch_list cc">
-                                <li>
-                                    <label>
-                                        <input type="radio" name="creditenabled" value="1" {@pw::ifcheck($config[ 'app.torrent.credit.enabled']==1 )}><span>开启</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label>
-                                        <input type="radio" name="creditenabled" value="0" {@Pw::ifcheck($config[ 'app.torrent.credit.enabled']==0 )}><span>关闭</span>
-                                    </label>
-                                </li>
-                            </ul>
-                        </td>
-                        <td>
-                            <div class="fun_tips">启用后允许 WindPT 根据 tracker 数据修改用户积分</div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <!--# if ($config['app.torrent.credit.enabled']) { #-->
             <div class="h_a">自定义积分设置</div>
             <div class="table_full">
                 <table width="100%" id="J_group_table">
@@ -71,7 +42,6 @@
                     </tr>
                 </table>
             </div>
-            <!--# } #-->
             <div class="btn_wrap">
                 <div class="btn_wrap_pd">
                     <button class="btn btn_submit mr10 J_ajax_submit_btn" type="submit">提交</button>
