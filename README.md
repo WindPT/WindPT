@@ -11,26 +11,23 @@ Pull requests and issues are welcome.
 
 There's an implementation in Golang of the tracker (only the tracker, it depends on WindPT as Front-end) on [kinosang/WindTurbine](https://github.com/kinosang/WindTurbine)
 
-This extension is designed to work with PHPWind 9.x, and `local search` plugin (a 3rd extension) is required by the theme bundled with this extension.
+This extension is designed to work with PHPWind 9.x, and there's a theme for this project on [kinosang/PHPWind-WindPT-Theme](https://github.com/kinosang/PHPWind-WindPT-Theme).
 
 ## HOWTO
 
-* You should create a directory named `torrents` with mask 0755 under the root of PHPWind manually if php have no permission to `write`.
-* This extension and its bundled theme should be enabled manually on the Dashboard of PHPWind.
-* Do not forget to add cron jobs on the Dashboard of PHPWind if you need the crons bundled in.
+* This extension should be enabled manually on the Dashboard of PHPWind.
 * Change all `credit*` fields in `pw_user_data` and `pw_windid_user_data` to `double`.
+* Do not forget to add cron jobs on the Dashboard of PHPWind if you need the crons bundled in.
+* You should create a directory named `torrents` with mask 0755 under the root of PHPWind manually if php have no permission to `write`.
 
 ```
 /
-|- cron                            // cron job [put in PHPWind/src/service/cron/srv/do]
+|- cron                          // cron job [put in PHPWind/src/service/cron/srv/do]
 |  |- PwCronDoClearPeers.php
 |  |- PwCronDoClearTorrents.php
 |  =
 |- extensions
-|  |- torrent <dir>                // extension [put in PHPWind/src/extensions/]
-|  =
-|- themes_site
-|  |- pt <dir>                     // theme [put in PHPWind/themes/site/]
+|  |- torrent <dir>              // extension [put in PHPWind/src/extensions/]
 =  =
 ```
 
