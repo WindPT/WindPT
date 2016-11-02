@@ -9,9 +9,9 @@ WindPT
 
 Pull requests and issues are welcome.
 
-This extension **DOES NOT** provide announcement processor (tracker server), you must install [kinosang/WindTurbine](https://github.com/kinosang/WindTurbine) for that.
+This extension **DOES NOT** provide a tracker server, you must install [kinosang/WindTurbine](https://github.com/kinosang/WindTurbine) for that.
 
-This extension is designed to work with PHPWind 9.x, and there's a theme *MORE SUITABLE* for it on [kinosang/PHPWind-WindPT-Theme](https://github.com/kinosang/PHPWind-WindPT-Theme).
+There's a theme *MORE SUITABLE* than the one bundled with PHPWind 9.x for this extension on [kinosang/PHPWind-WindPT-Theme](https://github.com/kinosang/PHPWind-WindPT-Theme).
 
 ## HOWTO
 
