@@ -3,9 +3,8 @@
 defined('WEKIT_VERSION') || exit('Forbidden');
 
 Wind::import('SRV:forum.srv.post.do.PwPostDoBase');
-Wind::import('EXT:torrent.service.srv.helper.PwAnnounce');
-Wind::import('EXT:torrent.service.srv.helper.PwPasskey');
 Wind::import('EXT:torrent.service.srv.helper.PwBencode');
+Wind::import('EXT:torrent.service.srv.helper.PwUtils');
 
 class PwPostDoTorrent extends PwPostDoBase
 {
@@ -30,7 +29,7 @@ class PwPostDoTorrent extends PwPostDoBase
         $this->fid      = intval($pwpost->forum->fid);
         $this->wikilink = $wikilink;
         $this->action   = $this->tid ? 'modify' : 'add';
-        $this->passkey  = PwPasskey::getPassKey($this->user->uid);
+        $this->passkey  = PwUtils::getPassKey($this->user->uid);
     }
 
     public function createHtmlBeforeContent()
