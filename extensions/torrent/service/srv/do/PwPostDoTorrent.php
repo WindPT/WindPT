@@ -192,11 +192,11 @@ class PwPostDoTorrent extends PwPostDoBase
             }
         }
 
-        if (!is_dir(WEKIT_PATH . '../torrent')) {
-            mkdir(WEKIT_PATH . '../torrent', 0755);
+        if (!is_dir(WEKIT_PATH . '../torrents')) {
+            mkdir(WEKIT_PATH . '../torrents', 0755);
         }
 
-        $fp = fopen(WEKIT_PATH . '../torrent/' . $result . '.torrent', 'w');
+        $fp = fopen(WEKIT_PATH . '../torrents/' . $result . '.torrent', 'w');
 
         if ($fp) {
             $bencode = new PwBencode();

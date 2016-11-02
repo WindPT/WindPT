@@ -77,7 +77,7 @@ class PwHookDoTorrent
 
                 $torrentDs->deleteTorrent($torrent['id']);
 
-                @unlink(WEKIT_PATH . '../torrent/' . $torrent['id'] . '.torrent');
+                @unlink(WEKIT_PATH . '../torrents/' . $torrent['id'] . '.torrent');
             }
         }
     }
@@ -98,7 +98,7 @@ class PwHookDoTorrent
 
         $torrentDs->deleteTorrent($torrent['id']);
 
-        @unlink(WEKIT_PATH . '../torrent/' . $torrent['id'] . '.torrent');
+        @unlink(WEKIT_PATH . '../torrents/' . $torrent['id'] . '.torrent');
     }
 
     public function pwThreadType($tType)

@@ -255,7 +255,7 @@ class IndexController extends PwBaseController
             $this->showError('ban');
         }
 
-        $file = WEKIT_PATH . '../torrent/' . $id . '.torrent';
+        $file = WEKIT_PATH . '../torrents/' . $id . '.torrent';
         if (!file_exists($file)) {
             $this->showError('data.error');
         }
