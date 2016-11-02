@@ -127,7 +127,7 @@ class PwPostDoTorrent extends PwPostDoBase
                         foreach ($fileList as $file) {
                             $ft = substr(strrchr($file[0], '.'), 1);
                             if (in_array($ft, $deniedfts)) {
-                                return new PwError('种子内存在禁止发布的文件类型！');
+                                return new PwError('种子内存在禁止发布的文件类型: ' . $ft);
                             }
                         }
                     }
