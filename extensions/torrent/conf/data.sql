@@ -17,7 +17,7 @@ CREATE TABLE `pw_app_torrents` (
   `seeders` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `owner` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `nfo` blob,
-  `anonymous` tinyint(1) NOT NULL DEFAULT '0',
+  `anonymous` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `wikilink` varchar(256) DEFAULT '',
   `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -36,7 +36,7 @@ CREATE TABLE `pw_app_torrent_agents` (
   `family` varchar(50) NOT NULL DEFAULT '',
   `peer_id_pattern` varchar(200) NOT NULL,
   `agent_pattern` varchar(200) NOT NULL,
-  `https` tinyint(1) NOT NULL DEFAULT '0',
+  `https` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `hits` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
@@ -111,8 +111,8 @@ CREATE TABLE `pw_app_torrent_peers` (
   `uploaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `left` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `seeder` tinyint(1) NOT NULL DEFAULT '0',
-  `connectable` tinyint(1) NOT NULL DEFAULT '1',
+  `seeder` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `connectable` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `agent` varchar(60) NOT NULL DEFAULT '',
   `started_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `finished_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
