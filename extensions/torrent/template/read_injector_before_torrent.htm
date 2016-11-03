@@ -45,11 +45,6 @@
                 <strong>种子原名：</strong>
                 <span>{$torrent['filename']}</span>
                 <strong><a href="{@WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['id'])}">下载种子</a></strong>
-                <!--# if(!$torrent['sub']) { #-->
-                <strong><a href="{@WindUrlHelper::createUrl('/app/torrent/index/subscribe?id=' . $torrent['id'])}" id="subTorrent">订阅种子</a></strong>
-                <!--# } else { #-->
-                <strong><a href="{@WindUrlHelper::createUrl('/app/torrent/index/subscribe?id=' . $torrent['id'] . '&unsub=true')}" id="unsubTorrent">取消订阅</a></strong>
-                <!--# } #-->
             </li>
             <li style="color: #F00; padding-left: 3em;">请妥善保管您的种子文件和订阅链接，种子文件和订阅链接中包含您的个人信息，泄露可能导致盗号</li>
             <li>
@@ -82,39 +77,6 @@
     Wind.ready(function() {
         $('#toggleFileList').click(function() {
             $('#fileList').slideToggle();
-        });
-
-        $('#subTorrent').click(function(e) {
-            e.preventDefault();
-
-            Wind.Util.ajaxConfirm({
-                elem : $(this),
-                href : $(this).attr('href'),
-                msg : '确定订阅该种子？',
-                callback: function() {
-                    Wind.Util.resultTip({
-                        msg : '订阅种子成功！'
-                    });
-                }
-            });
-        });
-
-        $('#unsubTorrent').click(function(e) {
-            e.preventDefault();
-
-            $this = $(this);
-
-            Wind.Util.ajaxConfirm({
-                elem : $this,
-                href : $this.attr('href'),
-                msg : '确定取消订阅该种子？已经开始下载的订阅不受影响',
-                callback : function() {
-                    Wind.Util.resultTip({
-                        error : true,
-                        msg : '取消订阅成功！'
-                    });
-                }
-            });
         });
     });
     </script>

@@ -291,79 +291,6 @@ class IndexController extends PwBaseController
         exit($bencode->doEncode($dictionary));
     }
 
-    public function subscribeAction()
-    {
-        $id    = $this->getInput('id');
-        $unsub = $this->getInput('unsub');
-
-        if (!$this->loginUser->uid) {
-            $this->showError('login.not');
-        }
-
-        $userBan = $this->_getUserBanService()->getBanInfo($this->loginUser->uid);
-        if ($userBan) {
-            $this->showError('ban');
-        }
-
-        $torrent = $this->_getTorrentService()->getTorrent($id);
-        if (empty($torrent)) {
-            $this->showError('data.error');
-        }
-
-        $torrent = $this->_getTorrentSubscribeService()->getTorrentSubscribeByUidAndTorrent($this->loginUser->uid, $id);
-        if (!empty($torrent)) {
-            if ($unsub == 'true') {
-                $this->_getTorrentSubscribeService()->deleteTorrentSubscribe($torrent['id']);
-                $this->showMessage('TAG:del.success');
-            } else {
-                $this->showError('BBS:like.fail.already.liked');
-            }
-        }
-
-        Wind::import('EXT:torrent.service.dm.PwTorrentSubscribeDm');
-
-        $dm = new PwTorrentSubscribeDm();
-        $dm->setUid($this->loginUser->uid)->setTorrentId($id);
-        $this->_getTorrentSubscribeService()->addTorrentSubscribe($dm);
-
-        $this->showMessage('success');
-    }
-
-    public function myAction()
-    {
-        Wind::import('SRV:space.bo.PwSpaceModel');
-
-        $spaceUid = $this->loginUser->uid;
-
-        $space = new PwSpaceModel($spaceUid);
-
-        if (!$space->space['uid']) {
-            $this->showError('login.not');
-        }
-
-        $space->setTome($spaceUid, $this->loginUser->uid);
-        $space->setVisitUid($this->loginUser->uid);
-
-        $torrents = $this->_getTorrentSubscribeService()->getTorrentSubscribeByUid($this->loginUser->uid);
-
-        $this->setTheme('space', $space->space['space_style']);
-
-        $this->setOutput($space, 'space');
-        $this->setOutput($torrents, 'torrents');
-        $this->setOutput('my', 'src');
-
-        // seo设置
-        Wind::import('SRV:seo.bo.PwSeoBo');
-        $seoBo = PwSeoBo::getInstance();
-        $lang  = Wind::getComponent('i18n');
-        $seoBo->setCustomSeo(
-            $lang->getMessage('SEO:space.profile.run.title',
-                array($space->spaceUser['username'], $space->space['space_name'])), '',
-            $lang->getMessage('SEO:space.profile.run.description',
-                array($space->spaceUser['username'])));
-        Wekit::setV('seo', $seoBo);
-    }
-
     public function rssAction()
     {
         $passkey = $this->getInput('passkey');
@@ -391,22 +318,39 @@ class IndexController extends PwBaseController
         echo '<generator>WindPT RSS Generator</generator>';
         echo '<ttl>60</ttl>';
 
-        $torrents = $this->_getTorrentSubscribeService()->getTorrentSubscribeByUid($this->loginUser->uid);
+        $tagLists = $this->_getBuildLikeService()->getTagsByUid($user['uid']);
+        if ($tagid > 0) {
+            $logids   = $this->_getBuildLikeService()->getLogidsByTagid($tagid, 0, false);
+            $logLists = $this->_getBuildLikeService()->getLogLists($logids);
+        } else {
+            $logLists = $this->_getBuildLikeService()->getLogList($user['uid'], 0, false);
+        }
 
-        if (is_array($torrents)) {
-            foreach ($torrents as $torrent) {
-                if ($torrent['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
+        if (is_array($logLists)) {
+            foreach ($logLists as $likeLog) {
+                $likeContent = $this->_getLikeContentService()->getLikeContent($likeLog['likeid']);
+
+                $topic = $this->_getThreadService()->getThread($likeContent['fromid']);
+
+                if ($topic['special'] != 'torrent') {
                     continue;
                 }
 
+                if ($topic['disabled'] > 0 && !(in_array($user['groupid'], array(3, 4, 5)) || $topic['created_userid'] == $user['uid'])) {
+                    continue;
+                }
+
+                $forum   = $this->_getForumService()->getForum($topic['fid']);
+                $torrent = $this->_getTorrentService()->getTorrentByTid($topic['tid']);
+
                 echo '<item>';
-                echo '<title><![CDATA[' . $torrent['filename'] . ']]></title>';
-                echo '<link><![CDATA[' . WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid']) . ']]></link>';
-                echo '<pubDate>' . date('D, d M Y H:i:s O', $torrent['created_time']) . '</pubDate>';
-                echo '<description><![CDATA[' . $torrent['subject'] . ']]></description>';
-                echo '<enclosure type="application/x-bittorrent" length="' . $torrent['size'] . '" url="' . str_replace('&', '&amp;', WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['torrent_id'] . '&passkey=' . $passkey)) . '" />';
-                echo '<author><![CDATA[' . $torrent['created_username'] . ']]></author>';
-                echo '<category domain="' . WindUrlHelper::createUrl('/bbs/thread/run?fid=' . $torrent['fid']) . '"><![CDATA[' . $torrent['name'] . ']]></category>';
+                echo '<title><![CDATA[' . $torrent['save_as'] . ']]></title>';
+                echo '<link><![CDATA[' . WindUrlHelper::createUrl('/bbs/read/run?tid=' . $topic['tid']) . ']]></link>';
+                echo '<pubDate>' . date('D, d M Y H:i:s O', $topic['created_time']) . '</pubDate>';
+                echo '<description><![CDATA[' . $topic['subject'] . ']]></description>';
+                echo '<enclosure type="application/x-bittorrent" length="' . $torrent['size'] . '" url="' . str_replace('&', '&amp;', WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['id'] . '&passkey=' . $passkey)) . '" />';
+                echo '<author><![CDATA[' . $topic['created_username'] . ']]></author>';
+                echo '<category domain="' . WindUrlHelper::createUrl('/bbs/thread/run?fid=' . $topic['fid']) . '"><![CDATA[' . $forum['name'] . ']]></category>';
                 echo '</item>';
             }
         }
@@ -420,6 +364,11 @@ class IndexController extends PwBaseController
     private function _getUserBanService()
     {
         return Wekit::load('user.PwUserBan');
+    }
+
+    private function _getForumService()
+    {
+        return Wekit::load('forum.PwForum');
     }
 
     private function _getThreadService()
@@ -452,8 +401,13 @@ class IndexController extends PwBaseController
         return Wekit::load('EXT:torrent.service.PwTorrentHistory');
     }
 
-    private function _getTorrentSubscribeService()
+    private function _getBuildLikeService()
     {
-        return Wekit::load('EXT:torrent.service.PwTorrentSubscribe');
+        return Wekit::load('like.srv.PwBuildLikeService');
+    }
+
+    private function _getLikeContentService()
+    {
+        return Wekit::load('like.PwLikeContent');
     }
 }

@@ -125,19 +125,4 @@ CREATE TABLE `pw_app_torrent_peers` (
   CONSTRAINT `app_torrent_peers_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
--- ----------------------------
---  Table structure for `pw_app_torrent_subscriptions`
--- ----------------------------
-DROP TABLE IF EXISTS `pw_app_torrent_subscriptions`;
-CREATE TABLE `pw_app_torrent_subscriptions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned NOT NULL DEFAULT '0',
-  `torrent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `app_torrent_subscriptions_uid_foreign` (`uid`) USING BTREE,
-  KEY `app_torrent_subscriptions_torrent_id_foreign` (`torrent_id`) USING BTREE,
-  CONSTRAINT `app_torrent_subscriptions_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`),
-  CONSTRAINT `app_torrent_subscriptions_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
 SET FOREIGN_KEY_CHECKS = 1;

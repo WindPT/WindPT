@@ -87,14 +87,6 @@
                 <description>种子帖</description>
             </app_torrent>
         </s_PwThreadType>
-        <s_space_nav>
-            <app_torrent>
-                <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>
-                <loadway>load</loadway>
-                <method>spaceNav</method>
-                <description>空间导航</description>
-            </app_torrent>
-        </s_space_nav>
         <s_space_profile>
             <app_torrent>
                 <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>

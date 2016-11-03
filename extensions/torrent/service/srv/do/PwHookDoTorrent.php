@@ -96,13 +96,6 @@ class PwHookDoTorrent
         return $tType;
     }
 
-    public function spaceNav($space, $src)
-    {
-        if ($space->visitUid == $space->spaceUid) {
-            echo '<li class="' . Pw::isCurrent($src == 'my') . '"><a href="' . WindUrlHelper::createUrl('/app/torrent/index/my') . '">种子订阅</a></li>';
-        }
-    }
-
     public function spaceProfile($space)
     {
         $showuserinfo = Wekit::C('site', 'app.torrent.showuserinfo');

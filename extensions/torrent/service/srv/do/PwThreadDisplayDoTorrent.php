@@ -34,14 +34,6 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
             }
         }
 
-        $subscribe = $this->_getTorrentSubscribeDs()->getTorrentSubscribeByUidAndTorrent($this->user->uid, $torrent['id']);
-
-        if (!empty($subscribe)) {
-            $torrent['sub'] = true;
-        } else {
-            $torrent['sub'] = false;
-        }
-
         $seeder = $leecher = 0;
 
         $peers = $this->_getTorrentPeerService()->getTorrentPeerByTorrentId($torrent['id']);
@@ -82,10 +74,5 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
     private function _getTorrentPeerService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentPeer');
-    }
-
-    private function _getTorrentSubscribeDs()
-    {
-        return Wekit::load('EXT:torrent.service.PwTorrentSubscribe');
     }
 }
