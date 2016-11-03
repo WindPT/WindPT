@@ -6,11 +6,9 @@ Wind::import('LIB:base.PwBaseDm');
 
 class PwTorrentUserDm extends PwBaseDm
 {
-    public $uid;
-
     public function __construct($uid = 0)
     {
-        $this->uid = $uid;
+        $this->_data['uid'] = $uid;
     }
 
     public function setPassKey($passkey)

@@ -44,29 +44,29 @@ class PwUtils
     public static function getPassKey($uid)
     {
         Wind::import('EXT:torrent.service.dm.PwTorrentUserDm');
+        $torrentUserDs = Wekit::load('EXT:torrent.service.PwTorrentUser');
 
         $user = new PwUserBo($uid, true);
 
-        $torrentUserDs = Wekit::load('EXT:torrent.service.PwTorrentUser');
-        $torrentUser   = $torrentUserDs->getTorrentUserByUid($uid);
+        $torrentUser = $torrentUserDs->getTorrentUserByUid($uid);
 
-        $user->passkey = $torrentUser['passkey'];
+        $passkey = $torrentUser['passkey'];
 
-        if (empty($user->passkey)) {
-            $user->passkey = self::makePassKey($user);
+        if (empty($passkey)) {
+            $passkey = self::makePassKey($user);
 
             $dm = new PwTorrentUserDm($uid);
-            $dm->setPassKey($user->passkey);
+            $dm->setPassKey($passkey);
             $torrentUserDs->addTorrentUser($dm);
-        } elseif (strlen($user->passkey) != 40) {
-            $user->passkey = self::makePassKey($user);
+        } elseif (strlen($passkey) != 40) {
+            $passkey = self::makePassKey($user);
 
             $dm = new PwTorrentUserDm($uid);
-            $dm->setPassKey($user->passkey);
+            $dm->setPassKey($passkey);
             $torrentUserDs->updateTorrentUser($dm);
         }
 
-        return $user->passkey;
+        return $passkey;
     }
 
     public static function makePassKey($user)
