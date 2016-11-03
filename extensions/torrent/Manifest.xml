@@ -63,14 +63,6 @@
                 <description>顶部信息</description>
             </app_torrent>
         </s_header_info_1>
-        <s_PwCreditOperationConfig>
-            <app_torrent>
-                <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>
-                <method>pwCreditOperationConfig</method>
-                <loadway>load</loadway>
-                <description>积分日志</description>
-            </app_torrent>
-        </s_PwCreditOperationConfig>
         <s_PwThreadsDao_batchDelete>
             <app_torrent>
                 <class>EXT:torrent.service.srv.do.PwHookDoTorrent</class>

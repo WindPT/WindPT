@@ -48,17 +48,6 @@ class PwHookDoTorrent
         }
     }
 
-    public function pwCreditOperationConfig($config)
-    {
-        if (!is_array($config) || empty($config)) {
-            return $config;
-        }
-
-        $config['app_torrent'] = array('PT', 'global', '种子 {$torrent}', false);
-
-        return $config;
-    }
-
     public function pwThreadsDaoBatchDelete($ids)
     {
         $torrentDs = Wekit::load('EXT:torrent.service.PwTorrent');
