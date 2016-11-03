@@ -52,7 +52,7 @@ class PwUtils
 
         $user->passkey = $torrentUser['passkey'];
 
-        if (!$user->passkey) {
+        if (empty($user->passkey)) {
             $user->passkey = self::makePassKey($user);
 
             $dm = new PwTorrentUserDm($uid);

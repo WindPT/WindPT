@@ -128,7 +128,7 @@ class PwHookDoTorrent
         $this->histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($space->spaceUid);
         $this->torrents  = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($space->spaceUid);
 
-        $this->passkey = $user['passkey'];
+        $this->passkey = PwUtils::getPassKey($space->spaceUid);
 
         $this->seeding = $this->leeching = 0;
         if (is_array($peers)) {
