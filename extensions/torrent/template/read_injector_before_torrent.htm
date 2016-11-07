@@ -30,13 +30,26 @@
             width: 200px;
         }
 
-        .torrent ul.file li span {
+        .torrent ul.subList#peerList li.red {
+            color: red;
+        }
+
+        .torrent ul.subList#peerList li.green {
+            color: green;
+        }
+
+        .torrent ul.subList#peerList li.navy {
+            color: navy;
+        }
+
+        .torrent ul.subList li span {
             margin-right: 10px;
             width: 500px;
         }
 
-        .torrent ul.file li span:last-child {
-            width: 100px;
+        .torrent ul.subList#peerList li span {
+            margin-right: 2px;
+            width: 110px;
         }
     </style>
     <div class="torrent cc">
@@ -47,34 +60,42 @@
                 <strong><a href="{@WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['id'])}">下载种子</a></strong>
             </li>
             <li style="color: #F00; padding-left: 3em;">请妥善保管您的种子文件和订阅链接，种子文件和订阅链接中包含您的个人信息，泄露可能导致盗号</li>
-            <li>
-                <strong>添加时间：</strong>
-                <span>{$torrent['created_at']}</span>
+            <li id="togglePeerList">
                 <strong>做种：</strong>
                 <span style="width: 50px;<!--# if($torrent['seeder']=='断种') echo 'color:red;'; #-->">{$torrent['seeder']}</span>
                 <strong>下载：</strong>
                 <span style="width: 50px;">{$torrent['leecher']}</span>
+                <strong>完成：</strong>
+                <span style="width: 50px;">{$torrent['finished']}</span>
             </li>
+            <ul class="subList" id="peerList" style="display:none;">
+                <li><span>用户名</span><span>IP</span><span>本次上传</span><span>本次下载</span><span>最后活动</span><span>创建时间</span><span>客户端</span><span>可链接</span><span>完成</span></li>
+                <!--# if(is_array($torrent['peers'])) { #-->
+                <!--# foreach($torrent['peers'] as $peer) { #-->
+                <li class="{$peer['color']}"><span>{$peer['username']}</span><span>{$peer['ip']}</span><span>{$peer['uploaded']}</span><span>{$peer['downloaded']}</span><span>{$peer['last_action']}</span><span>{$peer['started_at']}</span><span>{$peer['agent']}</span><span>{$peer['connectable']?'是':'否'}</span><span>{$peer['percent']}</span></li>
+                <!--# } #-->
+                <!--# } #-->
+            </ul>
             <!--# if($torrent['wikilink']!='') { #-->
             <li><strong>Wiki链接：</strong><a href="{$torrent['wikilink']}" target="_blank">{$torrent['wikilink']}</a></li>
             <!--# } #-->
             <li><strong>Hash码：</strong>{$torrent['info_hash']}</li>
-            <li><strong>文件数量：</strong><span>共有{@count($torrent['list'])}个文件</span><strong>文件大小：</strong><span>{$torrent['size']}</span></li>
-        </ul>
-        <ul class="file">
-            <!--# if(is_array($torrent['list'])) { #-->
-            <li id="toggleFileList">文件列表：（点击展开/收拢）</li>
-            <div id="fileList" style="display:none;">
+            <li id="toggleFileList"><strong>种子内容：</strong><span>共有{@count($torrent['files'])}个文件（点击查看/收拢）</span><strong>文件大小：</strong><span>{$torrent['size']}</span></li>
+            <ul class="subList" id="fileList" style="display:none;">
                 <li><span>文件名</span><span>文件大小</span></li>
-                <!--# foreach($torrent['list'] as $file) { #-->
-                <li><span title="{$file['filename']}">{$file['filename']}</span><span>{$file['size']}</span></li>
+                <!--# if(is_array($torrent['files'])) { #-->
+                <!--# foreach($torrent['files'] as $file) { #-->
+                <li><span>{$file['filename']}</span><span>{$file['size']}</span></li>
                 <!--# } #-->
-            </div>
-            <!--# } #-->
+                <!--# } #-->
+            </ul>
         </ul>
     </div>
     <script>
     Wind.ready(function() {
+        $('#togglePeerList').click(function() {
+            $('#peerList').slideToggle();
+        });
         $('#toggleFileList').click(function() {
             $('#fileList').slideToggle();
         });

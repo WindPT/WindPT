@@ -23,31 +23,44 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
 
         Wind::import('EXT:torrent.service.srv.helper.PwUtils');
 
-        $torrent['seeders']   = $torrent['seeders'] + 1;
-        $torrent['size']      = PwUtils::readableDataTransfer($torrent['size']);
         $torrent['info_hash'] = PwUtils::readableHash($torrent['info_hash']);
-        $torrent['list']      = $this->_getTorrentFileService()->getTorrentFileByTorrentId($torrent['id']);
+        $torrent['files']     = $this->_getTorrentFileService()->getTorrentFileByTorrentId($torrent['id']);
+        $torrent['finished']  = count($this->_getTorrentHistoryService()->fetchTorrentHistoryByTorrentId($torrent['id']));
 
-        if (is_array($torrent['list'])) {
-            foreach ($torrent['list'] as $key => $value) {
-                $torrent['list'][$key]['size'] = PwUtils::readableDataTransfer($value['size']);
+        if (is_array($torrent['files'])) {
+            foreach ($torrent['files'] as $key => $value) {
+                $torrent['files'][$key]['size'] = PwUtils::readableDataTransfer($value['size']);
             }
         }
 
         $seeder = $leecher = 0;
 
-        $peers = $this->_getTorrentPeerService()->getTorrentPeerByTorrentId($torrent['id']);
+        $torrent['peers'] = $this->_getTorrentPeerService()->fetchTorrentPeerByTorrentId($torrent['id']);
 
-        if (is_array($peers)) {
-            foreach ($peers as $peer) {
+        if (is_array($torrent['peers'])) {
+            foreach ($torrent['peers'] as &$peer) {
                 if ($peer['seeder'] == 1) {
                     $seeder++;
                 } else {
                     $leecher++;
                 }
+                if ($peer['connectable'] == 1) {
+                    if ($peer['left'] > 0) {
+                        $peer['color'] = 'green';
+                    } else {
+                        $peer['color'] = 'navy';
+                    }
+                } else {
+                    $peer['color'] = 'red';
+                }
+
+                $peer['uploaded']   = PwUtils::readableDataTransfer($peer['uploaded']);
+                $peer['downloaded'] = PwUtils::readableDataTransfer($peer['downloaded']);
+                $peer['percent']    = ($torrent['size'] - $peer['left']) / $torrent['size'] * 100 . '%';
             }
         }
 
+        $torrent['size']    = PwUtils::readableDataTransfer($torrent['size']);
         $torrent['seeder']  = ($seeder == 0) ? '断种' : $seeder;
         $torrent['leecher'] = $leecher;
 
@@ -69,6 +82,11 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
     private function _getTorrentFileService()
     {
         return Wekit::load('EXT:torrent.service.PwTorrentFile');
+    }
+
+    private function _getTorrentHistoryService()
+    {
+        return Wekit::load('EXT:torrent.service.PwTorrentHistory');
     }
 
     private function _getTorrentPeerService()

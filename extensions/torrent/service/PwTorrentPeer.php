@@ -24,9 +24,9 @@ class PwTorrentPeer
         return $this->_getDao($fetchmode)->getTorrentPeerByPeerIDAndTorrentID($peer_id, $torrent_id);
     }
 
-    public function getTorrentPeerByTorrentId($tid, $fetchmode = self::FETCH_MAIN)
+    public function fetchTorrentPeerByTorrentId($tid, $fetchmode = self::FETCH_MAIN)
     {
-        return $this->_getDao($fetchmode)->getTorrentPeerByTorrentId($tid);
+        return $this->_getDao($fetchmode)->fetchTorrentPeerByTorrentId($tid);
     }
 
     public function getTorrentPeerByTorrentIdAndUid($tid, $uid, $fetchmode = self::FETCH_MAIN)
