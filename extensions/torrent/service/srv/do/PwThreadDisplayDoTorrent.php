@@ -46,9 +46,9 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
                 }
                 if ($peer['connectable'] == 1) {
                     if ($peer['left'] > 0) {
-                        $peer['color'] = 'green';
-                    } else {
                         $peer['color'] = 'navy';
+                    } else {
+                        $peer['color'] = 'green';
                     }
                 } else {
                     $peer['color'] = 'red';
