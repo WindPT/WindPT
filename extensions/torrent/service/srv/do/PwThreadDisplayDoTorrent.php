@@ -25,7 +25,10 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
 
         $torrent['info_hash'] = PwUtils::readableHash($torrent['info_hash']);
         $torrent['files']     = $this->_getTorrentFileService()->getTorrentFileByTorrentId($torrent['id']);
-        $torrent['finished']  = count($this->_getTorrentHistoryService()->fetchTorrentHistoryByTorrentId($torrent['id']));
+        $torrent['finished']  = $this->_getTorrentHistoryService()->fetchTorrentHistoryByTorrentId($torrent['id']);
+        $torrent['finished']  = array_filter($torrent['finished'], function ($var) {
+            return $var['left'] == 0;
+        });
 
         if (is_array($torrent['files'])) {
             foreach ($torrent['files'] as $key => $value) {

@@ -66,7 +66,7 @@
                 <strong>下载：</strong>
                 <span style="width: 50px;">{$torrent['leecher']}</span>
                 <strong>完成：</strong>
-                <span style="width: 50px;">{$torrent['finished']}</span>
+                <span style="width: 50px;">{@count($torrent['finished'])}</span>
             </li>
             <ul class="subList" id="peerList" style="display:none;">
                 <li><span>用户名</span><span>IP</span><span>本次上传</span><span>本次下载</span><span>最后活动</span><span>创建时间</span><span>客户端</span><span>可链接</span><span>完成</span></li>
