@@ -17,7 +17,6 @@ There's a theme *MORE SUITABLE* than the default one of PHPWind 9 on [kinosang/P
 
 * This extension should be enabled manually on the Dashboard of PHPWind.
 * Do not forget to add cron jobs on the Dashboard of PHPWind if you need the crons bundled in.
-* Change types of all `credit*` fields in `pw_user_data` and `pw_windid_user_data` from `int` to `double`.
 * You should create a directory named `torrents` with mask 0755 under the root of PHPWind manually if PHP have no permission to `write`.
 
 ```
