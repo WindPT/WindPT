@@ -180,9 +180,11 @@
         </div>
     </div>
     <div class="cc post_extend" style="color:#FF0000">
-        Private Tracker 地址（点击文本框复制到剪贴板，请不要泄露给其他人）：
+        Private Tracker 地址（点击右侧按钮复制到剪贴板，请不要泄露给其他人）：
         <input id="tracker" type="text" class="input" name="tracker" value="{@PwUtils::getTrackerUrl($pargs->passkey)}" style="width:640px;">
-        <button class="btn copy" data-clipboard-target="#tracker">复制</button>
+        <button class="btn copy" data-clipboard-target="#tracker" style="height: 28px">
+            <img src="/src/extensions/torrent/res/images/clippy.svg" alt="Copy to clipboard" style="height: 100%;">
+        </button>
     </div>
     <script>
     Wind.js('/src/extensions/torrent/res/js/clipboard.min.js', function() {
