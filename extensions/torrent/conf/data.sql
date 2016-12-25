@@ -49,6 +49,17 @@ INSERT INTO `pw_app_torrent_agents` VALUES ('1', 'Azureus 2.5.0.4', '^-AZ2504-',
 COMMIT;
 
 -- ----------------------------
+--  Table structure for `pw_app_torrent_caches`
+-- ----------------------------
+DROP TABLE IF EXISTS `pw_app_torrent_caches`;
+CREATE TABLE `pw_app_torrent_caches` (
+  `cache_key` varchar(32) NOT NULL,
+  `cache_value` text,
+  `cache_expire` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`cache_key`)
+) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `pw_app_torrent_users`
 -- ----------------------------
 DROP TABLE IF EXISTS `pw_app_torrent_users`;

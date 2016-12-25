@@ -150,17 +150,8 @@
                         <input type="file" class="input length_5" name="torrent" value="">
                     </li>
                     <li>
-                        <span>外部参考：</span>
-                        <select class="length_2" name="quote">
-                            <option value="0">Wiki 链接</option>
-                            <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 0) { #-->
-                            <option value="11">豆瓣读书 ID</option>
-                            <option value="12">豆瓣电影 ID</option>
-                            <option value="13">豆瓣音乐 ID</option>
-                            <option value="2">IMDB ID</option>
-                            <!--# } #-->
-                        </select>&nbsp;&nbsp;
-                        <input type="text" class="input length_3" name="wikilink" value="{$wikilink}">
+                        <span>参考链接： </span>
+                        <input type="text" class="input length_5" name="wikilink" placeholder="https://movie.douban.com/subject/1292226/">
                     </li>
                 </ul>
             </div>
@@ -207,7 +198,7 @@
         <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 0) { #-->
         var typebind;
 
-        $.get("{@WindUrlHelper::createUrl('/app/torrent/index/getBind')}", function(data) {
+        $.get("{@WindUrlHelper::createUrl('/app/torrent/title/bind')}", function(data) {
             typebind = data;
         }, 'json');
 
@@ -226,54 +217,39 @@
 
         $('[name="t_type"]').change(function() {
             $('.t_attr, .t_attr_t').hide();
-            $('select[name="quote"] option').hide();
             switch ($(this).val()) {
                 case '1':
                     $('#t_b').show();
                     $('input[name="wikilink"]').attr('placeholder', '26305561');
-                    $('select[name="quote"] option[value="11"]').show();
-                    $('select[name="quote"]').val('11');
                     break;
                 case '2':
                     $('#t_v').show();
                     $('input[name="wikilink"]').attr('placeholder', '10741834');
-                    $('select[name="quote"] option[value="12"]').show();
-                    $('select[name="quote"] option[value="2"]').show();
-                    $('select[name="quote"]').val('12');
                     break;
                 case '21':
                     $('#t_v').show();
                     $('#t_vs').show();
                     $('input[name="wikilink"]').attr('placeholder', '25845393');
-                    $('select[name="quote"] option[value="12"]').show();
-                    $('select[name="quote"] option[value="2"]').show();
-                    $('select[name="quote"]').val('12');
                     break;
                 case '3':
                     $('#t_a').show();
                     $('input[name="wikilink"]').attr('placeholder', '11603071');
-                    $('select[name="quote"] option[value="13"]').show();
-                    $('select[name="quote"]').val('13');
                     break;
                 case '4':
                     $('#t_s').show();
                     $('.t_attr_t').show();
                     $('input[name="wikilink"]').attr('placeholder', 'https://zh.wikipedia.org/wiki/Microsoft_Windows');
-                    $('select[name="quote"] option[value="0"]').show();
-                    $('select[name="quote"]').val('0');
                     break;
                 case '5':
                     $('.t_attr_t').show();
                     $('input[name="wikilink"]').attr('placeholder', 'https://zh.wikipedia.org/wiki/%E6%9D%A8%E6%B0%B8%E4%BF%A1');
-                    $('select[name="quote"] option[value="0"]').show();
-                    $('select[name="quote"]').val('0');
             }
         });
 
         $('#UpdateInfo').click(function() {
             Wind.Util.ajaxBtnDisable($(this));
 
-            var url = "{@WindUrlHelper::createUrl('/app/torrent/index/updateInfo')}";
+            var url = "{@WindUrlHelper::createUrl('/app/torrent/title/updateInfo')}";
 
             var paras = {};
             switch ($('[name="t_type"]').val()) {
@@ -307,14 +283,16 @@
             }
 
             paras.t_type = $('[name="t_type"]').val();
-            paras.w_type = $('[name="quote"]').val();
             paras.wikilink = $('[name="wikilink"]').val();
 
             $.post(url, paras, function(data) {
-                $('input[name="atc_title"]').val(data.title);
-                $('input[name="wikilink"]').val(data.wikilink);
-                if (data.content != null) {
-                    $('iframe.wind_editor_iframe').contents().find('body.editor_content').text(data.content);
+                if (data.code == 1) {
+                    $('input[name="atc_title"]').val(data.result.title);
+                    if (data.content != null) {
+                        $('iframe.wind_editor_iframe').contents().find('body.editor_content').text(data.result.content);
+                    }
+                } else {
+                    alert('获取数据失败！');
                 }
                 Wind.Util.ajaxBtnEnable($('#UpdateInfo'));
             }, 'json');
@@ -322,16 +300,6 @@
             setTimeout(function(){
                 Wind.Util.ajaxBtnEnable($('#UpdateInfo'));
             }, 3000);
-        });
-
-        $('select[name="quote"]').change(function() {
-            switch ($(this).val()) {
-                case '12':
-                    $('input[name="wikilink"]').attr('placeholder', '10741834');
-                    break;
-                case '2':
-                    $('input[name="wikilink"]').attr('placeholder', 'tt0111161');
-            }
         });
         <!--# } #-->
     });
