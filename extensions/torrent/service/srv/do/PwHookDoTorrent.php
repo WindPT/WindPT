@@ -106,6 +106,7 @@ class PwHookDoTorrent
 
         $this->spaceUid = $space->spaceUid;
         $this->visitUid = $space->visitUid;
+
         $user = Wekit::load('EXT:torrent.service.PwTorrentUser')->getTorrentUserByUid($space->spaceUid);
 
         $peers           = Wekit::load('EXT:torrent.service.PwTorrentPeer')->fetchTorrentPeerByUid($space->spaceUid);
