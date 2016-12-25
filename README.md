@@ -5,6 +5,7 @@ WindPT
 
 **A plugin for PHPWind 9 to build a Private BitTorrent tracker with Front-end.**
 
+[![StyleCI](https://styleci.io/repos/18007787/shield?style=flat&branch=master)](https://styleci.io/repos/18007787)
 [![Releases](https://img.shields.io/github/release/kinosang/WindPT.svg)](https://github.com/kinosang/WindPT/releases/latest)
 
 Pull requests and issues are welcome.
