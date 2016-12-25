@@ -116,6 +116,72 @@ class TitleController extends PwBaseController
                             $content = trim($api_result['Plot']);
                         }
                         break;
+                    case 'bgm.tv':
+                    case 'bangumi.tv':
+                        // Tested with http://bgm.tv/subject/265
+                        $api_url    = 'https://api.bgm.tv/subject/' . $wiki_id;
+                        $api_result = json_decode($this->send($api_url), true);
+
+                        $title = '[' . explode('-', $api_result['air_date'])[0] . ']';
+                        $title .= '[' . $api_result['name_cn'] . ']';
+                        $title .= '[' . $api_result['name'] . ']';
+
+                        $content = '[img]' . $api_result['images']['large'] . '[/img]<br />' . $api_result['summary'];
+                        break;
+                    case 'anidb.net':
+                        // Tested wit http://anidb.net/perl-bin/animedb.pl?show=anime&aid=22
+                        if (!empty(Wekit::C('site', 'app.torrent.titlegen.anidb'))) {
+                            $client = Wekit::C('site', 'app.torrent.titlegen.anidb');
+
+                            $url_query = $url['query'];
+                            parse_str($url_query, $url_query);
+
+                            $wiki_id = $url_query['aid'];
+                            $api_url = 'http://api.anidb.net:9001/httpapi?client=' . $client . '&clientver=1&protover=1&request=anime&aid=' . $wiki_id;
+
+                            $api_result = $this->send($api_url);
+                            $api_result = gzinflate(substr($api_result, 10));
+                            $api_result = simplexml_load_string($api_result);
+
+                            $ns = $api_result->getNamespaces(true);
+
+                            foreach ($api_result->titles->title as $title) {
+                                $type = trim($title->attributes()['type']);
+                                $lang = $title->attributes($ns['xml'])['lang'];
+                                switch ($lang) {
+                                    case 'zh-Hans':
+                                        $title_cn[$type] = $title;
+                                        break;
+                                    case 'en':
+                                        $title_en[$type] = $title;
+                                        break;
+                                    case 'ja':
+                                        $title_ja[$type] = $title;
+                                        break;
+                                    case 'x-jat':
+                                        $title_jat[$type] = $title;
+                                        break;
+                                    default:
+                                        continue;
+                                        break;
+                                }
+                            }
+
+                            $title_cn  = !empty($title_cn['official']) ? $title_cn['official'] : $title_cn['synonym'];
+                            $title_en  = !empty($title_en['official']) ? $title_en['official'] : $title_en['synonym'];
+                            $title_ja  = !empty($title_ja['official']) ? $title_ja['official'] : $title_ja['synonym'];
+                            $title_jat = !empty($title_jat['main']) ? $title_jat['main'] : $title_jat['synonym'];
+
+                            $title = '[' . explode('-', $api_result->startdate)[0] . ']';
+                            if (!empty($title_cn)) {
+                                $title .= '[' . $title_cn . ']';
+                            }
+                            $title .= '[' . $title_ja . ']';
+                            $title .= '[' . $title_jat . ' / ' . $title_en . ']';
+
+                            $content = '[img]http://img7.anidb.net/pics/anime/' . $api_result->picture . '[/img]<br />' . $api_result->description;
+                        }
+                        break;
                 }
 
                 if (!empty($title) && !empty($content) && !strstr($title, '[]')) {
