@@ -17,7 +17,7 @@ class PwHookDoTorrent
         $user = Wekit::getLoginUser();
 
         if ($user) {
-            $peers     = Wekit::load('EXT:torrent.service.PwTorrentPeer')->fetchTorrentPeerByUid($user->uid);
+            $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->fetchTorrentPeerByUid($user->uid);
             $histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($user->uid);
 
             $seeding = $leeching = 0;
@@ -44,19 +44,19 @@ class PwHookDoTorrent
                 $rotio = 'Inf.';
             }
 
-            echo '<a href="' . WindUrlHelper::createUrl('space/profile/run?uid=' . $user->uid) . '">下载：' . $leeching . ' 做种：' . $seeding . ' 分享率：' . $rotio . '</a>';
+            echo '<a href="'.WindUrlHelper::createUrl('space/profile/run?uid='.$user->uid).'">下载：'.$leeching.' 做种：'.$seeding.' 分享率：'.$rotio.'</a>';
         }
     }
 
     public function pwThreadsDaoBatchDelete($ids)
     {
         $torrentDs = Wekit::load('EXT:torrent.service.PwTorrent');
-        $fileDs    = Wekit::load('EXT:torrent.service.PwTorrentFile');
+        $fileDs = Wekit::load('EXT:torrent.service.PwTorrentFile');
 
         if (is_array($ids)) {
             foreach ($ids as $id) {
                 $torrent = $torrentDs->getTorrentByTid($id);
-                $files   = $fileDs->getTorrentFileByTorrentId($torrent['id']);
+                $files = $fileDs->getTorrentFileByTorrentId($torrent['id']);
 
                 if (is_array($files)) {
                     foreach ($files as $file) {
@@ -66,7 +66,7 @@ class PwHookDoTorrent
 
                 $torrentDs->deleteTorrent($torrent['id']);
 
-                @unlink(WEKIT_PATH . '../torrents/' . $torrent['id'] . '.torrent');
+                @unlink(WEKIT_PATH.'../torrents/'.$torrent['id'].'.torrent');
             }
         }
     }
@@ -74,10 +74,10 @@ class PwHookDoTorrent
     public function pwThreadsDaoDelete($id)
     {
         $torrentDs = Wekit::load('EXT:torrent.service.PwTorrent');
-        $fileDs    = Wekit::load('EXT:torrent.service.PwTorrentFile');
+        $fileDs = Wekit::load('EXT:torrent.service.PwTorrentFile');
 
         $torrent = $torrentDs->getTorrentByTid($id);
-        $files   = $fileDs->getTorrentFileByTorrentId($torrent['id']);
+        $files = $fileDs->getTorrentFileByTorrentId($torrent['id']);
 
         if (is_array($files)) {
             foreach ($files as $file) {
@@ -87,12 +87,13 @@ class PwHookDoTorrent
 
         $torrentDs->deleteTorrent($torrent['id']);
 
-        @unlink(WEKIT_PATH . '../torrents/' . $torrent['id'] . '.torrent');
+        @unlink(WEKIT_PATH.'../torrents/'.$torrent['id'].'.torrent');
     }
 
     public function pwThreadType($tType)
     {
         $tType['torrent'] = array('种子贴', '发布种子资源', true);
+
         return $tType;
     }
 
@@ -108,9 +109,9 @@ class PwHookDoTorrent
         $this->visitUid = $space->visitUid;
         $user = Wekit::load('EXT:torrent.service.PwTorrentUser')->getTorrentUserByUid($space->spaceUid);
 
-        $peers           = Wekit::load('EXT:torrent.service.PwTorrentPeer')->fetchTorrentPeerByUid($space->spaceUid);
+        $peers = Wekit::load('EXT:torrent.service.PwTorrentPeer')->fetchTorrentPeerByUid($space->spaceUid);
         $this->histories = Wekit::load('EXT:torrent.service.PwTorrentHistory')->fetchTorrentHistoryByUid($space->spaceUid);
-        $this->torrents  = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($space->spaceUid);
+        $this->torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrentByUid($space->spaceUid);
 
         $this->passkey = PwUtils::getPassKey($space->spaceUid);
 
@@ -132,10 +133,10 @@ class PwHookDoTorrent
                 $uploaded_total += $history['uploaded'];
 
                 $torrent = $PwTorrent->getTorrent($history['torrent_id']);
-                $thread  = $this->_getThreadService()->getThread($torrent['tid']);
+                $thread = $this->_getThreadService()->getThread($torrent['tid']);
 
                 if ($thread) {
-                    $history['tid']     = $torrent['tid'];
+                    $history['tid'] = $torrent['tid'];
                     $history['subject'] = $thread['subject'];
                 } else {
                     unset($history);
@@ -148,7 +149,7 @@ class PwHookDoTorrent
                 $thread = $this->_getThreadService()->getThread($torrent['tid']);
 
                 if ($thread) {
-                    $torrent['tid']     = $torrent['tid'];
+                    $torrent['tid'] = $torrent['tid'];
                     $torrent['subject'] = $thread['subject'];
                 } else {
                     unset($torrent);
@@ -163,7 +164,7 @@ class PwHookDoTorrent
         }
 
         $this->downloaded_total = PwUtils::readableDataTransfer($downloaded_total);
-        $this->uploaded_total   = PwUtils::readableDataTransfer($uploaded_total);
+        $this->uploaded_total = PwUtils::readableDataTransfer($uploaded_total);
 
         PwHook::template('displayProfileTorrentHtml', 'EXT:torrent.template.profile_injector_after_content', true, $this);
     }

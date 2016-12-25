@@ -13,7 +13,7 @@ class IndexController extends PwBaseController
 
     public function run()
     {
-        header('Location: ' . WindUrlHelper::createUrl('/'));
+        header('Location: '.WindUrlHelper::createUrl('/'));
 
         exit();
     }
@@ -25,7 +25,7 @@ class IndexController extends PwBaseController
 
     public function downloadAction()
     {
-        $id      = $this->getInput('id');
+        $id = $this->getInput('id');
         $passkey = $this->getInput('passkey');
 
         if (!$this->loginUser->uid && empty($passkey)) {
@@ -38,7 +38,7 @@ class IndexController extends PwBaseController
                 $uid = $user['uid'];
             }
         } else {
-            $uid     = $this->loginUser->uid;
+            $uid = $this->loginUser->uid;
             $passkey = PwUtils::getPassKey($uid);
         }
 
@@ -47,7 +47,7 @@ class IndexController extends PwBaseController
             $this->showError('ban');
         }
 
-        $file = WEKIT_PATH . '../torrents/' . $id . '.torrent';
+        $file = WEKIT_PATH.'../torrents/'.$id.'.torrent';
         if (!file_exists($file)) {
             $this->showError('data.error');
         }
@@ -61,7 +61,7 @@ class IndexController extends PwBaseController
         }
 
         // Change announce to user's private announce
-        $bencode    = Wekit::load('EXT:torrent.service.srv.helper.PwBencode');
+        $bencode = Wekit::load('EXT:torrent.service.srv.helper.PwBencode');
         $dictionary = $bencode->doDecodeFile($file);
 
         $dictionary['value']['announce'] = $bencode->doDecode($bencode->doEncodeString(PwUtils::getTrackerUrl($passkey)));
@@ -72,12 +72,12 @@ class IndexController extends PwBaseController
             $torrentnameprefix = Wekit::C('site', 'info.name');
         }
 
-        $filename = rawurlencode('[' . $torrentnameprefix . '][' . $torrent['save_as'] . ']');
+        $filename = rawurlencode('['.$torrentnameprefix.']['.$torrent['save_as'].']');
 
         // Send torrent file to broswer
         header('Content-Description: File Transfer');
         header('Content-type: application/octet-streamn');
-        header('Content-Disposition: attachment; charset=utf-8; filename="' . $filename . '.torrent"; filename*=UTF-8\'\'' . $filename . '.torrent');
+        header('Content-Disposition: attachment; charset=utf-8; filename="'.$filename.'.torrent"; filename*=UTF-8\'\''.$filename.'.torrent');
         header('Content-Transfer-Encoding: binary');
 
         exit($bencode->doEncode($dictionary));
@@ -102,17 +102,17 @@ class IndexController extends PwBaseController
         echo '<rss version="2.0">';
         echo '<channel>';
         echo '<title>WindPT Torrents</title>';
-        echo '<link>' . Wekit::C('site', 'info.url') . '</link>';
-        echo '<description>' . Wekit::C('site', 'info.name') . ' Powered by WindPT</description>';
+        echo '<link>'.Wekit::C('site', 'info.url').'</link>';
+        echo '<description>'.Wekit::C('site', 'info.name').' Powered by WindPT</description>';
         echo '<language>zh-cn</language>';
-        echo '<copyright>Copyright (c) ' . Wekit::C('site', 'info.name') . ' ' . date('Y') . ', all rights reserved</copyright>';
-        echo '<pubDate>' . date('D, d M Y H:i:s O') . '</pubDate>';
+        echo '<copyright>Copyright (c) '.Wekit::C('site', 'info.name').' '.date('Y').', all rights reserved</copyright>';
+        echo '<pubDate>'.date('D, d M Y H:i:s O').'</pubDate>';
         echo '<generator>WindPT RSS Generator</generator>';
         echo '<ttl>60</ttl>';
 
         $tagLists = $this->_getBuildLikeService()->getTagsByUid($user['uid']);
         if ($tagid > 0) {
-            $logids   = $this->_getBuildLikeService()->getLogidsByTagid($tagid, 0, false);
+            $logids = $this->_getBuildLikeService()->getLogidsByTagid($tagid, 0, false);
             $logLists = $this->_getBuildLikeService()->getLogLists($logids);
         } else {
             $logLists = $this->_getBuildLikeService()->getLogList($user['uid'], 0, false);
@@ -132,17 +132,17 @@ class IndexController extends PwBaseController
                     continue;
                 }
 
-                $forum   = $this->_getForumService()->getForum($topic['fid']);
+                $forum = $this->_getForumService()->getForum($topic['fid']);
                 $torrent = $this->_getTorrentService()->getTorrentByTid($topic['tid']);
 
                 echo '<item>';
-                echo '<title><![CDATA[' . $torrent['save_as'] . ']]></title>';
-                echo '<link><![CDATA[' . WindUrlHelper::createUrl('/bbs/read/run?tid=' . $topic['tid']) . ']]></link>';
-                echo '<pubDate>' . date('D, d M Y H:i:s O', $topic['created_time']) . '</pubDate>';
-                echo '<description><![CDATA[' . $topic['subject'] . ']]></description>';
-                echo '<enclosure type="application/x-bittorrent" length="' . $torrent['size'] . '" url="' . str_replace('&', '&amp;', WindUrlHelper::createUrl('/app/torrent/index/download?id=' . $torrent['id'] . '&passkey=' . $passkey)) . '" />';
-                echo '<author><![CDATA[' . $topic['created_username'] . ']]></author>';
-                echo '<category domain="' . WindUrlHelper::createUrl('/bbs/thread/run?fid=' . $topic['fid']) . '"><![CDATA[' . $forum['name'] . ']]></category>';
+                echo '<title><![CDATA['.$torrent['save_as'].']]></title>';
+                echo '<link><![CDATA['.WindUrlHelper::createUrl('/bbs/read/run?tid='.$topic['tid']).']]></link>';
+                echo '<pubDate>'.date('D, d M Y H:i:s O', $topic['created_time']).'</pubDate>';
+                echo '<description><![CDATA['.$topic['subject'].']]></description>';
+                echo '<enclosure type="application/x-bittorrent" length="'.$torrent['size'].'" url="'.str_replace('&', '&amp;', WindUrlHelper::createUrl('/app/torrent/index/download?id='.$torrent['id'].'&passkey='.$passkey)).'" />';
+                echo '<author><![CDATA['.$topic['created_username'].']]></author>';
+                echo '<category domain="'.WindUrlHelper::createUrl('/bbs/thread/run?fid='.$topic['fid']).'"><![CDATA['.$forum['name'].']]></category>';
                 echo '</item>';
             }
         }

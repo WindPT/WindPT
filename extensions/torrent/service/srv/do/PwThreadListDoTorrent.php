@@ -7,7 +7,8 @@ Wind::import('SRV:forum.srv.threadList.do.PwThreadListDoBase');
 class PwThreadListDoTorrent extends PwThreadListDoBase
 {
     public function __construct()
-    {}
+    {
+    }
 
     public function bulidThread($thread)
     {
@@ -28,9 +29,10 @@ class PwThreadListDoTorrent extends PwThreadListDoBase
                 }
             }
 
-            $thread['seeder']  = $seeder;
+            $thread['seeder'] = $seeder;
             $thread['leecher'] = $leecher;
         }
+
         return $thread;
     }
 }

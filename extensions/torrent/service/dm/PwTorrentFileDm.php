@@ -16,18 +16,21 @@ class PwTorrentFileDm extends PwBaseDm
     public function setTorrentId($torrent_id)
     {
         $this->_data['torrent_id'] = $torrent_id;
+
         return $this;
     }
 
     public function setFileName($filename)
     {
         $this->_data['filename'] = $filename;
+
         return $this;
     }
 
     public function setSize($size)
     {
         $this->_data['size'] = $size;
+
         return $this;
     }
 

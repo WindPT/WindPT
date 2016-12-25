@@ -6,19 +6,19 @@ class PwBencode
 {
     public function doEncode($obj)
     {
-        if (!is_array($obj) || !isset($obj["type"]) || !isset($obj["value"])) {
+        if (!is_array($obj) || !isset($obj['type']) || !isset($obj['value'])) {
             return;
         }
 
-        $c = $obj["value"];
-        switch ($obj["type"]) {
-            case "string":
+        $c = $obj['value'];
+        switch ($obj['type']) {
+            case 'string':
                 return $this->doEncodeString($c);
-            case "integer":
+            case 'integer':
                 return $this->doEncodeInt($c);
-            case "list":
+            case 'list':
                 return $this->doEncodeList($c);
-            case "dictionary":
+            case 'dictionary':
                 return $this->doEncodeDictionary($c);
             default:
                 return;
@@ -27,27 +27,28 @@ class PwBencode
 
     public function doEncodeString($s)
     {
-        return strlen($s) . ":$s";
+        return strlen($s).":$s";
     }
 
     public function doEncodeInt($i)
     {
-        return "i" . $i . "e";
+        return 'i'.$i.'e';
     }
 
     public function doEncodeList($a)
     {
-        $s = "l";
+        $s = 'l';
         foreach ($a as $e) {
             $s .= $this->doEncode($e);
         }
-        $s .= "e";
+        $s .= 'e';
+
         return $s;
     }
 
     public function doEncodeDictionary($d)
     {
-        $s    = "d";
+        $s = 'd';
         $keys = array_keys($d);
         sort($keys);
         foreach ($keys as $k) {
@@ -55,52 +56,54 @@ class PwBencode
             $s .= $this->doEncodeString($k);
             $s .= $this->doEncode($v);
         }
-        $s .= "e";
+        $s .= 'e';
+
         return $s;
     }
 
     public function doDecodeFile($file, $max_size = 290000)
     {
-        $open = fopen($file, "rb");
+        $open = fopen($file, 'rb');
         if (!$open) {
             return;
         }
 
         $string = fread($open, $max_size);
         fclose($open);
+
         return $this->doDecode($string);
     }
 
     public function doDecode($s)
     {
         if (preg_match('/^(\d+):/', $s, $m)) {
-            $l  = $m[1];
+            $l = $m[1];
             $pl = strlen($l) + 1;
-            $v  = substr($s, $pl, $l);
+            $v = substr($s, $pl, $l);
             $ss = substr($s, 0, $pl + $l);
             if (strlen($v) != $l) {
                 return;
             }
 
-            return array('type' => "string", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
+            return array('type' => 'string', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
         }
         if (preg_match('/^i(-{0,1}\d+)e/', $s, $m)) {
-            $v  = $m[1];
-            $ss = "i" . $v . "e";
-            if ($v === "-0") {
+            $v = $m[1];
+            $ss = 'i'.$v.'e';
+            if ($v === '-0') {
                 return;
             }
 
-            if ($v[0] == "0" && strlen($v) != 1) {
+            if ($v[0] == '0' && strlen($v) != 1) {
                 return;
             }
 
-            return array('type' => "integer", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
+            return array('type' => 'integer', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
         }
         switch ($s[0]) {
-            case "l":
+            case 'l':
                 return $this->doDecodeList($s);
-            case "d":
+            case 'd':
                 return $this->doDecodeDictionary($s);
             default:
                 return;
@@ -109,20 +112,20 @@ class PwBencode
 
     public function doDecodeList($s)
     {
-        if ($s[0] != "l") {
+        if ($s[0] != 'l') {
             return;
         }
 
         $sl = strlen($s);
-        $i  = 1;
-        $v  = array();
-        $ss = "l";
-        for (;;) {
+        $i = 1;
+        $v = array();
+        $ss = 'l';
+        for (; ;) {
             if ($i >= $sl) {
                 return;
             }
 
-            if ($s[$i] == "e") {
+            if ($s[$i] == 'e') {
                 break;
             }
 
@@ -132,40 +135,41 @@ class PwBencode
             }
 
             $v[] = $ret;
-            $i += $ret["strlen"];
-            $ss .= $ret["string"];
+            $i += $ret['strlen'];
+            $ss .= $ret['string'];
         }
-        $ss .= "e";
-        return array('type' => "list", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
+        $ss .= 'e';
+
+        return array('type' => 'list', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
     }
 
     public function doDecodeDictionary($s)
     {
-        if ($s[0] != "d") {
+        if ($s[0] != 'd') {
             return;
         }
 
         $sl = strlen($s);
-        $i  = 1;
-        $v  = array();
-        $ss = "d";
-        for (;;) {
+        $i = 1;
+        $v = array();
+        $ss = 'd';
+        for (; ;) {
             if ($i >= $sl) {
                 return;
             }
 
-            if ($s[$i] == "e") {
+            if ($s[$i] == 'e') {
                 break;
             }
 
             $ret = $this->doDecode(substr($s, $i));
-            if (!isset($ret) || !is_array($ret) || $ret["type"] != "string") {
+            if (!isset($ret) || !is_array($ret) || $ret['type'] != 'string') {
                 return;
             }
 
-            $k = $ret["value"];
-            $i += $ret["strlen"];
-            $ss .= $ret["string"];
+            $k = $ret['value'];
+            $i += $ret['strlen'];
+            $ss .= $ret['string'];
             if ($i >= $sl) {
                 return;
             }
@@ -176,21 +180,22 @@ class PwBencode
             }
 
             $v[$k] = $ret;
-            $i += $ret["strlen"];
-            $ss .= $ret["string"];
+            $i += $ret['strlen'];
+            $ss .= $ret['string'];
         }
-        $ss .= "e";
-        return array('type' => "dictionary", 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
+        $ss .= 'e';
+
+        return array('type' => 'dictionary', 'value' => $v, 'strlen' => strlen($ss), 'string' => $ss);
     }
 
     public function doDictionaryCheck($d, $s)
     {
-        if ($d["type"] != "dictionary") {
+        if ($d['type'] != 'dictionary') {
             return;
         }
 
-        $a   = explode(":", $s);
-        $dd  = $d["value"];
+        $a = explode(':', $s);
+        $dd = $d['value'];
         $ret = array();
         foreach ($a as $k) {
             unset($t);
@@ -203,35 +208,35 @@ class PwBencode
             }
 
             if (isset($t)) {
-                if ($dd[$k]["type"] != $t) {
+                if ($dd[$k]['type'] != $t) {
                     bark($lang_takeupload['std_invalid_entry_in_dictionary']);
                 }
 
-                $ret[] = $dd[$k]["value"];
+                $ret[] = $dd[$k]['value'];
             } else {
                 $ret[] = $dd[$k];
             }
-
         }
+
         return $ret;
     }
 
     public function doDictionaryGet($d, $k, $t)
     {
-        if ($d["type"] != "dictionary") {
+        if ($d['type'] != 'dictionary') {
             return;
         }
 
-        $dd = $d["value"];
+        $dd = $d['value'];
         if (!isset($dd[$k])) {
             return;
         }
 
         $v = $dd[$k];
-        if ($v["type"] != $t) {
+        if ($v['type'] != $t) {
             bark($lang_takeupload['std_invalid_dictionary_entry_type']);
         }
 
-        return $v["value"];
+        return $v['value'];
     }
 }

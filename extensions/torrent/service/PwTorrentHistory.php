@@ -35,6 +35,7 @@ class PwTorrentHistory
         if (($result = $dm->beforeAdd()) !== true) {
             return $result;
         }
+
         return $this->_getDao(self::FETCH_MAIN)->addTorrentHistory($dm->getData());
     }
 
@@ -43,6 +44,7 @@ class PwTorrentHistory
         if (($result = $dm->beforeUpdate()) !== true) {
             return $result;
         }
+
         return $this->_getDao($fetchmode)->updateTorrentHistory($dm->id, $dm->getData(), $dm->getIncreaseData());
     }
 

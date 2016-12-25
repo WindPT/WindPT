@@ -10,9 +10,9 @@ class PwCronDoClearTorrents extends AbstractCronBase
 {
     private function deleteThread($topic)
     {
-        $tid            = $topic['tid'];
-        $fid            = $topic['fid'];
-        $subject        = $topic['subject'];
+        $tid = $topic['tid'];
+        $fid = $topic['fid'];
+        $subject = $topic['subject'];
         $created_userid = $topic['created_userid'];
 
         $dm = new PwTopicRecycleDm();
@@ -24,7 +24,7 @@ class PwCronDoClearTorrents extends AbstractCronBase
         Wekit::load('forum.PwThread')->updateThread($dm);
 
         $api = WindidApi::api('message');
-        $api->send($created_userid, '您的种子 ' . $subject . ' 因长期断种已被系统自动移入回收站，如有异议请尽快联系管理员，管理员将根据相关规定决定恢复或彻底删除。', 1);
+        $api->send($created_userid, '您的种子 '.$subject.' 因长期断种已被系统自动移入回收站，如有异议请尽快联系管理员，管理员将根据相关规定决定恢复或彻底删除。', 1);
     }
 
     public function run($cronId)
@@ -32,7 +32,7 @@ class PwCronDoClearTorrents extends AbstractCronBase
         $torrentimeout = Wekit::C('site', 'app.torrent.cron.torrentimeout');
 
         if ($torrentimeout < 1) {
-            return null;
+            return;
         }
 
         $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrent();
@@ -48,7 +48,7 @@ class PwCronDoClearTorrents extends AbstractCronBase
                 continue;
             }
 
-            if (strtotime($torrent['updated_at']) < strtotime('-' . $torrentimeout . ' day')) {
+            if (strtotime($torrent['updated_at']) < strtotime('-'.$torrentimeout.' day')) {
                 $this->deleteThread($topic);
             }
         }

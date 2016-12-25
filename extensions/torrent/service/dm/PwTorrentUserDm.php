@@ -14,6 +14,7 @@ class PwTorrentUserDm extends PwBaseDm
     public function setPassKey($passkey)
     {
         $this->_data['passkey'] = $passkey;
+
         return $this;
     }
 

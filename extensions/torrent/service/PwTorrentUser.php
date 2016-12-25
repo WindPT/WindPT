@@ -21,6 +21,7 @@ class PwTorrentUser
         if (($result = $dm->beforeAdd()) !== true) {
             return $result;
         }
+
         return $this->_getDao(self::FETCH_MAIN)->addTorrentUser($dm->getData());
     }
 
@@ -29,6 +30,7 @@ class PwTorrentUser
         if (($result = $dm->beforeUpdate()) !== true) {
             return $result;
         }
+
         return $this->_getDao($fetchmode)->updateTorrentUser($dm->id, $dm->getData(), $dm->getIncreaseData());
     }
 

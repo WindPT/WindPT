@@ -16,30 +16,35 @@ class PwTorrentAgentDm extends PwBaseDm
     public function setFamily($family)
     {
         $this->_data['family'] = $family;
+
         return $this;
     }
 
     public function setPeeridPattern($peer_id_pattern)
     {
         $this->_data['peer_id_pattern'] = $peer_id_pattern;
+
         return $this;
     }
 
     public function setAgentPattern($agent_pattern)
     {
         $this->_data['agent_pattern'] = $agent_pattern;
+
         return $this;
     }
 
     public function setHttps($https)
     {
         $this->_data['https'] = $https;
+
         return $this;
     }
 
     public function setHits($hits)
     {
         $this->_data['hits'] = $hits;
+
         return $this;
     }
 

@@ -17,7 +17,7 @@ class ManageController extends AdminBaseController
 
     public function run()
     {
-        $cronList['ClearPeers']    = $this->_loadCronService()->getCronByFile('PwCronDoClearPeers');
+        $cronList['ClearPeers'] = $this->_loadCronService()->getCronByFile('PwCronDoClearPeers');
         $cronList['ClearTorrents'] = $this->_loadCronService()->getCronByFile('PwCronDoClearTorrents');
 
         $this->setOutput($this->config, 'config');

@@ -4,8 +4,8 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 
 class PwTorrentFileDao extends PwBaseDao
 {
-    protected $_table      = 'app_torrent_files';
-    protected $_pk         = 'id';
+    protected $_table = 'app_torrent_files';
+    protected $_pk = 'id';
     protected $_dataStruct = array('id', 'torrent_id', 'filename', 'size');
 
     public function getTorrentFile($id)
@@ -17,6 +17,7 @@ class PwTorrentFileDao extends PwBaseDao
     {
         $sql = $this->_bindSql('SELECT * FROM %s WHERE torrent_id = ?', $this->getTable());
         $smt = $this->getConnection()->createStatement($sql);
+
         return $smt->queryAll(array($id), 'id');
     }
 

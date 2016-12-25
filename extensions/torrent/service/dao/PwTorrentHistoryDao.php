@@ -4,8 +4,8 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 
 class PwTorrentHistoryDao extends PwBaseDao
 {
-    protected $_table      = 'app_torrent_histories';
-    protected $_pk         = 'id';
+    protected $_table = 'app_torrent_histories';
+    protected $_pk = 'id';
     protected $_dataStruct = array('id', 'uid', 'torrent_id', 'uploaded', 'uploaded_last', 'downloaded', 'downloaded_last', 'left', 'state');
 
     public function getTorrentHistory($id)
@@ -15,22 +15,25 @@ class PwTorrentHistoryDao extends PwBaseDao
 
     public function getTorrentHistoryByTorrentIdAndUid($torrent, $uid)
     {
-        $sql = $this->_bindTable("SELECT * FROM %s WHERE torrent_id = ? AND uid = ?");
+        $sql = $this->_bindTable('SELECT * FROM %s WHERE torrent_id = ? AND uid = ?');
         $smt = $this->getConnection()->createStatement($sql);
+
         return $smt->getOne(array($torrent, $uid));
     }
 
     public function fetchTorrentHistoryByTorrentId($torrent)
     {
-        $sql = $this->_bindTable("SELECT * FROM %s WHERE torrent_id = ?");
+        $sql = $this->_bindTable('SELECT * FROM %s WHERE torrent_id = ?');
         $smt = $this->getConnection()->createStatement($sql);
+
         return $smt->queryAll(array($torrent));
     }
 
     public function fetchTorrentHistoryByUid($uid)
     {
-        $sql = $this->_bindTable("SELECT * FROM %s WHERE uid = ?");
+        $sql = $this->_bindTable('SELECT * FROM %s WHERE uid = ?');
         $smt = $this->getConnection()->createStatement($sql);
+
         return $smt->queryAll(array($uid));
     }
 
