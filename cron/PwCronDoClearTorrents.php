@@ -32,7 +32,7 @@ class PwCronDoClearTorrents extends AbstractCronBase
         $torrentimeout = Wekit::C('site', 'app.torrent.cron.torrentimeout');
 
         if ($torrentimeout < 1) {
-            return null;
+            return;
         }
 
         $torrents = Wekit::load('EXT:torrent.service.PwTorrent')->fetchTorrent();
