@@ -33,13 +33,11 @@ class ManageController extends AdminBaseController
 
     public function typeAction()
     {
-        $forums = $this->_loadForumService()->getCommonForumList();
+        $forums = $this->_loadForumService()->getCommonForumList(PwForum::FETCH_MAIN | PwForum::FETCH_EXTRA);
         foreach ($forums as $key => $forum) {
-            if ($forum['type'] == 'forum') {
+            $forumset = unserialize($forum['settings_basic']);
+            if ($forum['type'] == 'forum' && in_array('torrent', $forumset['allowtype'])) {
                 $forums[$key]['topic_types'] = $this->_loadTopicTypeService()->getTypesByFid($forum['fid']);
-                if (empty($forums[$key]['topic_types'])) {
-                    unset($forums[$key]);
-                }
             } else {
                 unset($forums[$key]);
             }
