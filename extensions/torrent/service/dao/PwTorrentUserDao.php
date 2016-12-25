@@ -4,14 +4,15 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 
 class PwTorrentUserDao extends PwBaseDao
 {
-    protected $_table      = 'app_torrent_users';
-    protected $_pk         = 'uid';
+    protected $_table = 'app_torrent_users';
+    protected $_pk = 'uid';
     protected $_dataStruct = array('uid', 'passkey');
 
     public function getTorrentUserByUid($uid)
     {
         $sql = $this->_bindSql('SELECT * FROM %s WHERE uid=?', $this->getTable());
         $smt = $this->getConnection()->createStatement($sql);
+
         return $smt->getOne(array($uid), 'uid');
     }
 
@@ -19,6 +20,7 @@ class PwTorrentUserDao extends PwBaseDao
     {
         $sql = $this->_bindSql('SELECT * FROM %s WHERE passkey=?', $this->getTable());
         $smt = $this->getConnection()->createStatement($sql);
+
         return $smt->getOne(array($passkey), 'uid');
     }
 

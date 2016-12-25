@@ -5,6 +5,7 @@ defined('WEKIT_VERSION') || exit('Forbidden');
 class PwTorrentPeer
 {
     const FETCH_MAIN = 1;
+
     public function getTorrentPeer($id, $fetchmode = self::FETCH_MAIN)
     {
         if (empty($id)) {
@@ -48,6 +49,7 @@ class PwTorrentPeer
         if (($result = $dm->beforeAdd()) !== true) {
             return $result;
         }
+
         return $this->_getDao(self::FETCH_MAIN)->addTorrentPeer($dm->getData());
     }
 
@@ -56,6 +58,7 @@ class PwTorrentPeer
         if (($result = $dm->beforeUpdate()) !== true) {
             return $result;
         }
+
         return $this->_getDao($fetchmode)->updateTorrentPeer($dm->id, $dm->getData(), $dm->getIncreaseData());
     }
 

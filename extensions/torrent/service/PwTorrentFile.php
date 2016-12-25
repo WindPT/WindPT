@@ -25,6 +25,7 @@ class PwTorrentFile
         if (($result = $dm->beforeAdd()) !== true) {
             return $result;
         }
+
         return $this->_getDao(self::FETCH_MAIN)->addTorrentFile($dm->getData());
     }
 
@@ -33,6 +34,7 @@ class PwTorrentFile
         if (($result = $dm->beforeUpdate()) !== true) {
             return $result;
         }
+
         return $this->_getDao($fetchmode)->updateTorrentFile($dm->id, $dm->getData(), $dm->getIncreaseData());
     }
 

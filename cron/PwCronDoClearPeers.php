@@ -22,7 +22,7 @@ class PwCronDoClearPeers extends AbstractCronBase
             }
 
             foreach ($peers as $peer) {
-                if (strtotime($peer['last_action']) < strtotime('-' . Wekit::C('site', 'app.torrent.cron.peertimeout') . ' minute')) {
+                if (strtotime($peer['last_action']) < strtotime('-'.Wekit::C('site', 'app.torrent.cron.peertimeout').' minute')) {
                     Wekit::load('EXT:torrent.service.PwTorrentPeer')->deleteTorrentPeer($peer['id']);
                 }
             }

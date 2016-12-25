@@ -25,6 +25,7 @@ class PwTorrentAgent
         if (($result = $dm->beforeAdd()) !== true) {
             return $result;
         }
+
         return $this->_getDao(self::FETCH_MAIN)->addTorrentAgent($dm->getData());
     }
 
@@ -33,6 +34,7 @@ class PwTorrentAgent
         if (($result = $dm->beforeUpdate()) !== true) {
             return $result;
         }
+
         return $this->_getDao($fetchmode)->updateTorrentAgent($dm->id, $dm->getData(), $dm->getIncreaseData());
     }
 

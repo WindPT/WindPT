@@ -12,7 +12,7 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
 
     public function __construct($tid, PwUserBo $user)
     {
-        $this->tid  = $tid;
+        $this->tid = $tid;
         $this->user = $user;
         $this->getData();
     }
@@ -24,9 +24,9 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
         Wind::import('EXT:torrent.service.srv.helper.PwUtils');
 
         $torrent['info_hash'] = PwUtils::readableHash($torrent['info_hash']);
-        $torrent['files']     = $this->_getTorrentFileService()->getTorrentFileByTorrentId($torrent['id']);
-        $torrent['finished']  = $this->_getTorrentHistoryService()->fetchTorrentHistoryByTorrentId($torrent['id']);
-        $torrent['finished']  = array_filter($torrent['finished'], function ($var) {
+        $torrent['files'] = $this->_getTorrentFileService()->getTorrentFileByTorrentId($torrent['id']);
+        $torrent['finished'] = $this->_getTorrentHistoryService()->fetchTorrentHistoryByTorrentId($torrent['id']);
+        $torrent['finished'] = array_filter($torrent['finished'], function ($var) {
             return $var['left'] == 0;
         });
 
@@ -57,14 +57,14 @@ class PwThreadDisplayDoTorrent extends PwThreadDisplayDoBase
                     $peer['color'] = 'red';
                 }
 
-                $peer['uploaded']   = PwUtils::readableDataTransfer($peer['uploaded']);
+                $peer['uploaded'] = PwUtils::readableDataTransfer($peer['uploaded']);
                 $peer['downloaded'] = PwUtils::readableDataTransfer($peer['downloaded']);
-                $peer['percent']    = ($torrent['size'] - $peer['left']) / $torrent['size'] * 100 . '%';
+                $peer['percent'] = ($torrent['size'] - $peer['left']) / $torrent['size'] * 100 .'%';
             }
         }
 
-        $torrent['size']    = PwUtils::readableDataTransfer($torrent['size']);
-        $torrent['seeder']  = ($seeder == 0) ? '断种' : $seeder;
+        $torrent['size'] = PwUtils::readableDataTransfer($torrent['size']);
+        $torrent['seeder'] = ($seeder == 0) ? '断种' : $seeder;
         $torrent['leecher'] = $leecher;
 
         $this->torrent = $torrent;
