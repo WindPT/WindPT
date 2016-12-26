@@ -40,6 +40,16 @@
         .t_attr_t {
             display: none;
         }
+
+        code#tracker {
+            width: 640px;
+            display: inline-block;
+        }
+
+        code#tracker .covered {
+            color:rgb(51,51,51);
+            background: rgb(51,51,51);
+        }
     </style>
     <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 0) { #-->
     <div class="cc post_extend" id="titleMaker">
@@ -172,13 +182,15 @@
     </div>
     <div class="cc post_extend" style="color:#FF0000">
         Private Tracker 地址（点击右侧按钮复制到剪贴板，请不要泄露给其他人）：
-        <input id="tracker" type="text" class="input" name="tracker" value="{@PwUtils::getTrackerUrl($pargs->passkey)}" style="width:640px;">
+        <code id="tracker" class="input">{@PwUtils::getTrackerUrl('__PASSKEY__')}</code>
         <button class="btn copy" data-clipboard-target="#tracker" style="height: 28px">
             <img src="/src/extensions/torrent/res/images/clippy.svg" alt="Copy to clipboard" style="height: 100%;">
         </button>
     </div>
     <script>
     Wind.js('/src/extensions/torrent/res/js/clipboard.min.js', function() {
+        $('code#tracker').html($('code#tracker').html().replace('__PASSKEY__', '<span class="covered">{$pargs->passkey}</span>'));
+
         var clipboard = new Clipboard('.copy');
 
         clipboard.on('success', function(e) {
