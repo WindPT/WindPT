@@ -188,7 +188,7 @@
         </button>
     </div>
     <script>
-    Wind.js('/src/extensions/torrent/res/js/clipboard.min.js', function() {
+    Wind.use('jquery', '/src/extensions/torrent/res/js/clipboard.min.js', function() {
         $('code#tracker').html($('code#tracker').html().replace('__PASSKEY__', '<span class="covered">{$pargs->passkey}</span>'));
 
         var clipboard = new Clipboard('.copy');
@@ -200,9 +200,7 @@
         clipboard.on('error', function(e) {
             alert('复制失败，请使用 Ctrl + C 复制！');
         });
-    });
 
-    Wind.ready(function() {
         <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 1) { #-->
         $('#J_atc_title').attr('readonly', 'readonly').attr('placeholder', '请使用标题生成器');
         <!--# } #-->
