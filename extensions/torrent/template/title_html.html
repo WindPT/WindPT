@@ -1,0 +1,245 @@
+<div class="dialog_wrapper">
+    <div class="table_full">
+        <form>
+            <table width="100%">
+                <col class="th" />
+                <col width="290" />
+                <col />
+                <tr>
+                    <th>资源类型</th>
+                    <td>
+                        <select class="length_5" id="J_input_type">
+                            <option value="0">--请选择资源类型--</option>
+                            <option value="1">书籍</option>
+                            <option value="2">影视</option>
+                            <option value="21">剧集</option>
+                            <option value="3">音乐</option>
+                            <option value="4">其他</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>参考链接</th>
+                    <td>
+                        <input type="text" class="input length_5" id="J_input_wikilink">
+                    </td>
+                </tr>
+                <tr>
+                    <th>国别</th>
+                    <td>
+                        <input type="text" class="input length_5" id="J_attrs_country" name="country">
+                    </td>
+                </tr>
+                <tr>
+                    <th>年份</th>
+                    <td>
+                        <input type="text" class="input length_5" id="J_attrs_year" name="year">
+                    </td>
+                </tr>
+                <tr>
+                    <th>名称</th>
+                    <td>
+                        <input type="text" class="input length_5" id="J_attrs_title" name="title">
+                    </td>
+                </tr>
+                <tr>
+                    <th>又名</th>
+                    <td>
+                        <input type="text" class="input length_5" id="J_attrs_aka" name="aka">
+                    </td>
+                </tr>
+                <tr class="t_attr t_v">
+                    <th>分辨率</th>
+                    <td>
+                        <select class="length_5" id="J_attrs_resolution" name="resolution">
+                            <option value="其他分辨率">--分辨率--</option>
+                            <option value="1080P">1080P</option>
+                            <option value="720P">720P</option>
+                            <option value="其他分辨率">其他</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="t_attr t_v">
+                    <th>格式</th>
+                    <td>
+                        <select class="length_5" id="J_attrs_format" name="format">
+                            <option value="其他格式">--格式--</option>
+                            <option value="MKV">MKV</option>
+                            <option value="MP4">MP4</option>
+                            <option value="AVI">AVI</option>
+                            <option value="MPEG">MPEG</option>
+                            <option value="TS">TS</option>
+                            <option value="其他格式">其他</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="t_attr t_v">
+                    <th>来源</th>
+                    <td>
+                        <select class="length_5" id="J_attrs_source" name="source">
+                            <option value="其他来源">--来源--</option>
+                            <option value="BDRip">BDRip</option>
+                            <option value="HDRip">HDRip</option>
+                            <option value="DVDrip">DVDrip</option>
+                            <option value="DVDScr">DVDScr</option>
+                            <option value="Bluray">Bluray</option>
+                            <option value="WEBDL">WEBDL</option>
+                            <option value="HDTV">HDTV</option>
+                            <option value="其他来源">其他</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="t_attr t_v">
+                    <th>字幕</th>
+                    <td>
+                        <select class="length_5" id="J_attrs_subtitle" name="subtitle">
+                            <option value="其他字幕">--字幕--</option>
+                            <option value="简中">简中</option>
+                            <option value="繁中">繁中</option>
+                            <option value="英文">英文</option>
+                            <option value="中英">中英</option>
+                            <option value="中日">中日</option>
+                            <option value="外挂">外挂</option>
+                            <option value="无">无</option>
+                            <option value="其他字幕">其他</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="t_attr t_vs">
+                    <th>状态</th>
+                    <td>
+                        <select class="length_5" id="J_attrs_state" name="state">
+                            <option value="其他状态">--状态--</option>
+                            <option value="完结">完结</option>
+                            <option value="连载">连载</option>
+                            <option value="单集">单集</option>
+                            <option value="特别">特别</option>
+                            <option value="其他状态">其他</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="t_attr t_vs">
+                    <th>集数</th>
+                    <td>
+                        <input type="text" class="input length_5" id="J_attrs_episode" name="episode" placeholder="S1E01">
+                    </td>
+                </tr>
+                <tr class="t_attr t_a">
+                    <th>流派</th>
+                    <td>
+                        <select class="length_5" id="J_attrs_school" name="school">
+                            <option value="其他流派">--流派--</option>
+                            <option value="乡村">乡村</option>
+                            <option value="动漫">动漫</option>
+                            <option value="古典">古典</option>
+                            <option value="摇滚">摇滚</option>
+                            <option value="民乐">民乐</option>
+                            <option value="流行">流行</option>
+                            <option value="爵士">爵士</option>
+                            <option value="电子">电子</option>
+                            <option value="舞曲">舞曲</option>
+                            <option value="蓝调">蓝调</option>
+                            <option value="金属">金属</option>
+                            <option value="纯乐器">纯乐器</option>
+                            <option value="其他流派">其他</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="t_attr t_a">
+                    <th>格式</th>
+                    <td>
+                        <select class="length_5" id="J_attrs_format_audio" name="format_audio">
+                            <option value="其他格式">--格式--</option>
+                            <option value="FLAC">FLAC</option>
+                            <option value="APE">APE</option>
+                            <option value="WAV">WAV</option>
+                            <option value="ALAC">ALAC</option>
+                            <option value="MP3">MP3</option>
+                            <option value="其他格式">其他</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div>
+        <button class="btn btn_submit mr10" id="J_generator_update">更新</button>
+        <button class="btn btn_success" id="J_generator_insert"><span class="add"></span>插入</button>
+    </div>
+</div>
+<script>
+Wind.use('jquery', function() {
+    var result;
+
+    $('.wind_dialog input[name="csrf_token"]').remove();
+
+    $.get("{@WindUrlHelper::createUrl('/app/torrent/title/bind')}", function(data) {
+        $('#J_input_type option').removeAttr('disabled');
+        $('#J_input_type option').each(function(option) {
+            if ($(this).val() != 0 && $.inArray($(this).val(), data[$('[name="topictype"]').val()]) == -1) {
+                $(this).attr('disabled', 'disabled');
+            }
+        });
+    }, 'json');
+
+    $('#J_input_type').change(function() {
+        $('.t_attr').find('*:disabled').removeAttr('disabled');
+        $('.t_attr').hide();
+        switch ($(this).val()) {
+            case '1':
+                $('#J_input_wikilink').attr('placeholder', 'https://book.douban.com/subject/7007241/');
+                break;
+            case '2':
+                $('.t_v').show();
+                $('#J_input_wikilink').attr('placeholder', 'https://movie.douban.com/subject/1292226/');
+                break;
+            case '21':
+                $('.t_v').show();
+                $('.t_vs').show();
+                $('#J_input_wikilink').attr('placeholder', 'http://bgm.tv/subject/265');
+                break;
+            case '3':
+                $('.t_a').show();
+                $('#J_input_wikilink').attr('placeholder', 'https://music.douban.com/subject/26767978/');
+                break;
+            case '4':
+                $('#J_input_wikilink').attr('placeholder', 'https://zh.wikipedia.org/wiki/%E6%9D%A8%E6%B0%B8%E4%BF%A1');
+                break;
+        }
+
+        $('.t_attr').find('input:hidden, select:hidden, textarea:hidden').not('input[type=hidden]').attr('disabled', 'disabled');
+    });
+
+    $('#J_generator_update').click(function() {
+        var url = "{@WindUrlHelper::createUrl('/app/torrent/title/run?wikilink=__WIKILINK__')}";
+        $.get(url.replace('&amp;', '&').replace('__WIKILINK__', encodeURIComponent($('#J_input_wikilink').val())), function(data) {
+            if (data.code == 1) {
+                result = data.result;
+                console.log(result);
+
+                $('#J_attrs_country').attr('value', result.attrs.country);
+                $('#J_attrs_year').attr('value', result.attrs.year);
+                $('#J_attrs_title').attr('value', result.attrs.title);
+                $('#J_attrs_aka').attr('value', result.attrs.aka);
+            }
+        }, 'json');
+    });
+
+    $('#J_generator_insert').click(function() {
+        var title = '';
+
+        $('.wind_dialog .dialog_wrapper form').serializeArray().forEach(function(attr) {
+            if (attr.value != undefined && attr.value != null && attr.value != '') {
+                title += '[' + attr.value + ']';
+            }
+        });
+
+        $('input[name="atc_title"]').val(title);
+        $('input[name="wikilink"]').val($('#J_input_wikilink').val());
+        $('iframe.wind_editor_iframe').contents().find('body.editor_content').text(result.content);
+
+        $('.wind_dialog').remove();
+        $('.wind_dialog_mask').remove();
+    });
+});
+</script>

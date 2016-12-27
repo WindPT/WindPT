@@ -7,12 +7,6 @@
             margin-bottom: 10px;
         }
 
-        .post_extend_ct {
-            float: left;
-            width: 375px;
-            border-right: 1px solid #d5e6ed;
-        }
-
         .post_extend_sd {
             float: left;
             border-left: 1px solid #d5e6ed;
@@ -36,8 +30,7 @@
             font-weight: bold;
         }
 
-        .t_attr,
-        .t_attr_t {
+        .t_attr {
             display: none;
         }
 
@@ -50,118 +43,27 @@
             color:rgb(51,51,51);
             background: rgb(51,51,51);
         }
+
+        .wind_dialog .core_pop .dialog_wrapper {
+            padding: 20px;
+        }
+
+        #J_dialog_html {
+            display: none;
+        }
     </style>
-    <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 0) { #-->
-    <div class="cc post_extend" id="titleMaker">
-        <select class="mr10" name="t_type">
-            <option value="5">-- 资源种类 --</option>
-            <option value="1">书籍</option>
-            <option value="2">影视</option>
-            <option value="21">剧集</option>
-            <option value="3">音乐</option>
-            <option value="4">软件</option>
-            <option value="5">其他</option>
-        </select>
-        <span class="t_attr" id="t_b">请填写“外部参考” - “豆瓣读书 ID”</span>
-        <span class="t_attr" id="t_v">
-        请填写“外部参考” - “豆瓣电影 ID”
-        <select class="mr10" name="t_v_r">
-            <option value="其他分辨率">-- 分辨率 --</option>
-            <option value="1080P">1080P</option>
-            <option value="720P">720P</option>
-            <option value="其他分辨率">其他</option>
-        </select>
-        <select class="mr10" name="t_v_f">
-            <option value="其他格式">-- 文件格式 --</option>
-            <option value="MKV">MKV</option>
-            <option value="MP4">MP4</option>
-            <option value="AVI">AVI</option>
-            <option value="MPEG">MPEG</option>
-            <option value="TS">TS</option>
-            <option value="其他格式">其他</option>
-        </select>
-        <select class="mr10" name="t_v_q">
-            <option value="其他质量">-- 影片质量 --</option>
-            <option value="DVDrip">DVDrip</option>
-            <option value="HDRip">HDRip</option>
-            <option value="BDRip">BDRip</option>
-            <option value="R5">R5</option>
-            <option value="DVDScr">DVDScr</option>
-            <option value="BDMV">BDMV</option>
-            <option value="HDTV">HDTV</option>
-            <option value="其他质量">其他</option>
-        </select>
-        <select class="mr10" name="t_v_s">
-            <option value="无">-- 字幕 --</option>
-            <option value="简中">简中</option>
-            <option value="繁中">繁中</option>
-            <option value="英文">英文</option>
-            <option value="中英">中英</option>
-            <option value="中日">中日</option>
-            <option value="外挂">外挂</option>
-            <option value="无">无</option>
-            <option value="其他字幕">其他</option>
-        </select>
-        </span>
-        <span class="t_attr" id="t_vs">
-        <select class="mr10" name="t_vs_s">
-            <option value="">-- 状态 --</option>
-            <option value="完结">完结</option>
-            <option value="连载">连载</option>
-            <option value="单集">单集</option>
-            <option value="特别">特别</option>
-            <option value="其他状态">其他</option>
-        </select>
-        <input type="text" class="input" name="t_vs_se" placeholder="季度、集数">
-        </span>
-        <span class="t_attr" id="t_a">
-        请填写“外部参考” - “豆瓣音乐 ID”
-        <input type="text" class="input" name="t_a_f" placeholder="文件格式">
-        <input type="text" class="input" name="t_a_b" placeholder="码率">
-        </span>
-        <span class="t_attr" id="t_s">
-        <select class="mr10" name="t_s_p">
-            <option value="其他平台">-- 运行平台 --</option>
-            <option value="Win">Win</option>
-            <option value="Mac">Mac</option>
-            <option value="Linux">Linux</option>
-            <option value="其他平台">其他</option>
-        </select>
-        </span>
-        <span class="t_attr_t">
-        <select class="mr10" name="t_s_l">
-            <option value="其他语言">-- 语言 --</option>
-            <option value="简中">简中</option>
-            <option value="繁中">繁中</option>
-            <option value="英文">英文</option>
-            <option value="多国">多国</option>
-            <option value="其他语言">其他</option>
-        </select>
-        <select class="mr10" name="t_s_f">
-            <option value="其他格式">-- 格式 --</option>
-            <option value="可执行文件">可执行文件</option>
-            <option value="压缩包">压缩包</option>
-            <option value="磁盘镜像">磁盘镜像</option>
-            <option value="其他格式">其他</option>
-        </select>
-        <input type="text" class="input" name="t_n_p" placeholder="出版/发行">&nbsp;&nbsp;
-        <input type="text" class="input" name="t_n_c" placeholder="中文名">
-        &nbsp;&nbsp;<input type="text" class="input" name="t_n_o" placeholder="外文原名（若有）">
-        </span>
-        <button type="button" class="btn btn_submit mr10" id="UpdateInfo">更新标题和简介</button>
-    </div>
-    <!--# } #-->
     <div class="cc post_extend">
-        <div class="post_extend_ct">
+        <div class="post_extend_sd">
             <div class="post_item">
                 <ul>
                     <li>
                         <span>种子文件： </span>
-                        <input type="file" class="input length_5" name="torrent" value="">
+                        <input type="file" class="input length_6" name="torrent" accept=".torrent">
                     </li>
                     <li>
                         <span>参考链接： </span>
                         <input type="text" class="input length_5" name="wikilink" placeholder="https://movie.douban.com/subject/1292226/">
+                        <button type="button" class="btn btn_submit" id="J_update_info">更新数据</button>
                     </li>
                 </ul>
             </div>
@@ -174,7 +76,7 @@
                         <p>1、必须上传种子文件；</p>
                     </li>
                     <li>
-                        <p>2、填写“外部参考”配合上方标题生成器；</p>
+                        <p>2、填写“参考链接”配合标题生成器；</p>
                     </li>
                 </ul>
             </div>
@@ -187,8 +89,20 @@
             <img src="/src/extensions/torrent/res/images/clippy.svg" alt="Copy to clipboard" style="height: 100%;">
         </button>
     </div>
+    <div id="J_dialog_html">
+        <div class="dialog_wrapper">
+            <h3>功能简介</h3>
+            <p>标题生成器是一个快速创建标题和正文内容的工具，可以通过豆瓣、IMDb等数据库自动填充关键信息。</p>
+            <h3>使用说明</h3>
+            <ol>
+                <li>点击“更新数据”，打开标题生成器并填写“参考链接”</li>
+                <li>填写其他参数并点击“更新”以生成数据</li>
+                <li>点击“插入”将数据插入编辑器</li>
+            </ol>
+        </div>
+    </div>
     <script>
-    Wind.use('jquery', '/src/extensions/torrent/res/js/clipboard.min.js', function() {
+    Wind.use('jquery', 'dialog', '/src/extensions/torrent/res/js/clipboard.min.js', function() {
         $('code#tracker').html($('code#tracker').html().replace('__PASSKEY__', '<span class="covered">{$pargs->passkey}</span>'));
 
         var clipboard = new Clipboard('.copy');
@@ -203,113 +117,26 @@
 
         <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 1) { #-->
         $('#J_atc_title').attr('readonly', 'readonly').attr('placeholder', '请使用标题生成器');
+        $('#J_title_tip').html('<a>什么是标题生成器?</a>');
         <!--# } #-->
 
         <!--# if (Wekit::C('site','app.torrent.titlegen.enabled') > 0) { #-->
-        var typebind;
-
-        $.get("{@WindUrlHelper::createUrl('/app/torrent/title/bind')}", function(data) {
-            typebind = data;
-        }, 'json');
-
-        setTimeout(function(){
-            Wind.Util.ajaxBtnEnable($('#UpdateInfo'));
-        }, 3000);
-
-        $('[name="topictype"]').change(function() {
-            $('[name="t_type"] option').removeAttr('disabled');
-            $('[name="t_type"] option').each(function(option) {
-                if ($.inArray($(this).val(), typebind[$('[name="topictype"]').val()]) == -1) {
-                    $(this).attr('disabled', 'disabled');
-                }
+        $('#J_title_tip a').click(function(){
+            Wind.dialog.html($('#J_dialog_html').html(), {
+                title : '标题生成器',
+                width : 400,
+                isDrag : true
             });
         });
 
-        $('[name="t_type"]').change(function() {
-            $('.t_attr, .t_attr_t').hide();
-            switch ($(this).val()) {
-                case '1':
-                    $('#t_b').show();
-                    $('input[name="wikilink"]').attr('placeholder', '26305561');
-                    break;
-                case '2':
-                    $('#t_v').show();
-                    $('input[name="wikilink"]').attr('placeholder', '10741834');
-                    break;
-                case '21':
-                    $('#t_v').show();
-                    $('#t_vs').show();
-                    $('input[name="wikilink"]').attr('placeholder', '25845393');
-                    break;
-                case '3':
-                    $('#t_a').show();
-                    $('input[name="wikilink"]').attr('placeholder', '11603071');
-                    break;
-                case '4':
-                    $('#t_s').show();
-                    $('.t_attr_t').show();
-                    $('input[name="wikilink"]').attr('placeholder', 'https://zh.wikipedia.org/wiki/Microsoft_Windows');
-                    break;
-                case '5':
-                    $('.t_attr_t').show();
-                    $('input[name="wikilink"]').attr('placeholder', 'https://zh.wikipedia.org/wiki/%E6%9D%A8%E6%B0%B8%E4%BF%A1');
-            }
-        });
-
-        $('#UpdateInfo').click(function() {
-            Wind.Util.ajaxBtnDisable($(this));
-
-            var url = "{@WindUrlHelper::createUrl('/app/torrent/title/updateInfo')}";
-
-            var paras = {};
-            switch ($('[name="t_type"]').val()) {
-                case '2':
-                case '21':
-                    paras = {
-                        resolution: $('[name="t_v_r"]').val(),
-                        format: $('[name="t_v_f"]').val(),
-                        rip: $('[name="t_v_q"]').val(),
-                        sub: $('[name="t_v_s"]').val(),
-                        se: $('[name="t_vs_se"]').val(),
-                        state: $('[name="t_vs_s"]').val(),
-                    };
-                    break;
-                case '3':
-                    paras = {
-                        format: $('[name="t_a_f"]').val(),
-                        bps: $('[name="t_a_b"]').val(),
-                    };
-                    break;
-                case '4':
-                case '5':
-                    paras = {
-                        platform: $('[name="t_s_p"]').val(),
-                        lang: $('[name="t_s_l"]').val(),
-                        format: $('[name="t_s_f"]').val(),
-                        publisher: $('[name="t_n_p"]').val(),
-                        name: $('[name="t_n_c"]').val(),
-                        oname: $('[name="t_n_o"]').val(),
-                    };
-            }
-
-            paras.t_type = $('[name="t_type"]').val();
-            paras.wikilink = $('[name="wikilink"]').val();
-
-            $.post(url, paras, function(data) {
-                if (data.code == 1) {
-                    $('input[name="atc_title"]').val(data.result.title);
-                    if (data.content != null) {
-                        $('iframe.wind_editor_iframe').contents().find('body.editor_content').text(data.result.content);
-                    }
-                } else {
-                    alert('获取数据失败！');
-                }
-                Wind.Util.ajaxBtnEnable($('#UpdateInfo'));
-            }, 'json');
-
-            setTimeout(function(){
-                Wind.Util.ajaxBtnEnable($('#UpdateInfo'));
-            }, 3000);
+        $('#J_update_info').click(function(){
+            $.get('{@WindUrlHelper::createUrl('/app/torrent/title/html')}', function(data) {
+                Wind.dialog.html(data, {
+                    title : '标题生成器',
+                    width : 400,
+                    isDrag : true
+                });
+            }, 'html');
         });
         <!--# } #-->
     });
