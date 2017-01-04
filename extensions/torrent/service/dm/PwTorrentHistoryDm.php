@@ -55,6 +55,18 @@ class PwTorrentHistoryDm extends PwBaseDm
         return $this;
     }
 
+    public function setLeeched($leeched)
+    {
+        $this->_data['leeched'] = $leeched;
+        return $this;
+    }
+
+    public function setSeeded($seeded)
+    {
+        $this->_data['seeded'] = $seeded;
+        return $this;
+    }
+
     protected function _beforeAdd()
     {
         return true;
