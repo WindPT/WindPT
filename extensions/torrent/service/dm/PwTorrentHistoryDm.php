@@ -55,12 +55,6 @@ class PwTorrentHistoryDm extends PwBaseDm
         return $this;
     }
 
-    public function setState($state)
-    {
-        $this->_data['state'] = $state;
-        return $this;
-    }
-
     protected function _beforeAdd()
     {
         return true;

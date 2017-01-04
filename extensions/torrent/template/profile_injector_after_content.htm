@@ -70,24 +70,11 @@
             <dl class="cc">
                 <dd><a href="{@WindUrlHelper::createUrl('/bbs/read/run?tid=' . $torrent['tid'])}">{$torrent['subject']}</a></dd>
                 <dt>
-                    <!--#
-                    switch ($torrent['state']) {
-                        case 'started':
-                            if ($torrent['left'] > 0) {
-                                echo '下载中';
-                            } else {
-                                echo '做种中';
-                            }
-                            break;
-                        case 'stopped':
-                            if ($torrent['left'] > 0) {
-                                echo '未完成';
-                            } else {
-                                echo '已完成';
-                            }
-                            break;
-                    }
-                    #-->
+                    <!--# if ($torrent['left'] > 0) { #-->
+                        未完成
+                    <!--# } else { #-->
+                        已完成
+                    <!--# } #-->
                 </dt>
             </dl>
             <!--# } #-->

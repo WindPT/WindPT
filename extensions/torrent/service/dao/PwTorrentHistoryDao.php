@@ -6,7 +6,7 @@ class PwTorrentHistoryDao extends PwBaseDao
 {
     protected $_table      = 'app_torrent_histories';
     protected $_pk         = 'id';
-    protected $_dataStruct = array('id', 'uid', 'torrent_id', 'uploaded', 'uploaded_last', 'downloaded', 'downloaded_last', 'left', 'state');
+    protected $_dataStruct = array('id', 'uid', 'torrent_id', 'uploaded', 'uploaded_last', 'downloaded', 'downloaded_last', 'left');
 
     public function getTorrentHistory($id)
     {

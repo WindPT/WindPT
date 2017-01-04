@@ -100,7 +100,6 @@ CREATE TABLE `pw_app_torrent_histories` (
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
   `downloaded_last` bigint(20) NOT NULL DEFAULT '0',
   `left` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `state` enum('started','stopped') NOT NULL DEFAULT 'started',
   PRIMARY KEY (`id`),
   KEY `app_torrent_historys_uid_foreign` (`uid`) USING BTREE,
   KEY `app_torrent_historys_torrent_id_foreign` (`torrent_id`) USING BTREE,
