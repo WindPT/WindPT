@@ -129,8 +129,10 @@ class PwHookDoTorrent
         if (is_array($this->histories)) {
             $PwTorrent = Wekit::load('EXT:torrent.service.PwTorrent');
             foreach ($this->histories as &$history) {
-                $downloaded_total += $history['downloaded'];
-                $uploaded_total += $history['uploaded'];
+                $this->leeched_total += $history['leeched'];
+                $this->seeded_total += $history['seeded'];
+                $this->downloaded_total += $history['downloaded'];
+                $this->uploaded_total += $history['uploaded'];
 
                 $torrent = $PwTorrent->getTorrent($history['torrent_id']);
                 $thread  = $this->_getThreadService()->getThread($torrent['tid']);
@@ -156,15 +158,6 @@ class PwHookDoTorrent
                 }
             }
         }
-
-        if ($downloaded_total != 0) {
-            $this->rotio = round($uploaded_total / $downloaded_total, 2);
-        } else {
-            $this->rotio = 'Inf.';
-        }
-
-        $this->downloaded_total = PwUtils::readableDataTransfer($downloaded_total);
-        $this->uploaded_total   = PwUtils::readableDataTransfer($uploaded_total);
 
         PwHook::template('displayProfileTorrentHtml', 'EXT:torrent.template.profile_injector_after_content', true, $this);
     }

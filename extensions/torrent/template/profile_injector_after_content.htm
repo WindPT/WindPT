@@ -36,16 +36,28 @@
             <dd>{$pargs->seeding}</dd>
         </dl>
         <dl class="cc">
-            <dt>分享率：</dt>
-            <dd>{$pargs->rotio}</dd>
-        </dl>
-        <dl class="cc">
             <dt>下载量：</dt>
-            <dd>{$pargs->downloaded_total}</dd>
+            <dd>{@PwUtils::readableDataTransfer($pargs->downloaded_total)}</dd>
         </dl>
         <dl class="cc">
             <dt>上传量：</dt>
-            <dd>{$pargs->uploaded_total}</dd>
+            <dd>{@PwUtils::readableDataTransfer($pargs->uploaded_total)}</dd>
+        </dl>
+        <dl class="cc">
+            <dt>分享率：</dt>
+            <dd>{@($pargs->downloaded_total != 0)?round($pargs->uploaded_total / $pargs->downloaded_total, 2):'Inf.'}</dd>
+        </dl>
+        <dl class="cc">
+            <dt>下载时长：</dt>
+            <dd>{@PwUtils::readableTime($pargs->leeched_total)}</dd>
+        </dl>
+        <dl class="cc">
+            <dt>上传时长：</dt>
+            <dd>{@PwUtils::readableTime($pargs->seeded_total)}</dd>
+        </dl>
+        <dl class="cc">
+            <dt>分享占比：</dt>
+            <dd>{@($pargs->leeched_total != 0)?round($pargs->seeded_total / $pargs->leeched_total * 100).' %':'Inf.'}</dd>
         </dl>
         <dl class="cc">
             <dt>发布种子：</dt>

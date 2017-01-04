@@ -19,6 +19,17 @@ class PwUtils
         }
     }
 
+    public static function readableTime($seconds)
+    {
+        if ($seconds < 3600) {
+            return number_format($seconds / 60, 2) . ' min(s)';
+        } elseif ($seconds < 86400) {
+            return number_format($seconds / 3600, 2) . ' hr(s)';
+        } else {
+            return number_format($seconds / 86400, 2) . ' day(s)';
+        }
+    }
+
     public static function readableHash($hash)
     {
         return preg_replace_callback('/./s', create_function('$matches', 'return sprintf("%02x", ord($matches[0]));'), str_pad($hash, 20));
