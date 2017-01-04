@@ -1,6 +1,7 @@
 <hook-action name="displayProfileTorrentHtml" args='pargs'>
     <style>
-        #passkey.covered {
+        .covered {
+            color: rgb(51,51,51);
             background: rgb(51,51,51);
         }
 
@@ -11,30 +12,27 @@
         }
     </style>
     <div class="space_profile">
-        <h3><strong>Tracker个人信息</strong></h3>
+        <h3><strong>Tracker信息</strong></h3>
         <!--# if ($pargs->visitUid == $pargs->spaceUid) { #-->
         <dl class="cc">
-            <dt>Passkey：</dt>
-            <dd>
-                <span class="covered" id="passkey" style="color:rgb(51,51,51);">{$pargs->passkey}</span>&nbsp;
-                <button class="btn" id="btnTogglePasskey">显示/隐藏</button>
-            </dd>
+            <dt>个人密钥：</dt>
+            <dd><span class="covered">{$pargs->passkey}</span></dd>
         </dl>
 
         <dl class="cc">
             <dt>订阅地址：</dt>
             <dd>
-                <a href="{@WindUrlHelper::createUrl('/app/torrent/index/rss?passkey=' . $pargs->passkey)}">RSS 链接（请勿泄露）</a>&nbsp;<a href="{@WindUrlHelper::createUrl('/like/mylike/run')}" class="btn">管理</a>
+                <a href="{@WindUrlHelper::createUrl('/app/torrent/index/rss?passkey=' . $pargs->passkey)}">RSS（请勿泄露）</a>&nbsp;<a href="{@WindUrlHelper::createUrl('/like/mylike/run')}" class="btn">管理订阅</a>
             </dd>
         </dl>
         <!--# } #-->
 
         <dl class="cc">
-            <dt>下载：</dt>
+            <dt>正在下载：</dt>
             <dd>{$pargs->leeching}</dd>
         </dl>
         <dl class="cc">
-            <dt>做种：</dt>
+            <dt>正在做种：</dt>
             <dd>{$pargs->seeding}</dd>
         </dl>
         <dl class="cc">
@@ -50,7 +48,7 @@
             <dd>{$pargs->uploaded_total}</dd>
         </dl>
         <dl class="cc">
-            <dt>发布：</dt>
+            <dt>发布种子：</dt>
             <dd>{@count($pargs->torrents)}&nbsp;<button class="btn" id="btnTogglePosted">显示/隐藏</button></dd>
         </dl>
         <div id="posted">
@@ -63,7 +61,7 @@
             <!--# } #-->
         </div>
         <dl class="cc">
-            <dt>历史：</dt>
+            <dt>历史记录：</dt>
             <dd>{@count($pargs->histories)}&nbsp;<button class="btn" id="btnToggleHistories">显示/隐藏</button></dd>
         </dl>
         <div id="histories">
@@ -100,10 +98,6 @@
     <script>
     Wind.ready(function() {
         $('#posted, #histories').hide();
-
-        $('#btnTogglePasskey').click(function() {
-            $('#passkey').toggleClass('covered');
-        });
 
         $('#btnTogglePosted').click(function() {
             $('#posted').slideToggle();
