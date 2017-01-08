@@ -12,7 +12,6 @@ CREATE TABLE `pw_app_torrents` (
   `filename` varchar(255) NOT NULL DEFAULT '',
   `save_as` varchar(255) NOT NULL DEFAULT '',
   `size` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `type` enum('single','multi') NOT NULL DEFAULT 'single',
   `leechers` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `seeders` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `owner` mediumint(8) unsigned NOT NULL DEFAULT '0',

@@ -18,7 +18,6 @@ class PwPostDoTorrent extends PwPostDoBase
     protected $filesavename;
     protected $filelist;
     protected $totalength;
-    protected $type;
     protected $action;
 
     public function __construct(PwPost $pwpost, $tid = null, $wikilink = '')
@@ -77,7 +76,6 @@ class PwPostDoTorrent extends PwPostDoBase
             $totalLength = $bencode->doDictionaryGet($info, 'length', 'integer');
             if (isset($totalLength)) {
                 $fileList[] = array($dictionaryName, $totalLength);
-                $type       = 'single';
             } else {
                 $flist = $bencode->doDictionaryGet($info, 'files', 'list');
                 if (!isset($flist)) {
@@ -114,7 +112,6 @@ class PwPostDoTorrent extends PwPostDoBase
                         $fileList[] = array($ffe, $ll);
                     }
                 }
-                $type = 'multi';
             }
 
             $torrentcheck = Wekit::C('site', 'app.torrent.check');
@@ -162,7 +159,6 @@ class PwPostDoTorrent extends PwPostDoBase
             $this->filesavename = $dictionaryName;
             $this->filelist     = $fileList;
             $this->totalength   = $totalLength;
-            $this->type         = $type;
 
             return true;
         } else {
@@ -173,7 +169,7 @@ class PwPostDoTorrent extends PwPostDoBase
     public function addTorrentt($tid)
     {
         $dm = Wekit::load('EXT:torrent.service.dm.PwTorrentDm');
-        $dm->setTid($tid)->setInfoHash($this->infohash)->setOwner($this->user->uid)->setAnonymous(0)->setSize($this->totalength)->setType($this->type)->setWikilink($this->wikilink)->setFileName($this->filename)->setSaveAs($this->filesavename)->setCreatedAt(date('Y-m-d H:i:s'))->setUpdatedAt(date('Y-m-d H:i:s'));
+        $dm->setTid($tid)->setInfoHash($this->infohash)->setOwner($this->user->uid)->setAnonymous(0)->setSize($this->totalength)->setWikilink($this->wikilink)->setFileName($this->filename)->setSaveAs($this->filesavename)->setCreatedAt(date('Y-m-d H:i:s'))->setUpdatedAt(date('Y-m-d H:i:s'));
 
         $result = $this->_getTorrentService()->addTorrent($dm);
 

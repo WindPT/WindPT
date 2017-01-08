@@ -43,12 +43,6 @@ class PwTorrentDm extends PwBaseDm
         return $this;
     }
 
-    public function setType($type)
-    {
-        $this->_data['type'] = $type;
-        return $this;
-    }
-
     public function setLeechers($leechers)
     {
         $this->_data['leechers'] = $leechers;

@@ -6,7 +6,7 @@ class PwTorrentDao extends PwBaseDao
 {
     protected $_table      = 'app_torrents';
     protected $_pk         = 'id';
-    protected $_dataStruct = array('id', 'tid', 'info_hash', 'filename', 'save_as', 'size', 'created_at', 'type', 'leechers', 'seeders', 'updated_at', 'owner', 'nfo', 'anonymous', 'wikilink');
+    protected $_dataStruct = array('id', 'tid', 'info_hash', 'filename', 'save_as', 'size', 'created_at', 'leechers', 'seeders', 'updated_at', 'owner', 'nfo', 'anonymous', 'wikilink');
 
     public function getTorrent($id)
     {
