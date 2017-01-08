@@ -111,8 +111,8 @@ CREATE TABLE `pw_app_torrent_histories` (
 DROP TABLE IF EXISTS `pw_app_torrent_peers`;
 CREATE TABLE `pw_app_torrent_peers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `torrent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
+  `torrent_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `username` varchar(15) NOT NULL DEFAULT '',
   `ip` varbinary(64) NOT NULL DEFAULT '',
   `peer_id` binary(20) NOT NULL,

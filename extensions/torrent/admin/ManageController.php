@@ -57,7 +57,18 @@ class ManageController extends AdminBaseController
 
     public function dorunAction()
     {
-        list($showuserinfo, $showpeers, $titlegenenabled, $titlegendouban, $titlegenomdb, $titlegenanidb, $check, $deniedfts, $trackerserver, $torrentnameprefix, $peertimeout, $torrentimeout) = $this->getInput(array('showuserinfo', 'showpeers', 'titlegenenabled', 'titlegendouban', 'titlegenomdb', 'titlegenanidb', 'check', 'deniedfts', 'trackerserver', 'torrentnameprefix', 'peertimeout', 'torrentimeout'), 'post');
+        $showuserinfo      = $this->getInput('showuserinfo', 'post');
+        $showpeers         = $this->getInput('showpeers', 'post');
+        $titlegenenabled   = $this->getInput('titlegenenabled', 'post');
+        $titlegendouban    = $this->getInput('titlegendouban', 'post');
+        $titlegenomdb      = $this->getInput('titlegenomdb', 'post');
+        $titlegenanidb     = $this->getInput('titlegenanidb', 'post');
+        $check             = $this->getInput('check', 'post');
+        $deniedfts         = $this->getInput('deniedfts', 'post');
+        $trackerserver     = $this->getInput('trackerserver', 'post');
+        $torrentnameprefix = $this->getInput('torrentnameprefix', 'post');
+        $peertimeout       = $this->getInput('peertimeout', 'post');
+        $torrentimeout     = $this->getInput('torrentimeout', 'post');
 
         if (is_array($deniedfts)) {
             foreach ($deniedfts as $key => $value) {
@@ -78,7 +89,18 @@ class ManageController extends AdminBaseController
         }
 
         $config = new PwConfigSet('site');
-        $config->set('app.torrent.showuserinfo', $showuserinfo)->set('app.torrent.showpeers', $showpeers)->set('app.torrent.titlegen.enabled', $titlegenenabled)->set('app.torrent.titlegen.douban', $titlegendouban)->set('app.torrent.titlegen.omdb', $titlegenomdb)->set('app.torrent.titlegen.anidb', $titlegenanidb)->set('app.torrent.check', $check)->set('app.torrent.trackerserver', $trackerserver)->set('app.torrent.torrentnameprefix', $torrentnameprefix)->set('app.torrent.cron.peertimeout', intval($peertimeout))->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
+        $config
+            ->set('app.torrent.showuserinfo', $showuserinfo)
+            ->set('app.torrent.showpeers', $showpeers)
+            ->set('app.torrent.titlegen.enabled', $titlegenenabled)
+            ->set('app.torrent.titlegen.douban', $titlegendouban)
+            ->set('app.torrent.titlegen.omdb', $titlegenomdb)
+            ->set('app.torrent.titlegen.anidb', $titlegenanidb)
+            ->set('app.torrent.check', $check)
+            ->set('app.torrent.trackerserver', $trackerserver)
+            ->set('app.torrent.torrentnameprefix', $torrentnameprefix)
+            ->set('app.torrent.cron.peertimeout', intval($peertimeout))
+            ->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
 
         if (!empty($deniedfts)) {
             $config->set('app.torrent.deniedfts', $_deniedfts);
