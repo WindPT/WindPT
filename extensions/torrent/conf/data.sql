@@ -98,10 +98,11 @@ CREATE TABLE `pw_app_torrent_histories` (
   `leeched` bigint(20) unsigned NOT NULL DEFAULT '0',
   `seeded` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `app_torrent_historys_uid_foreign` (`uid`) USING BTREE,
-  KEY `app_torrent_historys_torrent_id_foreign` (`torrent_id`) USING BTREE,
-  CONSTRAINT `app_torrent_historys_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`),
-  CONSTRAINT `app_torrent_historys_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
+  KEY `app_torrent_histories_uid_foreign` (`uid`) USING BTREE,
+  KEY `app_torrent_histories_torrent_id_foreign` (`torrent_id`) USING BTREE,
+  CONSTRAINT `app_torrent_histories_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`),
+  CONSTRAINT `app_torrent_histories_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
+) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
