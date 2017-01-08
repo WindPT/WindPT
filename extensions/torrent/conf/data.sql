@@ -66,8 +66,6 @@ DROP TABLE IF EXISTS `pw_app_torrent_users`;
 CREATE TABLE `pw_app_torrent_users` (
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
   `passkey` varchar(40) NOT NULL DEFAULT '',
-  `uploaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `downloaded_mo` bigint(20) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `passkey` (`passkey`) USING BTREE,
   UNIQUE KEY `app_torrent_users_uid_foreign` (`uid`) USING BTREE,
   CONSTRAINT `app_torrent_users_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
@@ -96,9 +94,7 @@ CREATE TABLE `pw_app_torrent_histories` (
   `uid` int(10) unsigned NOT NULL DEFAULT '0',
   `torrent_id` mediumint(8) unsigned NOT NULL,
   `uploaded` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `uploaded_last` bigint(20) NOT NULL DEFAULT '0',
   `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `downloaded_last` bigint(20) NOT NULL DEFAULT '0',
   `left` bigint(20) unsigned NOT NULL DEFAULT '0',
   `leeched` bigint(20) unsigned NOT NULL DEFAULT '0',
   `seeded` bigint(20) unsigned NOT NULL,
