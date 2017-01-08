@@ -66,6 +66,7 @@ class ManageController extends AdminBaseController
         $check             = $this->getInput('check', 'post');
         $deniedfts         = $this->getInput('deniedfts', 'post');
         $trackerserver     = $this->getInput('trackerserver', 'post');
+        $logenabled        = $this->getInput('logenabled', 'post');
         $torrentnameprefix = $this->getInput('torrentnameprefix', 'post');
         $peertimeout       = $this->getInput('peertimeout', 'post');
         $torrentimeout     = $this->getInput('torrentimeout', 'post');
@@ -98,6 +99,7 @@ class ManageController extends AdminBaseController
             ->set('app.torrent.titlegen.anidb', $titlegenanidb)
             ->set('app.torrent.check', $check)
             ->set('app.torrent.trackerserver', $trackerserver)
+            ->set('app.torrent.log', $logenabled)
             ->set('app.torrent.torrentnameprefix', $torrentnameprefix)
             ->set('app.torrent.cron.peertimeout', intval($peertimeout))
             ->set('app.torrent.cron.torrentimeout', intval($torrentimeout));

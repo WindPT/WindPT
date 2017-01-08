@@ -103,6 +103,30 @@ CREATE TABLE `pw_app_torrent_histories` (
   CONSTRAINT `app_torrent_histories_torrent_id_foreign` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`),
   CONSTRAINT `app_torrent_histories_uid_foreign` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `pw_app_torrent_logs`
+-- ----------------------------
+DROP TABLE IF EXISTS `pw_app_torrent_logs`;
+CREATE TABLE `pw_app_torrent_logs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned NOT NULL DEFAULT '0',
+  `torrent_id` mediumint(8) unsigned NOT NULL,
+  `agent` varchar(60) NOT NULL DEFAULT '',
+  `passkey` varchar(40) NOT NULL,
+  `info_hash` binary(20) NOT NULL,
+  `peer_id` binary(20) NOT NULL,
+  `ip` varbinary(20) NOT NULL,
+  `port` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `uploaded` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `downloaded` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `left` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `announced_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `app_torrent_historys_uid_foreign` (`uid`),
+  KEY `app_torrent_historys_torrent_id_foreign` (`torrent_id`),
+  CONSTRAINT `pw_app_torrent_logs_ibfk_1` FOREIGN KEY (`torrent_id`) REFERENCES `pw_app_torrents` (`id`),
+  CONSTRAINT `pw_app_torrent_logs_ibfk_2` FOREIGN KEY (`uid`) REFERENCES `pw_user` (`uid`)
 ) AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------

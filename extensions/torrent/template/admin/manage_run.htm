@@ -203,6 +203,26 @@
                         </td>
                     </tr>
                     <tr>
+                        <th>日志留存</th>
+                        <td>
+                            <ul class="switch_list cc">
+                                <li>
+                                    <label>
+                                        <input type="radio" name="logenabled" value="1" {@pw::ifcheck($config['app.torrent.log']==1 )}><span>开启</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="logenabled" value="0" {@Pw::ifcheck($config['app.torrent.log']==0 )}><span>关闭</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </td>
+                        <td>
+                            <div class="fun_tips">是否开启日志留存，若开启将保留每次tracker数据</div>
+                        </td>
+                    </tr>
+                    <tr>
                         <th>种子文件前缀</th>
                         <td>
                             <input name="torrentnameprefix" type="text" class="input length_5" value="{$config['app.torrent.torrentnameprefix']}">
