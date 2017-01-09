@@ -24,14 +24,14 @@ class PwCronDoClearTorrents extends AbstractCronBase
         Wekit::load('forum.PwThread')->updateThread($dm);
 
         $api = WindidApi::api('message');
-        $api->send($created_userid, '您的种子 ' . $subject . ' 因长期断种已被系统自动移入回收站，如有异议请尽快联系管理员，管理员将根据相关规定决定恢复或彻底删除。', 1);
+        $api->send($created_userid, '您的种子 ' . $subject . ' 因长期断种已被系统自动移入回收站，如有异议请尽快联系管理员。', 1);
     }
 
     public function run($cronId)
     {
-        $torrentimeout = Wekit::C('site', 'app.torrent.cron.torrentimeout');
+        $torrenexpired = Wekit::C('site', 'app.torrent.cron.torrenexpired');
 
-        if ($torrentimeout < 1) {
+        if ($torrenexpired < 1) {
             return;
         }
 
@@ -48,7 +48,7 @@ class PwCronDoClearTorrents extends AbstractCronBase
                 continue;
             }
 
-            if (strtotime($torrent['updated_at']) < strtotime('-' . $torrentimeout . ' day')) {
+            if (strtotime($torrent['updated_at']) < strtotime('-' . $torrenexpired . ' day')) {
                 $this->deleteThread($topic);
             }
         }

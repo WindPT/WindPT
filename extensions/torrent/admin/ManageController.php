@@ -69,7 +69,7 @@ class ManageController extends AdminBaseController
         $logenabled        = $this->getInput('logenabled', 'post');
         $torrentnameprefix = $this->getInput('torrentnameprefix', 'post');
         $peertimeout       = $this->getInput('peertimeout', 'post');
-        $torrentimeout     = $this->getInput('torrentimeout', 'post');
+        $torrenexpired     = $this->getInput('torrenexpired', 'post');
 
         if (is_array($deniedfts)) {
             foreach ($deniedfts as $key => $value) {
@@ -102,7 +102,7 @@ class ManageController extends AdminBaseController
             ->set('app.torrent.log', $logenabled)
             ->set('app.torrent.torrentnameprefix', $torrentnameprefix)
             ->set('app.torrent.cron.peertimeout', intval($peertimeout))
-            ->set('app.torrent.cron.torrentimeout', intval($torrentimeout));
+            ->set('app.torrent.cron.torrenexpired', intval($torrenexpired));
 
         if (!empty($deniedfts)) {
             $config->set('app.torrent.deniedfts', $_deniedfts);
