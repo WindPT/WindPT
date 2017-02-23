@@ -9,6 +9,8 @@ WindPT
 [![GitHub release](https://img.shields.io/github/release/kinosang/WindPT.svg)](https://github.com/kinosang/WindPT/releases/latest)
 [![GitHub tag](https://img.shields.io/github/tag/kinosang/WindPT.svg)](https://github.com/kinosang/WindPT/releases)
 
+**[中文说明](README_CN.md)**
+
 Pull requests and issues are welcome.
 
 This extension **DOES NOT** provide a tracker server, you must install [kinosang/WindTurbine](https://github.com/kinosang/WindTurbine) for that.
