@@ -31,21 +31,9 @@ class PwTorrentHistoryDm extends PwBaseDm
         return $this;
     }
 
-    public function setUploadedLast($uploaded_last)
-    {
-        $this->_data['uploaded_last'] = $uploaded_last;
-        return $this;
-    }
-
     public function setDownloaded($downloaded)
     {
         $this->_data['downloaded'] = $downloaded;
-        return $this;
-    }
-
-    public function setDownloadedLast($downloaded_last)
-    {
-        $this->_data['downloaded_last'] = $downloaded_last;
         return $this;
     }
 
