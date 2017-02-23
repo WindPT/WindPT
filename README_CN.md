@@ -5,9 +5,11 @@ WindPT
 
 **本项目用于基于 PHPWind 9 搭建 PT 站前端**
 
-本项目**不提供** Tracker Server，你必须安装 [kinosang/WindTurbine](https://github.com/kinosang/WindTurbine) 或其他兼容 tracker.
+本项目**不提供** Tracker Server，你必须安装 [kinosang/WindTurbine](https://github.com/kinosang/WindTurbine) 或兼容 tracker.
 
 与本项目适配的 PHPWind 主题是 [kinosang/PHPWind-WindPT-Theme](https://github.com/kinosang/PHPWind-WindPT-Theme).
+
+WindTurbine 安装方法见下文.
 
 ## 如何使用
 
@@ -25,6 +27,14 @@ WindPT
 |  |- torrent <dir> // 扩展 [上传目录到 PHPWind/src/extensions/]
 =  =
 ```
+
+## 安装 WindTurbine
+
+1. 在 [WindTurbine Releases](https://github.com/kinosang/WindTurbine/releases/latest) 下载最新版预编译包（WindTurbine.zip）.
+2. 上传到服务器（比如 `~/WindTurbine`）并解压.
+3. 复制 `config.sample.xml` 为 `config.xml` 并编辑.
+4. 使用 `screen` `nohop` 等工具运行 `WindTurbine`.
+5. 可使用 `nginx` 等反代 Tracker.
 
 ## 捐赠
 
