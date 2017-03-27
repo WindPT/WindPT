@@ -6,16 +6,17 @@ WindPT
 **A plugin for PHPWind 9 to build a Private BitTorrent tracker with Front-end.**
 
 [![StyleCI](https://styleci.io/repos/18007787/shield?style=flat&branch=master)](https://styleci.io/repos/18007787)
-[![GitHub release](https://img.shields.io/github/release/kinosang/WindPT.svg)](https://github.com/kinosang/WindPT/releases/latest)
-[![GitHub tag](https://img.shields.io/github/tag/kinosang/WindPT.svg)](https://github.com/kinosang/WindPT/releases)
+[![GitHub release](https://img.shields.io/github/release/WindPT/WindPT.svg)](https://github.com/WindPT/WindPT/releases/latest)
+[![GitHub tag](https://img.shields.io/github/tag/WindPT/WindPT.svg)](https://github.com/WindPT/WindPT/releases)
+[![Gitter](https://img.shields.io/gitter/room/WindPT/Lobby.svg)](https://gitter.im/WindPT/Lobby)
 
 **[中文说明](README_CN.md)**
 
 Pull requests and issues are welcome.
 
-This extension **DOES NOT** provide a tracker server, you must install [kinosang/WindTurbine](https://github.com/kinosang/WindTurbine) for that.
+This extension **DOES NOT** provide a tracker server, you must install [WindPT/WindTurbine](https://github.com/WindPT/WindTurbine) for that.
 
-There's a theme *MORE SUITABLE* than the default one of PHPWind 9 on [kinosang/PHPWind-WindPT-Theme](https://github.com/kinosang/PHPWind-WindPT-Theme).
+There's a theme *MORE SUITABLE* than the default one of PHPWind 9 on [WindPT/PHPWind-WindPT-Theme](https://github.com/WindPT/PHPWind-WindPT-Theme).
 
 ## HOWTO
 
